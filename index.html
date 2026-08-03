@@ -248,12 +248,13 @@
     position: fixed; left:0; right:0; top:0; z-index: 39;
     display:flex; flex-direction:row; height: 40px;
     background: var(--panel-bg-2); border-bottom:1px solid var(--border-1);
+    padding: 0 8px; gap: 8px; box-sizing:border-box;
   }
   .fw-half{
-    flex:1 1 50%; display:flex; align-items:center; gap:2px; padding:0 4px;
+    flex:1 1 50%; display:flex; align-items:center; gap:4px; padding:0 2px;
     min-width:0;
   }
-  #urduFontWheel{ border-inline-start: 1px solid var(--border-1); }
+  #urduFontWheel{ border-inline-start: 1px solid var(--border-1); padding-inline-start:8px; }
   .fw-btn{
     width:24px;height:24px;min-width:24px;border-radius:50%;border:1px solid var(--border-2);
     background:var(--panel-bg); color:var(--text-dark); font-size:13px; cursor:pointer;
@@ -459,7 +460,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS014</span>
+      <span id="verTag">UFS015</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -489,12 +490,12 @@
 </div>
 
 <div id="fontWheelBar">
-  <div class="fw-half" id="urduFontWheel">
+  <div class="fw-half" id="urduFontWheel" dir="ltr">
     <button class="fw-btn fw-minus" data-wheel="ur">–</button>
     <div class="fw-scroll" id="urduWheelScroll" dir="ltr"></div>
     <button class="fw-btn fw-plus" data-wheel="ur">+</button>
   </div>
-  <div class="fw-half" id="enFontWheel">
+  <div class="fw-half" id="enFontWheel" dir="ltr">
     <button class="fw-btn fw-minus" data-wheel="en">–</button>
     <div class="fw-scroll" id="enWheelScroll" dir="ltr"></div>
     <button class="fw-btn fw-plus" data-wheel="en">+</button>
@@ -1207,23 +1208,7 @@ function showSelToolbarPinned(){
 }
 document.addEventListener('selectionchange', ()=>{
   if(document.activeElement !== canvasText) return;
-  if(toolbarDragged){ selToolbar.style.display = 'flex'; return; }
-  const sel = window.getSelection();
-  if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
-    showSelToolbarPinned();
-    return;
-  }
-  const rect = sel.getRangeAt(0).getBoundingClientRect();
-  if(rect.width===0 && rect.height===0){ showSelToolbarPinned(); return; }
-  selToolbar.style.position = 'absolute';
-  selToolbar.style.transform = 'none';
-  selToolbar.style.display='flex';
-  let topPx = window.scrollY + rect.top - 44;
-  const kh0 = (typeof getKeyboardHeight === 'function') ? getKeyboardHeight() : 0;
-  const safeMaxTopAbs = window.scrollY + window.innerHeight - kh0 - 100;
-  if(topPx > safeMaxTopAbs) topPx = safeMaxTopAbs;
-  selToolbar.style.top = topPx + 'px';
-  selToolbar.style.left = (window.scrollX + rect.left + rect.width/2 - selToolbar.offsetWidth/2) + 'px';
+  showSelToolbarPinned();
 });
 canvasText.addEventListener('focus', ()=>{
   showSelToolbarPinned();
