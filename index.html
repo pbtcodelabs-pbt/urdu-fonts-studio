@@ -557,7 +557,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS021</span>
+      <span id="verTag">UFS022</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -1736,36 +1736,14 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
   await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
 
-  const range = document.createRange();
-  range.selectNodeContents(div);
-  const refTop = div.getBoundingClientRect().top;
-  const bands = clusterLineBands(range.getClientRects(), refTop);
-
   const fullCanvas = await html2canvas(div, {backgroundColor:'#ffffff', scale: renderScale});
   document.body.removeChild(div);
-  const pxPerCssPx = fullCanvas.width / contentWpx;
-
-  const breaks = [0];
-  let pageStart = 0;
-  for(let i=0;i<bands.length;i++){
-    const b = bands[i];
-    if(b.bottom - pageStart > maxContentHpx){
-      const breakAt = i>0 ? bands[i-1].bottom : pageStart;
-      if(breakAt > pageStart){ breaks.push(breakAt); pageStart = breakAt; }
-      else { breaks.push(b.bottom); pageStart = b.bottom; }
-    }
-  }
-  const totalCssH = fullCanvas.height / pxPerCssPx;
-  breaks.push(Math.max(totalCssH, bands.length? bands[bands.length-1].bottom : 0));
 
   const pages = [];
-  for(let i=0;i<breaks.length-1;i++){
-    const sliceTopCss = breaks[i], sliceBottomCss = breaks[i+1];
-    const sliceHCss = sliceBottomCss - sliceTopCss;
-    if(sliceHCss <= 0) continue;
-    const sliceTopPx = sliceTopCss * pxPerCssPx;
-    const sliceHPx = Math.min(sliceHCss * pxPerCssPx, fullCanvas.height - sliceTopPx);
-
+  let y = 0;
+  const sliceHpxAtScale = maxContentHpx * renderScale;
+  while(y < fullCanvas.height){
+    const sliceH = Math.min(sliceHpxAtScale, fullCanvas.height - y);
     const pageCanvas = document.createElement('canvas');
     pageCanvas.width = pageWpx * renderScale;
     pageCanvas.height = pageHpx * renderScale;
@@ -1773,13 +1751,14 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
     pctx.fillStyle = '#ffffff';
     pctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
     const destX = marginPx*renderScale, destY = marginPx*renderScale;
-    pctx.drawImage(fullCanvas, 0, sliceTopPx, fullCanvas.width, sliceHPx, destX, destY, fullCanvas.width, sliceHPx);
+    pctx.drawImage(fullCanvas, 0, y, fullCanvas.width, sliceH, destX, destY, fullCanvas.width, sliceH);
     drawPageBorder(pctx, pageCanvas.width, pageCanvas.height, borderStyle);
     pctx.fillStyle = '#7a6a4f';
     pctx.font = (22*renderScale*PX_PER_PT/2.2)+'px Tahoma, sans-serif';
     pctx.textAlign = 'center';
     pctx.fillText(String(pages.length+1), pageCanvas.width/2, pageCanvas.height - (16*renderScale*PX_PER_PT/2.2));
     pages.push(pageCanvas);
+    y += sliceH;
   }
   if(!pages.length){
     const blank = document.createElement('canvas');
