@@ -67,7 +67,7 @@
     --panel-bg: #eaf5ff;
     --panel-bg-2: #d3ecff;
     --canvas-bg: #f7f0e0;
-    --rail-w: 58px;
+    --rail-w: 0px;
   }
 
   *{ box-sizing: border-box; }
@@ -118,16 +118,18 @@
   .pill-btn.primary{ background: var(--gold); color:#062a4a; border-color:var(--gold); }
   .pill-btn.primary:hover{ filter: brightness(1.08); }
 
-  /* ---------- Icon rail ---------- */
+  /* ---------- Icon rail (now a horizontal strip, not a right-side column) ---------- */
   #rail{
-    position: fixed; top:0; right:0; bottom:0; width: var(--rail-w);
+    position: fixed; left:0; right:0; top:0;
+    height: 54px;
     background: var(--panel-bg);
-    border-left: 1px solid #aed6f7;
-    display:flex; flex-direction:column; align-items:center;
-    padding-top: 62px; gap: 6px; z-index: 40;
+    border-bottom: 1px solid #aed6f7;
+    display:flex; flex-direction:row; align-items:center;
+    padding: 0 8px; gap: 4px; z-index: 40;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
   }
   .rail-btn{
-    width: 42px; height:42px; border-radius: 12px; border:none;
+    width: 42px; height:42px; min-width:42px; border-radius: 12px; border:none;
     background: transparent; color:#2f6690; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
     font-size: 19px; transition: all .15s; position:relative;
@@ -135,10 +137,10 @@
   .rail-btn:hover{ background: var(--panel-bg-2); color: var(--gold-soft); }
   .rail-btn.active{ background: var(--gold); color:#062a4a; }
   .rail-btn .lbl{
-    position:absolute; right: 52px; top:50%; transform: translateY(-50%);
+    position:absolute; top: 48px; left:50%; transform: translateX(-50%);
     background:#dceeff; color:var(--gold-soft); font-size:11px; padding:5px 10px;
     border-radius:6px; white-space:nowrap; opacity:0; pointer-events:none;
-    transition: opacity .12s; border:1px solid #aed6f7;
+    transition: opacity .12s; border:1px solid #aed6f7; z-index:45;
   }
   .rail-btn:hover .lbl{ opacity:1; }
 
@@ -403,7 +405,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS002</span>
+      <span id="verTag">UFS006</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -1449,12 +1451,17 @@ if(window.visualViewport){
   window.visualViewport.addEventListener('scroll', adjustForKeyboard);
 }
 
+const railEl2 = document.getElementById('rail');
 function syncStageTop(){
-  stageEl3.style.top = (topbarEl.offsetHeight + 14) + 'px';
+  const topbarH = topbarEl.offsetHeight;
+  railEl2.style.top = topbarH + 'px';
+  const railH = railEl2.offsetHeight;
+  stageEl3.style.top = (topbarH + railH + 10) + 'px';
 }
 window.addEventListener('load', syncStageTop);
 window.addEventListener('resize', syncStageTop);
 new ResizeObserver(syncStageTop).observe(topbarEl);
+new ResizeObserver(syncStageTop).observe(railEl2);
 if(document.fonts && document.fonts.ready){ document.fonts.ready.then(syncStageTop).catch(()=>{}); }
 setTimeout(syncStageTop, 300);
 setTimeout(syncStageTop, 1200);
