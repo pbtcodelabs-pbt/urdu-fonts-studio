@@ -248,13 +248,14 @@
     position: fixed; left:0; right:0; top:0; z-index: 39;
     display:flex; flex-direction:row; height: 40px;
     background: var(--panel-bg-2); border-bottom:1px solid var(--border-1);
-    padding: 0 8px; gap: 8px; box-sizing:border-box;
+    padding: 0 8px; gap: 22px; box-sizing:border-box;
   }
   .fw-half{
     flex:1 1 50%; display:flex; align-items:center; gap:4px; padding:0 2px;
     min-width:0;
   }
-  #urduFontWheel{ border-inline-start: 1px solid var(--border-1); padding-inline-start:8px; }
+  #urduFontWheel{ border-inline-start: 1px solid var(--border-1); padding-left:16px !important; padding-inline-start:8px; }
+  #enFontWheel{ padding-right:16px !important; }
   .fw-btn{
     width:24px;height:24px;min-width:24px;border-radius:50%;border:1px solid var(--border-2);
     background:var(--panel-bg); color:var(--text-dark); font-size:13px; cursor:pointer;
@@ -465,7 +466,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS016</span>
+      <span id="verTag">UFS018</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -1482,8 +1483,8 @@ function shareCurrentPage(){
   exportImage(async (blob, canvas)=>{
     const tooTall = canvas.height > canvas.width * 2.2;
     if(tooTall){
-      const printCanvas = await buildPrintCanvas(22, 'portrait', 2);
-      const pdf = buildFullPagePDF(printCanvas, 'portrait');
+      const pages = await buildPaginatedPages(22, 'portrait', 2, 'none');
+      const pdf = buildPdfFromPages(pages, 'portrait');
       const pdfBlob = pdf.output('blob');
       const file = new File([pdfBlob], 'urdu-tehreer.pdf', {type:'application/pdf'});
       if(navigator.canShare && navigator.canShare({files:[file]})){
@@ -1583,6 +1584,104 @@ function drawPageBorder(ctx, w, h, style){
   ctx.restore();
 }
 
+const PAGE_MARGIN_PT = 40; /* reserved margin so border never touches text */
+
+function clusterLineBands(rects, refTop){
+  const items = Array.from(rects).map(r=> ({top:r.top-refTop, bottom:r.bottom-refTop})).filter(r=> r.bottom>r.top);
+  items.sort((a,b)=> a.top-b.top);
+  const bands = [];
+  for(const r of items){
+    const last = bands[bands.length-1];
+    if(last && r.top < last.bottom - 2){
+      last.bottom = Math.max(last.bottom, r.bottom);
+      last.top = Math.min(last.top, r.top);
+    } else {
+      bands.push({top:r.top, bottom:r.bottom});
+    }
+  }
+  return bands;
+}
+
+/* Builds all pages for the given content, breaking only between lines (never mid-line),
+   with the border drawn safely outside the text margin. Returns an array of finished,
+   bordered, numbered page canvases. */
+async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderStyle){
+  const dims = A4_PT[orientation];
+  const pageWpx = dims.w * PX_PER_PT;
+  const pageHpx = dims.h * PX_PER_PT;
+  const marginPx = PAGE_MARGIN_PT * PX_PER_PT;
+  const contentWpx = pageWpx - marginPx*2;
+  const maxContentHpx = pageHpx - marginPx*2;
+
+  const measureDiv = document.createElement('div');
+  measureDiv.style.cssText = `position:fixed;left:-99999px;top:0;width:${contentWpx}px;box-sizing:border-box;`;
+  measureDiv.style.direction = 'rtl';
+  measureDiv.style.textAlign = canvasText.style.textAlign || 'right';
+  measureDiv.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
+  measureDiv.style.fontSize = fontSizePx + 'px';
+  measureDiv.style.lineHeight = canvasText.style.lineHeight || '2.1';
+  measureDiv.innerHTML = canvasText.innerHTML;
+  document.body.appendChild(measureDiv);
+  await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+
+  const range = document.createRange();
+  range.selectNodeContents(measureDiv);
+  const refTop = measureDiv.getBoundingClientRect().top;
+  const bands = clusterLineBands(range.getClientRects(), refTop);
+  const totalH = measureDiv.scrollHeight;
+
+  const breaks = [0];
+  let pageStart = 0;
+  for(let i=0;i<bands.length;i++){
+    const b = bands[i];
+    if(b.bottom - pageStart > maxContentHpx){
+      const breakAt = i>0 ? bands[i-1].bottom : pageStart;
+      if(breakAt > pageStart){ breaks.push(breakAt); pageStart = breakAt; }
+      else { breaks.push(b.bottom); pageStart = b.bottom; } /* single line taller than a page: let it stand alone */
+    }
+  }
+  breaks.push(Math.max(totalH, bands.length? bands[bands.length-1].bottom : 0));
+
+  const pages = [];
+  for(let i=0;i<breaks.length-1;i++){
+    const sliceTop = breaks[i], sliceBottom = breaks[i+1];
+    const sliceH = sliceBottom - sliceTop;
+    if(sliceH <= 0) continue;
+
+    const frame = document.createElement('div');
+    frame.style.cssText = `position:fixed;left:-99999px;top:0;width:${pageWpx}px;height:${pageHpx}px;background:#ffffff;overflow:hidden;`;
+    const clipWin = document.createElement('div');
+    clipWin.style.cssText = `position:absolute;top:${marginPx}px;left:${marginPx}px;width:${contentWpx}px;height:${maxContentHpx}px;overflow:hidden;`;
+    const clone = measureDiv.cloneNode(true);
+    clone.style.position = 'relative';
+    clone.style.top = (-sliceTop) + 'px';
+    clone.style.width = contentWpx + 'px';
+    clipWin.appendChild(clone);
+    frame.appendChild(clipWin);
+    document.body.appendChild(frame);
+    await new Promise(r=> requestAnimationFrame(r));
+    const contentCanvas = await html2canvas(frame, {backgroundColor:'#ffffff', scale: renderScale});
+    document.body.removeChild(frame);
+
+    drawPageBorder(contentCanvas.getContext('2d'), contentCanvas.width, contentCanvas.height, borderStyle);
+    const ctx2 = contentCanvas.getContext('2d');
+    ctx2.fillStyle = '#7a6a4f';
+    ctx2.font = (22*renderScale*PX_PER_PT/2.2)+'px Tahoma, sans-serif';
+    ctx2.textAlign = 'center';
+    ctx2.fillText(String(pages.length+1), contentCanvas.width/2, contentCanvas.height - (16*renderScale*PX_PER_PT/2.2));
+    pages.push(contentCanvas);
+  }
+  document.body.removeChild(measureDiv);
+  if(!pages.length){
+    const blank = document.createElement('canvas');
+    blank.width = pageWpx*renderScale; blank.height = pageHpx*renderScale;
+    const bctx = blank.getContext('2d'); bctx.fillStyle='#ffffff'; bctx.fillRect(0,0,blank.width,blank.height);
+    pages.push(blank);
+  }
+  return pages;
+}
+
 async function buildPrintCanvas(fontSizePx, orientation, renderScale){
   const dims = A4_PT[orientation];
   const containerWpx = dims.w * PX_PER_PT;
@@ -1605,34 +1704,15 @@ async function buildPrintCanvas(fontSizePx, orientation, renderScale){
   return canvas;
 }
 
-function buildFullPagePDF(canvas, orientation, borderStyle){
+function buildPdfFromPages(pages, orientation){
   const dims = A4_PT[orientation];
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF({unit:'pt', format:'a4', orientation: orientation==='landscape' ? 'l':'p'});
-  const canvasPxPerPt = canvas.width / dims.w;
-  const pageHeightCanvasPx = dims.h * canvasPxPerPt;
-  let y = 0, first = true, pageNum = 1;
-  while(y < canvas.height){
-    const sliceH = Math.min(pageHeightCanvasPx, canvas.height - y);
-    const sliceCanvas = document.createElement('canvas');
-    sliceCanvas.width = canvas.width;
-    sliceCanvas.height = pageHeightCanvasPx;
-    const sctx = sliceCanvas.getContext('2d');
-    sctx.fillStyle = '#ffffff';
-    sctx.fillRect(0,0,sliceCanvas.width, sliceCanvas.height);
-    sctx.drawImage(canvas, 0, y, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
-    drawPageBorder(sctx, sliceCanvas.width, sliceCanvas.height, borderStyle);
-    sctx.fillStyle = '#7a6a4f';
-    sctx.font = (24*canvasPxPerPt/2.5)+'px Tahoma, sans-serif';
-    sctx.textAlign = 'center';
-    sctx.fillText(String(pageNum), sliceCanvas.width/2, sliceCanvas.height - (18*canvasPxPerPt/2.5));
-    const imgData = sliceCanvas.toDataURL('image/jpeg', 0.95);
-    if(!first) pdf.addPage();
+  pages.forEach((canvas, i)=>{
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    if(i>0) pdf.addPage();
     pdf.addImage(imgData, 'JPEG', 0, 0, dims.w, dims.h);
-    first = false;
-    y += sliceH;
-    pageNum++;
-  }
+  });
   return pdf;
 }
 
@@ -1643,7 +1723,8 @@ const pdfPreviewImg = document.getElementById('pdfPreviewImg');
 let pdfPreviewZoom = 100;
 let pdfUpdateTimer = null;
 
-let pdfFullCanvas = null, pdfPageHeightPx = 0, pdfTotalPages = 1, pdfCurrentPreviewPage = 0;
+let pdfPreviewPages = [];
+let pdfTotalPages = 1, pdfCurrentPreviewPage = 0;
 async function updatePdfPreview(){
   if(!canvasText.innerText || !canvasText.innerText.trim()){
     pdfPageCountEl.textContent = 'یہ صفحہ خالی ہے';
@@ -1651,39 +1732,18 @@ async function updatePdfPreview(){
   }
   pdfPageCountEl.textContent = 'حساب لگایا جا رہا ہے…';
   const fontPx = +pdfFontSizeInput.value;
-  const canvas = await buildPrintCanvas(fontPx, pdfOrientation, 1);
-  const dims = A4_PT[pdfOrientation];
-  const canvasPxPerPt = canvas.width / dims.w;
-  const pageHeightCanvasPx = dims.h * canvasPxPerPt;
-  const pages = Math.max(1, Math.ceil(canvas.height / pageHeightCanvasPx));
-  pdfFullCanvas = canvas;
-  pdfPageHeightPx = pageHeightCanvasPx;
-  pdfTotalPages = pages;
+  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 1, pdfBorderStyle);
+  pdfPreviewPages = pages;
+  pdfTotalPages = pages.length;
   pdfCurrentPreviewPage = 0;
-  pdfPageCountEl.textContent = 'اس ترتیب میں تقریباً ' + pages + ' صفحات بنیں گی (A4، ' + (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ')';
+  pdfPageCountEl.textContent = 'اس ترتیب میں ' + pdfTotalPages + ' صفحات بنیں گی (A4، ' + (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ')';
   renderPdfPreviewPage(0);
 }
 function renderPdfPreviewPage(idx){
-  if(!pdfFullCanvas) return;
+  if(!pdfPreviewPages.length) return;
   idx = Math.max(0, Math.min(pdfTotalPages-1, idx));
   pdfCurrentPreviewPage = idx;
-  const canvas = pdfFullCanvas;
-  const pageHeightCanvasPx = pdfPageHeightPx;
-  const y = idx * pageHeightCanvasPx;
-  const sliceH = Math.min(pageHeightCanvasPx, Math.max(0, canvas.height - y));
-  const pageCanvas = document.createElement('canvas');
-  pageCanvas.width = canvas.width;
-  pageCanvas.height = pageHeightCanvasPx;
-  const pctx = pageCanvas.getContext('2d');
-  pctx.fillStyle = '#ffffff'; pctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
-  if(sliceH > 0) pctx.drawImage(canvas, 0, y, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
-  drawPageBorder(pctx, pageCanvas.width, pageCanvas.height, pdfBorderStyle);
-  const canvasPxPerPt = canvas.width / A4_PT[pdfOrientation].w;
-  pctx.fillStyle = '#7a6a4f';
-  pctx.font = (24*canvasPxPerPt/2.5)+'px Tahoma, sans-serif';
-  pctx.textAlign = 'center';
-  pctx.fillText(String(idx+1), pageCanvas.width/2, pageCanvas.height - (18*canvasPxPerPt/2.5));
-  pdfPreviewImg.src = pageCanvas.toDataURL('image/jpeg', 0.92);
+  pdfPreviewImg.src = pdfPreviewPages[idx].toDataURL('image/jpeg', 0.92);
   pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
   const nav = document.getElementById('pdfPreviewNavLabel');
   if(nav) nav.textContent = 'صفحہ ' + (idx+1) + ' / ' + pdfTotalPages;
@@ -1754,11 +1814,11 @@ document.getElementById('btnSavePdf').onclick = ()=>{
 document.getElementById('pdfConfirmSave').onclick = async ()=>{
   showToast('PDF تیار ہو رہی ہے…');
   const fontPx = +pdfFontSizeInput.value;
-  const canvas = await buildPrintCanvas(fontPx, pdfOrientation, 2);
-  const pdf = buildFullPagePDF(canvas, pdfOrientation, pdfBorderStyle);
+  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 2, pdfBorderStyle);
+  const pdf = buildPdfFromPages(pages, pdfOrientation);
   pdf.save('urdu-page.pdf');
   pdfModal.classList.remove('open');
-  showToast('PDF محفوظ ہو گئی — پورے A4 صفحات پر مشتمل');
+  showToast('PDF محفوظ ہو گئی — پورے A4 صفحات پر مشتمل، لائن کہیں کٹی نہیں');
 };
 
 /* ---------- print ---------- */
@@ -1913,6 +1973,10 @@ canvasText.addEventListener('input', ()=>{
   autoSaveTimer = setTimeout(()=> saveDraft(true), 1500);
 });
 window.addEventListener('beforeunload', ()=> saveDraft(true));
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveDraft(true); });
+window.addEventListener('pagehide', ()=> saveDraft(true));
+window.addEventListener('blur', ()=> saveDraft(true));
+canvasText.addEventListener('blur', ()=> saveDraft(true));
 
 window.addEventListener('load', ()=>{
   try{
