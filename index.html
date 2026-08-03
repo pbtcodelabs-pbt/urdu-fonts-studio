@@ -60,6 +60,97 @@
     font-weight: 400;
   }
 
+  @font-face {
+    font-family: 'Aligarh Arabic';
+    src: url('fonts/AligarhArabic-Regular.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic Bold';
+    src: url('fonts/AligarhArabic-Bold.otf') format('opentype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic Black';
+    src: url('fonts/AligarhArabic-Black.otf') format('opentype');
+    font-weight: 900;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic ExtraBold';
+    src: url('fonts/AligarhArabic-ExtraBold.otf') format('opentype');
+    font-weight: 800;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic SemiBold';
+    src: url('fonts/AligarhArabic-SemiBold.otf') format('opentype');
+    font-weight: 600;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic Medium';
+    src: url('fonts/AligarhArabic-Medium.otf') format('opentype');
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic Light';
+    src: url('fonts/AligarhArabic-Light.otf') format('opentype');
+    font-weight: 300;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic ExtraLight';
+    src: url('fonts/AligarhArabic-ExtraLight.otf') format('opentype');
+    font-weight: 200;
+  }
+  @font-face {
+    font-family: 'Aligarh Arabic Thin';
+    src: url('fonts/AligarhArabic-Thin.otf') format('opentype');
+    font-weight: 100;
+  }
+  @font-face {
+    font-family: 'Retro Floral';
+    src: url('fonts/Retro_Floral.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Qilka Bold';
+    src: url('fonts/Qilka-Bold.otf') format('opentype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Qobliyah';
+    src: url('fonts/Qobliyah.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Lutfey Arabic';
+    src: url('fonts/LutfeyArabic-Regular.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Lutfey Arabic Outline';
+    src: url('fonts/LutfeyArabic-Outline.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Tufuli Arabic';
+    src: url('fonts/TufuliArabic-Regular.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Tufuli Arabic Bold';
+    src: url('fonts/TufuliArabic-Bold.otf') format('opentype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Signatie';
+    src: url('fonts/Signatie.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Delik';
+    src: url('fonts/Delik.otf') format('opentype');
+    font-weight: 400;
+  }
+
   :root{
     --ink: #241a12;
     --gold: #1e88e5;
@@ -466,7 +557,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS018</span>
+      <span id="verTag">UFS021</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -551,6 +642,7 @@
   <button class="rail-btn" data-panel="export">⇩<span class="lbl">محفوظ / شیئر</span></button>
   <button class="rail-btn" id="btnOpenHW">✍<span class="lbl">ہاتھ کی تحریر</span></button>
   <button class="rail-btn" id="btnOpenBook">📖<span class="lbl">کتاب</span></button>
+  <button class="rail-btn" id="btnCollapseBlank">🧹<span class="lbl">اضافی خالی جگہ ہٹائیں</span></button>
 </div>
 
 <div id="drawer">
@@ -791,6 +883,24 @@ const FONTS = [
   { id:'sameer-qamri', label:'سمیر قمری', family:"'Sameer Qamri','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'alfars-aban', label:'الفارس ابان', family:"'Al Fars Aban','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'syalbiyah', label:'سیالبیہ', family:"'Syalbiyah','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh', label:'علی گڑھ عربی', family:"'Aligarh Arabic','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-bold', label:'علی گڑھ بولڈ', family:"'Aligarh Arabic Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-black', label:'علی گڑھ بلیک', family:"'Aligarh Arabic Black','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-extrabold', label:'علی گڑھ ایکسٹرا بولڈ', family:"'Aligarh Arabic ExtraBold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-semibold', label:'علی گڑھ سیمی بولڈ', family:"'Aligarh Arabic SemiBold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-medium', label:'علی گڑھ میڈیم', family:"'Aligarh Arabic Medium','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-light', label:'علی گڑھ لائٹ', family:"'Aligarh Arabic Light','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-extralight', label:'علی گڑھ ایکسٹرا لائٹ', family:"'Aligarh Arabic ExtraLight','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aligarh-thin', label:'علی گڑھ تھن', family:"'Aligarh Arabic Thin','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'retro-floral', label:'ریٹرو فلورل', family:"'Retro Floral','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'qilka-bold', label:'قلقہ بولڈ', family:"'Qilka Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'qobliyah', label:'قبلیہ', family:"'Qobliyah','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'lutfey', label:'لطفی عربی', family:"'Lutfey Arabic','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'lutfey-outline', label:'لطفی آؤٹ لائن', family:"'Lutfey Arabic Outline','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'tufuli', label:'طفولی عربی', family:"'Tufuli Arabic','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'tufuli-bold', label:'طفولی بولڈ', family:"'Tufuli Arabic Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'signatie', label:'سگنیشی', family:"'Signatie','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'delik', label:'ڈیلک', family:"'Delik','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'atpinko', label:'AT Pinko', family:"'AT Pinko',sans-serif", sample:'Sample Aa' },
   { id:'atpinko-bold', label:'AT Pinko بولڈ', family:"'AT Pinko Bold',sans-serif", sample:'Sample Aa' },
   { id:'naskh',  label:'عام نسخ (سسٹم)', family:"'Traditional Arabic','Noto Naskh Arabic',serif", sample:'آزاد' },
@@ -1613,23 +1723,27 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
   const contentWpx = pageWpx - marginPx*2;
   const maxContentHpx = pageHpx - marginPx*2;
 
-  const measureDiv = document.createElement('div');
-  measureDiv.style.cssText = `position:fixed;left:-99999px;top:0;width:${contentWpx}px;box-sizing:border-box;`;
-  measureDiv.style.direction = 'rtl';
-  measureDiv.style.textAlign = canvasText.style.textAlign || 'right';
-  measureDiv.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
-  measureDiv.style.fontSize = fontSizePx + 'px';
-  measureDiv.style.lineHeight = canvasText.style.lineHeight || '2.1';
-  measureDiv.innerHTML = canvasText.innerHTML;
-  document.body.appendChild(measureDiv);
+  const div = document.createElement('div');
+  div.style.position = 'fixed'; div.style.left = '-99999px'; div.style.top = '0';
+  div.style.width = contentWpx + 'px';
+  div.style.background = '#ffffff';
+  div.style.direction = 'rtl'; div.style.textAlign = canvasText.style.textAlign || 'right';
+  div.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
+  div.style.fontSize = fontSizePx + 'px';
+  div.style.lineHeight = canvasText.style.lineHeight || '2.1';
+  div.innerHTML = canvasText.innerHTML;
+  document.body.appendChild(div);
   await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
 
   const range = document.createRange();
-  range.selectNodeContents(measureDiv);
-  const refTop = measureDiv.getBoundingClientRect().top;
+  range.selectNodeContents(div);
+  const refTop = div.getBoundingClientRect().top;
   const bands = clusterLineBands(range.getClientRects(), refTop);
-  const totalH = measureDiv.scrollHeight;
+
+  const fullCanvas = await html2canvas(div, {backgroundColor:'#ffffff', scale: renderScale});
+  document.body.removeChild(div);
+  const pxPerCssPx = fullCanvas.width / contentWpx;
 
   const breaks = [0];
   let pageStart = 0;
@@ -1638,41 +1752,35 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
     if(b.bottom - pageStart > maxContentHpx){
       const breakAt = i>0 ? bands[i-1].bottom : pageStart;
       if(breakAt > pageStart){ breaks.push(breakAt); pageStart = breakAt; }
-      else { breaks.push(b.bottom); pageStart = b.bottom; } /* single line taller than a page: let it stand alone */
+      else { breaks.push(b.bottom); pageStart = b.bottom; }
     }
   }
-  breaks.push(Math.max(totalH, bands.length? bands[bands.length-1].bottom : 0));
+  const totalCssH = fullCanvas.height / pxPerCssPx;
+  breaks.push(Math.max(totalCssH, bands.length? bands[bands.length-1].bottom : 0));
 
   const pages = [];
   for(let i=0;i<breaks.length-1;i++){
-    const sliceTop = breaks[i], sliceBottom = breaks[i+1];
-    const sliceH = sliceBottom - sliceTop;
-    if(sliceH <= 0) continue;
+    const sliceTopCss = breaks[i], sliceBottomCss = breaks[i+1];
+    const sliceHCss = sliceBottomCss - sliceTopCss;
+    if(sliceHCss <= 0) continue;
+    const sliceTopPx = sliceTopCss * pxPerCssPx;
+    const sliceHPx = Math.min(sliceHCss * pxPerCssPx, fullCanvas.height - sliceTopPx);
 
-    const frame = document.createElement('div');
-    frame.style.cssText = `position:fixed;left:-99999px;top:0;width:${pageWpx}px;height:${pageHpx}px;background:#ffffff;overflow:hidden;`;
-    const clipWin = document.createElement('div');
-    clipWin.style.cssText = `position:absolute;top:${marginPx}px;left:${marginPx}px;width:${contentWpx}px;height:${maxContentHpx}px;overflow:hidden;`;
-    const clone = measureDiv.cloneNode(true);
-    clone.style.position = 'relative';
-    clone.style.top = (-sliceTop) + 'px';
-    clone.style.width = contentWpx + 'px';
-    clipWin.appendChild(clone);
-    frame.appendChild(clipWin);
-    document.body.appendChild(frame);
-    await new Promise(r=> requestAnimationFrame(r));
-    const contentCanvas = await html2canvas(frame, {backgroundColor:'#ffffff', scale: renderScale});
-    document.body.removeChild(frame);
-
-    drawPageBorder(contentCanvas.getContext('2d'), contentCanvas.width, contentCanvas.height, borderStyle);
-    const ctx2 = contentCanvas.getContext('2d');
-    ctx2.fillStyle = '#7a6a4f';
-    ctx2.font = (22*renderScale*PX_PER_PT/2.2)+'px Tahoma, sans-serif';
-    ctx2.textAlign = 'center';
-    ctx2.fillText(String(pages.length+1), contentCanvas.width/2, contentCanvas.height - (16*renderScale*PX_PER_PT/2.2));
-    pages.push(contentCanvas);
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = pageWpx * renderScale;
+    pageCanvas.height = pageHpx * renderScale;
+    const pctx = pageCanvas.getContext('2d');
+    pctx.fillStyle = '#ffffff';
+    pctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
+    const destX = marginPx*renderScale, destY = marginPx*renderScale;
+    pctx.drawImage(fullCanvas, 0, sliceTopPx, fullCanvas.width, sliceHPx, destX, destY, fullCanvas.width, sliceHPx);
+    drawPageBorder(pctx, pageCanvas.width, pageCanvas.height, borderStyle);
+    pctx.fillStyle = '#7a6a4f';
+    pctx.font = (22*renderScale*PX_PER_PT/2.2)+'px Tahoma, sans-serif';
+    pctx.textAlign = 'center';
+    pctx.fillText(String(pages.length+1), pageCanvas.width/2, pageCanvas.height - (16*renderScale*PX_PER_PT/2.2));
+    pages.push(pageCanvas);
   }
-  document.body.removeChild(measureDiv);
   if(!pages.length){
     const blank = document.createElement('canvas');
     blank.width = pageWpx*renderScale; blank.height = pageHpx*renderScale;
@@ -1954,6 +2062,16 @@ document.getElementById('btnClearAll').onclick = ()=>{
     captureSnapshot();
     showToast('صفحہ صاف کر دیا — واپس لانے کے لیے ↶ دبائیں');
   }
+};
+document.getElementById('btnCollapseBlank').onclick = ()=>{
+  captureSnapshot();
+  let html = canvasText.innerHTML;
+  html = html.replace(/(<div><br\s*\/?><\/div>\s*){2,}/gi, '<div><br></div>');
+  html = html.replace(/(<div>\s*<\/div>\s*){2,}/gi, '<div><br></div>');
+  html = html.replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>');
+  canvasText.innerHTML = html;
+  captureSnapshot();
+  showToast('اضافی خالی جگہ ہٹا دی');
 };
 canvasText.addEventListener('beforeinput', (e)=>{
   if(e.inputType && e.inputType.indexOf('delete') === 0){
