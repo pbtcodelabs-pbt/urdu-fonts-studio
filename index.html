@@ -338,6 +338,11 @@
     background: #e0a83e; display:flex; align-items:center; justify-content:center;
     box-shadow: 0 1px 4px rgba(0,0,0,.3);
   }
+  #selCloseBtn{
+    width:24px; height:24px; min-width:24px; border-radius:50%; border:none;
+    background:#c0392b; color:#fff; font-size:12px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; margin-inline-end:2px;
+  }
   #selToolbar{ opacity:.6; transition: opacity .15s; }
   #selToolbar.touched, #selToolbar:has(#selToolbarBody.expanded){ opacity:1; }
   #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
@@ -460,7 +465,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS015</span>
+      <span id="verTag">UFS016</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -504,6 +509,7 @@
 
 <div id="selToolbar">
   <span id="selDragHandle" title="پکڑ کر گھسیٹیں">⠿</span>
+  <button id="selCloseBtn" title="بند کریں">✕</button>
   <button id="selToggle">Aa ⌄</button>
   <div id="selToolbarBody">
   <select id="selFont" style="display:none;"></select>
@@ -519,8 +525,8 @@
   <button class="icon-toggle" data-align="justify" title="برابر">▤</button>
   <button id="selLineSpace" title="سطروں کا فاصلہ">↕</button>
   <button id="selFitLine" title="ایک لائن میں فٹ کریں">↔️1</button>
-  <input type="range" id="selFitSlider" min="8" max="90" value="34" style="width:70px;display:none;">
-  <span id="selFitSliderVal" style="display:none;color:var(--text-muted);font-size:11px;min-width:26px;">34</span>
+  <input type="range" id="selFitSlider" min="8" max="140" value="34" style="width:90px;">
+  <span id="selFitSliderVal" style="color:var(--text-muted);font-size:11px;min-width:26px;">34</span>
   <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
   <button id="selColorBtn" title="لفظ کا رنگ">🎨</button>
   <button id="selBgBtn" title="لفظ کا بیک گراؤنڈ">🖍️</button>
@@ -736,6 +742,10 @@
       <button class="pill-btn" data-border="double">ڈبل لائن</button>
       <button class="pill-btn" data-border="floral">پھولوں والا</button>
       <button class="pill-btn" data-border="rounded-gold">گول سنہری</button>
+      <button class="pill-btn" data-border="dotted">نقطے دار</button>
+      <button class="pill-btn" data-border="corner">صرف کونے</button>
+      <button class="pill-btn" data-border="shadow">سایہ دار</button>
+      <button class="pill-btn" data-border="ornate">شاہی ڈبل</button>
     </div>
     <div style="display:flex;gap:10px;margin-bottom:12px;">
       <button class="pill-btn primary" id="pdfPortrait" style="flex:1;">📄 پورٹریٹ</button>
@@ -751,11 +761,16 @@
     <div id="pdfPageCount" style="text-align:center;color:#123a68;font-size:13px;font-weight:600;margin-bottom:10px;">حساب لگایا جا رہا ہے…</div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;justify-content:center;">
       <button id="pdfPrevZoomMinus" style="width:28px;height:28px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;">–</button>
-      <span style="color:#2f6690;font-size:12px;">پہلے صفحے کا پریویو</span>
+      <span style="color:#2f6690;font-size:12px;">صفحے کا پریویو</span>
       <button id="pdfPrevZoomPlus" style="width:28px;height:28px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;">+</button>
     </div>
-    <div id="pdfPreviewWrap" style="overflow:auto;max-height:48vh;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
+    <div id="pdfPreviewWrap" style="overflow:auto;max-height:44vh;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
       <img id="pdfPreviewImg" style="max-width:none;transition:width .15s;" />
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px;">
+      <button id="pdfPrevPage" class="pill-btn">◄ پچھلا صفحہ</button>
+      <span id="pdfPreviewNavLabel" style="color:#123a68;font-size:13px;font-weight:600;">صفحہ 1 / 1</span>
+      <button id="pdfNextPage" class="pill-btn">اگلا صفحہ ►</button>
     </div>
   </div>
   <div class="fs-foot">
@@ -989,6 +1004,9 @@ document.addEventListener('selectionchange', ()=>{
   const s = window.getSelection();
   if(s.rangeCount && !s.isCollapsed && canvasText.contains(s.anchorNode) && canvasText.contains(s.focusNode)){
     savedRange = s.getRangeAt(0).cloneRange();
+    if(typeof fitLineSpan !== 'undefined' && fitLineSpan && !fitLineSpan.contains(s.anchorNode)){
+      fitLineSpan = null;
+    }
   }
 });
 
@@ -1125,20 +1143,24 @@ document.getElementById('selFitLine').onclick = fitToOneLine;
 
 document.getElementById('selFitSlider').onmousedown = (e)=> e.preventDefault();
 document.getElementById('selFitSlider').oninput = (e)=>{
-  if(!fitLineSpan || !canvasText.contains(fitLineSpan)) return;
-  const containerWidth = canvasText.clientWidth - 20;
   let size = +e.target.value;
-  fitLineSpan.style.whiteSpace = 'nowrap';
-  fitLineSpan.style.fontSize = size + 'px';
-  let guard = 0;
-  while(fitLineSpan.getBoundingClientRect().width > containerWidth && size > 8 && guard < 100){
-    size -= 1;
-    fitLineSpan.style.fontSize = size + 'px';
-    guard++;
-  }
-  fitLineSpan.style.whiteSpace = '';
   document.getElementById('selFitSliderVal').textContent = size;
-  if(size !== +e.target.value) e.target.value = size;
+  if(fitLineSpan && canvasText.contains(fitLineSpan)){
+    const containerWidth = canvasText.clientWidth - 20;
+    fitLineSpan.style.whiteSpace = 'nowrap';
+    fitLineSpan.style.fontSize = size + 'px';
+    let guard = 0;
+    while(fitLineSpan.getBoundingClientRect().width > containerWidth && size > 8 && guard < 100){
+      size -= 1;
+      fitLineSpan.style.fontSize = size + 'px';
+      guard++;
+    }
+    fitLineSpan.style.whiteSpace = '';
+    document.getElementById('selFitSliderVal').textContent = size;
+    if(size !== +e.target.value) e.target.value = size;
+    return;
+  }
+  styleSelection(st=> st.fontSize = size+'px', ()=> canvasText.style.fontSize = size+'px');
 };
 
 /* ---------- zoom (adjusts TEXT SIZE only — the page/paper stays put) ---------- */
@@ -1190,6 +1212,7 @@ const selToolbar = document.getElementById('selToolbar');
 let toolbarDragged = false;
 let toolbarPos = null;
 function showSelToolbarPinned(){
+  if(typeof toolbarManuallyClosed !== 'undefined' && toolbarManuallyClosed) return;
   if(toolbarDragged && toolbarPos){
     selToolbar.style.position = 'fixed';
     selToolbar.style.top = toolbarPos.top + 'px';
@@ -1210,18 +1233,21 @@ document.addEventListener('selectionchange', ()=>{
   if(document.activeElement !== canvasText) return;
   showSelToolbarPinned();
 });
+let toolbarManuallyClosed = false;
 canvasText.addEventListener('focus', ()=>{
+  toolbarManuallyClosed = false;
   showSelToolbarPinned();
   setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 350);
   setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 700);
 });
 canvasText.addEventListener('blur', ()=>{
-  setTimeout(()=>{
-    if(document.activeElement !== canvasText && !selToolbar.contains(document.activeElement)){
-      selToolbar.style.display = 'none';
-    }
-  }, 150);
+  /* intentionally does not auto-hide the toolbar anymore — only the ✕ button closes it */
 });
+document.getElementById('selCloseBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selCloseBtn').onclick = ()=>{
+  toolbarManuallyClosed = true;
+  selToolbar.style.display = 'none';
+};
 document.getElementById('selToggle').onmousedown = (e)=> e.preventDefault();
 document.getElementById('selToggle').onclick = ()=>{
   const body = document.getElementById('selToolbarBody');
@@ -1528,6 +1554,31 @@ function drawPageBorder(ctx, w, h, style){
     ctx.lineWidth = w*0.01;
     roundRectPath(ctx, margin, margin, w-margin*2, h-margin*2, w*0.02);
     ctx.stroke();
+  } else if(style==='dotted'){
+    ctx.lineWidth = w*0.007;
+    ctx.lineCap = 'round';
+    ctx.setLineDash([1, w*0.012]);
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    ctx.setLineDash([]);
+  } else if(style==='corner'){
+    const L = w*0.09;
+    ctx.lineWidth = w*0.008;
+    const corners = [[margin,margin,1,1],[w-margin,margin,-1,1],[margin,h-margin,1,-1],[w-margin,h-margin,-1,-1]];
+    corners.forEach(([x,y,dx,dy])=>{
+      ctx.beginPath();
+      ctx.moveTo(x, y+L*dy); ctx.lineTo(x,y); ctx.lineTo(x+L*dx, y);
+      ctx.stroke();
+    });
+  } else if(style==='shadow'){
+    ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = w*0.02; ctx.shadowOffsetY = w*0.01;
+    ctx.lineWidth = w*0.008;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+  } else if(style==='ornate'){
+    ctx.lineWidth = w*0.014;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    const m2 = margin + w*0.02;
+    ctx.lineWidth = w*0.003;
+    ctx.strokeRect(m2, m2, w-m2*2, h-m2*2);
   }
   ctx.restore();
 }
@@ -1592,6 +1643,7 @@ const pdfPreviewImg = document.getElementById('pdfPreviewImg');
 let pdfPreviewZoom = 100;
 let pdfUpdateTimer = null;
 
+let pdfFullCanvas = null, pdfPageHeightPx = 0, pdfTotalPages = 1, pdfCurrentPreviewPage = 0;
 async function updatePdfPreview(){
   if(!canvasText.innerText || !canvasText.innerText.trim()){
     pdfPageCountEl.textContent = 'یہ صفحہ خالی ہے';
@@ -1604,21 +1656,37 @@ async function updatePdfPreview(){
   const canvasPxPerPt = canvas.width / dims.w;
   const pageHeightCanvasPx = dims.h * canvasPxPerPt;
   const pages = Math.max(1, Math.ceil(canvas.height / pageHeightCanvasPx));
+  pdfFullCanvas = canvas;
+  pdfPageHeightPx = pageHeightCanvasPx;
+  pdfTotalPages = pages;
+  pdfCurrentPreviewPage = 0;
   pdfPageCountEl.textContent = 'اس ترتیب میں تقریباً ' + pages + ' صفحات بنیں گی (A4، ' + (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ')';
-
+  renderPdfPreviewPage(0);
+}
+function renderPdfPreviewPage(idx){
+  if(!pdfFullCanvas) return;
+  idx = Math.max(0, Math.min(pdfTotalPages-1, idx));
+  pdfCurrentPreviewPage = idx;
+  const canvas = pdfFullCanvas;
+  const pageHeightCanvasPx = pdfPageHeightPx;
+  const y = idx * pageHeightCanvasPx;
+  const sliceH = Math.min(pageHeightCanvasPx, Math.max(0, canvas.height - y));
   const pageCanvas = document.createElement('canvas');
   pageCanvas.width = canvas.width;
   pageCanvas.height = pageHeightCanvasPx;
   const pctx = pageCanvas.getContext('2d');
   pctx.fillStyle = '#ffffff'; pctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
-  pctx.drawImage(canvas, 0, 0, canvas.width, Math.min(pageHeightCanvasPx, canvas.height), 0, 0, canvas.width, Math.min(pageHeightCanvasPx, canvas.height));
+  if(sliceH > 0) pctx.drawImage(canvas, 0, y, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
   drawPageBorder(pctx, pageCanvas.width, pageCanvas.height, pdfBorderStyle);
+  const canvasPxPerPt = canvas.width / A4_PT[pdfOrientation].w;
   pctx.fillStyle = '#7a6a4f';
   pctx.font = (24*canvasPxPerPt/2.5)+'px Tahoma, sans-serif';
   pctx.textAlign = 'center';
-  pctx.fillText('1', pageCanvas.width/2, pageCanvas.height - (18*canvasPxPerPt/2.5));
+  pctx.fillText(String(idx+1), pageCanvas.width/2, pageCanvas.height - (18*canvasPxPerPt/2.5));
   pdfPreviewImg.src = pageCanvas.toDataURL('image/jpeg', 0.92);
   pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
+  const nav = document.getElementById('pdfPreviewNavLabel');
+  if(nav) nav.textContent = 'صفحہ ' + (idx+1) + ' / ' + pdfTotalPages;
 }
 function queuePdfPreviewUpdate(){
   clearTimeout(pdfUpdateTimer);
@@ -1669,6 +1737,8 @@ document.getElementById('pdfPrevZoomPlus').onclick = ()=>{
   pdfPreviewZoom = Math.min(300, pdfPreviewZoom+15);
   pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
 };
+document.getElementById('pdfPrevPage').onclick = ()=> renderPdfPreviewPage(pdfCurrentPreviewPage - 1);
+document.getElementById('pdfNextPage').onclick = ()=> renderPdfPreviewPage(pdfCurrentPreviewPage + 1);
 document.getElementById('pdfClose').onclick = ()=> pdfModal.classList.remove('open');
 
 document.getElementById('btnSavePdf').onclick = ()=>{
