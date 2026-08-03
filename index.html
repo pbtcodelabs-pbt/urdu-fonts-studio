@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اردو فونٹ اسٹوڈیو</title>
+<style>
+  @font-face {
+    font-family: 'Jameel Noori Nastaleeq';
+    src: url('fonts/JameelNooriNastaleeq.ttf') format('truetype');
+    font-weight: 400 800;
+  }
+  @font-face {
+    font-family: 'Noto Nastaliq Urdu';
+    src: url('fonts/NotoNastaliqUrdu-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Noto Nastaliq Urdu Medium';
+    src: url('fonts/NotoNastaliqUrdu-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: 'Noto Nastaliq Urdu Bold';
+    src: url('fonts/NotoNastaliqUrdu-Bold.ttf') format('truetype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'AT Pinko';
+    src: url('fonts/ATPinko-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'AT Pinko Bold';
+    src: url('fonts/ATPinko-Bold.ttf') format('truetype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'PDMS Multan';
+    src: url('fonts/PDMS_Multan.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Sameer Qamri';
+    src: url('fonts/Sameer_Qamri.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Al Fars Aban';
+    src: url('fonts/AlFars_Aban.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Syalbiyah';
+    src: url('fonts/Syalbiyah.ttf') format('truetype');
+    font-weight: 400;
+  }
+
+  :root{
+    --ink: #241a12;
+    --gold: #1e88e5;
+    --gold-soft: #2f6690;
+    --panel-bg: #eaf5ff;
+    --panel-bg-2: #d3ecff;
+    --canvas-bg: #f7f0e0;
+    --rail-w: 58px;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: var(--panel-bg);
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    overflow: hidden;
+  }
+
+  /* ---------- Top bar ---------- */
+  #topbar{
+    position: fixed; top:0; right: var(--rail-w); left:0; min-height:52px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 8px 14px; gap:8px; flex-wrap:wrap;
+    background: linear-gradient(180deg, #cfe6fb, #dceeff);
+    border-bottom: 1px solid #aed6f7;
+    z-index: 30;
+  }
+  #topbar h1{
+    font-size: 14px; color: var(--gold-soft); margin:0; font-weight:600;
+    letter-spacing: 0.5px; white-space:nowrap;
+  }
+  #topbar .sub{ color:#4a7aa8; font-size:10.5px; margin-inline-start:6px; }
+  #topActions{ display:flex; gap:6px; flex-wrap:nowrap; justify-content:flex-end; }
+  #topActions .pill-btn{ padding:8px 11px; font-size:12px; border-radius:10px; font-weight:600; white-space:nowrap; }
+  .pill-btn{
+    background: #ffffff; border: 1.5px solid #7fc0f0; color: var(--gold-soft);
+    padding: 6px 14px; border-radius: 20px; font-size: 12.5px; cursor:pointer;
+    transition: all .15s; box-shadow: 0 1px 3px rgba(30,136,229,.15);
+  }
+  .pill-btn:hover{ background: var(--gold); color:#062a4a; border-color: var(--gold); }
+  .pill-btn:active{ transform: scale(.96); }
+  .pill-btn.primary{ background: var(--gold); color:#062a4a; border-color:var(--gold); }
+  .pill-btn.primary:hover{ filter: brightness(1.08); }
+
+  /* ---------- Icon rail ---------- */
+  #rail{
+    position: fixed; top:0; right:0; bottom:0; width: var(--rail-w);
+    background: var(--panel-bg);
+    border-left: 1px solid #aed6f7;
+    display:flex; flex-direction:column; align-items:center;
+    padding-top: 62px; gap: 6px; z-index: 40;
+  }
+  .rail-btn{
+    width: 42px; height:42px; border-radius: 12px; border:none;
+    background: transparent; color:#2f6690; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 19px; transition: all .15s; position:relative;
+  }
+  .rail-btn:hover{ background: var(--panel-bg-2); color: var(--gold-soft); }
+  .rail-btn.active{ background: var(--gold); color:#062a4a; }
+  .rail-btn .lbl{
+    position:absolute; right: 52px; top:50%; transform: translateY(-50%);
+    background:#dceeff; color:var(--gold-soft); font-size:11px; padding:5px 10px;
+    border-radius:6px; white-space:nowrap; opacity:0; pointer-events:none;
+    transition: opacity .12s; border:1px solid #aed6f7;
+  }
+  .rail-btn:hover .lbl{ opacity:1; }
+
+  /* ---------- Drawer (bottom sheet — page stays visible above it) ---------- */
+  #drawer{
+    position: fixed; left:0; right: var(--rail-w); bottom:0; top:auto;
+    height: 46vh; max-height: 480px; min-height: 300px;
+    background: var(--panel-bg); border-top: 2px solid #7fc0f0; border-left:none;
+    transform: translateY(100%); transition: transform .22s ease;
+    z-index: 35; overflow-y:auto; padding: 14px 16px 30px;
+    border-radius: 18px 18px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,.45);
+  }
+  #drawer.open{ transform: translateY(0); }
+  #drawer::before{
+    content:''; position:sticky; top:-14px; display:block; width:44px; height:5px;
+    background:#7fc0f0; border-radius:4px; margin: 0 auto 10px;
+  }
+  #drawer h2{
+    color: var(--gold); font-size: 13px; margin: 0 0 14px; font-weight:600;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  #drawer h2 button{
+    background:none; border:none; color:#4a7aa8; font-size:16px; cursor:pointer;
+  }
+  .field-label{ color:#2f6690; font-size:11.5px; margin: 14px 0 6px; display:block; }
+  .font-option{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 10px 12px; border-radius: 10px; margin-bottom:6px;
+    background: var(--panel-bg-2); border: 1px solid transparent; cursor:pointer;
+    color: #123a68; font-size: 15px;
+  }
+  .font-option:hover{ border-color: #7fc0f0; }
+  .font-option.selected{ border-color: var(--gold); background:#cfe4fa; }
+  .font-option .sample{ font-size:19px; }
+  input[type=range]{ width:100%; accent-color: var(--gold); }
+  .row-between{ display:flex; align-items:center; justify-content:space-between; color:#2f6690; font-size:12px; }
+  .btn-grid4{ display:grid; grid-template-columns: repeat(4,1fr); gap:8px; margin-top:6px; }
+  .icon-toggle{
+    background: var(--panel-bg-2); border:1px solid #aed6f7; color:#2f6690;
+    border-radius:9px; padding:10px 0; cursor:pointer; font-size:16px;
+  }
+  .icon-toggle.active{ background: var(--gold); color:#062a4a; border-color:var(--gold); }
+  .color-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  .swatch{
+    width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid #aed6f7;
+  }
+  .swatch.selected{ border-color: var(--gold); }
+  #punctGrid{ display:grid; grid-template-columns: repeat(4,1fr); gap:8px; }
+  .punct-btn{
+    background: var(--panel-bg-2); border:1px solid #aed6f7; color:#123a68;
+    border-radius:9px; padding:10px 0; font-size:18px; cursor:pointer;
+  }
+  .punct-btn:hover{ border-color: var(--gold); }
+  #themeGrid{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
+  .theme-swatch{
+    height:46px; border-radius:9px; cursor:pointer; border:2px solid transparent;
+    position:relative;
+  }
+  .theme-swatch.selected{ border-color: var(--gold); }
+  .theme-swatch span{
+    position:absolute; inset:auto 0 -18px 0; font-size:9.5px; color:#2f6690; text-align:center;
+  }
+  .hint{ color:#3d6f97; font-size:11px; line-height:1.7; margin-top:16px; }
+
+  /* ---------- Stage / Canvas ---------- */
+  #stage{
+    position: fixed; top:52px; left:0; right: var(--rail-w); bottom:0;
+    overflow: auto; padding: 40px;
+  }
+  #stageInner{ transition: transform .15s ease; }
+
+  /* always-visible quick zoom slider bar on the main page */
+  #quickZoom{
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    right: auto; margin-inline-end: calc(var(--rail-w) / 2 * -1);
+    display:flex; align-items:center; gap:10px;
+    background: #dceeffee; border:1px solid var(--gold); border-radius: 24px;
+    padding: 8px 16px; z-index: 60; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    width: min(78vw, 360px);
+  }
+  #quickZoom span{ color:#2f6690; font-size:12px; min-width:40px; text-align:center; }
+  #quickZoom input[type=range]{ flex:1; accent-color: var(--gold); }
+  @media (max-width: 640px){
+    #quickZoom{ margin-inline-end: 0; bottom: 14px; }
+  }
+
+  #paper{
+    width: 760px; min-height: 520px; max-width: 90vw;
+    margin: 0 auto;
+    background: var(--canvas-bg);
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    padding: 60px 55px;
+    position: relative;
+  }
+  #canvasText{
+    outline: none; direction: rtl; text-align: right;
+    font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
+    font-size: 34px; line-height: 2.1; color: var(--ink);
+    min-height: 380px;
+  }
+  #canvasText div{ min-height: 1.2em; }
+  #canvasText:empty:before{
+    content: attr(data-placeholder);
+    color: #b7a988; pointer-events:none;
+  }
+
+  /* poster theme variants */
+  #paper.theme-paper{ background: #f7f0e0; --ink: #241a12; }
+  #paper.theme-ink{ background: radial-gradient(circle at 30% 20%, #2e2620, #14100c); --ink:#e9dfc4; }
+  #paper.theme-gold{ background: #f7f0e0; border: 6px double #b8923f; --ink:#241a12; }
+  #paper.theme-night{ background: linear-gradient(160deg,#0e1a2b,#1b2c46); --ink:#eef2f8; }
+  #paper.theme-maroon{ background: radial-gradient(circle at 70% 20%, #6b2430, #3c1017); --ink:#f3e6d8; }
+  #paper.theme-emerald{ background: radial-gradient(160deg,#0f2e26,#173f34); --ink:#eaf5ee; }
+  #paper.theme-marble{ background: repeating-radial-gradient(circle at 20% 30%, #eee5d3 0 2px, #e4d8be 3px 40px); --ink:#241a12; }
+  #paper.theme-teal{ background: linear-gradient(160deg,#0b2e34,#124450); --ink:#e6f6f8; }
+  #paper.theme-desert{ background: linear-gradient(160deg,#e7c9a1,#cf9f6b); --ink:#3a2410; }
+  #paper.theme-charcoal{ background: #262626; --ink:#eeeeee; }
+  #paper.theme-rose{ background: linear-gradient(160deg,#f3dbe0,#e7b9c3); --ink:#4a1420; }
+  #paper.theme-indigo{ background: linear-gradient(160deg,#161233,#2b2160); --ink:#e9e6ff; }
+  #paper.theme-sand{ background: #efe4cc; border: 2px solid #c8ac6e; --ink:#3a2b12; }
+  #paper.theme-forest{ background: linear-gradient(160deg,#16241a,#233a26); --ink:#e6f0e6; }
+  #paper.theme-plum{ background: radial-gradient(circle at 30% 70%, #3a1f3d, #200f24); --ink:#f2e6f2; }
+  #paper.theme-ivory{ background:#fffaf0; border:1px solid #ddd2b6; --ink:#241a12; }
+
+  #canvasText{ color: var(--ink); }
+
+  /* floating selection toolbar */
+  #selToolbar{
+    position: absolute; display:none; z-index: 50;
+    background: #dceeff; border:1px solid #7fc0f0; border-radius: 10px;
+    padding: 6px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    align-items:center; gap:6px; flex-wrap:wrap; max-width: 94vw; justify-content:center;
+  }
+  #selToolbar select, #selToolbar input[type=number]{
+    background:#d3ecff; color:#123a68; border:1px solid #7fc0f0; border-radius:6px;
+    font-size:12px; padding:4px 6px;
+  }
+  #selToolbar button{
+    background:#d3ecff; color:#123a68; border:1px solid #7fc0f0; border-radius:6px;
+    width:26px; height:26px; cursor:pointer; font-size:13px;
+  }
+  #selToolbar button.active{ background:var(--gold); color:#062a4a; }
+  #selToolbarBody{ display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; }
+  #selToolbarBody.expanded{ display:flex; }
+  #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
+
+  ::selection{ background: #1e88e566; }
+
+  #toast{
+    position: fixed; bottom: 24px; left:50%; transform: translateX(-50%);
+    background:#dceeff; color:#123a68; border:1px solid var(--gold);
+    padding: 10px 20px; border-radius: 20px; font-size:12.5px; z-index:100;
+    opacity:0; pointer-events:none; transition: opacity .2s;
+  }
+  #toast.show{ opacity:1; }
+
+  @media (max-width: 640px){
+    #paper{ padding: 34px 22px; }
+    #canvasText{ font-size: 26px; }
+    #drawer{ height: 52vh; }
+    #topbar .sub{ display:none; }
+    #topbar h1{ font-size:13px; }
+    #stage{ top: 96px; }
+  }
+
+  /* ---------- Full-screen modal (Handwriting + Book) ---------- */
+  .fs-modal{
+    position: fixed; inset:0; background: rgba(10,7,4,.92); z-index: 200;
+    display:none; flex-direction: column;
+  }
+  .fs-modal.open{ display:flex; }
+  .fs-modal .fs-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 16px; border-bottom:1px solid #aed6f7; background:#dceeff;
+  }
+  .fs-modal .fs-head h2{ color: var(--gold); font-size:14.5px; margin:0; }
+  .fs-modal .fs-head button{
+    background:#d3ecff; border:1px solid #7fc0f0; color:#123a68; border-radius:8px;
+    padding:6px 12px; font-size:13px; cursor:pointer;
+  }
+  .fs-body{ flex:1; overflow:auto; padding: 14px; }
+
+  /* handwriting split panes */
+  .hw-panes{ display:flex; gap:12px; height:100%; }
+  @media (max-width: 780px){
+    .hw-panes{ flex-direction:column; }
+    .hw-panes .hw-pane:first-child{ flex: 0 1 auto; max-height: 64vh; overflow-y:auto; }
+    .hw-panes .hw-pane:last-child{ flex: 1 1 auto; min-height:220px; }
+  }
+  .hw-pane{
+    flex:1; display:flex; flex-direction:column; min-height:280px;
+    background:#eaf5ff; border:1px solid #aed6f7; border-radius:10px; overflow:hidden;
+  }
+  .hw-pane-head{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:8px 10px; border-bottom:1px solid #aed6f7; color:#2f6690; font-size:12px;
+  }
+  .hw-pane-head .zoom-ctl{ display:flex; align-items:center; gap:6px; }
+  .hw-pane-head button{
+    background:#d3ecff; border:1px solid #7fc0f0; color:#123a68; border-radius:6px;
+    width:26px; height:26px; cursor:pointer; font-size:14px;
+  }
+  .hw-pane-head input[type=range]{ width:90px; }
+  .hw-view{ flex:1 1 auto; flex-shrink:0; min-height:260px; overflow:auto; position:relative; background:#071a30; }
+  #hwImageWrap{ transform-origin: top center; width:100%; padding:0; box-sizing:border-box; position:relative; }
+  #hwImageWrap canvas{ display:block; width:100%; height:auto; }
+  #hwDrawCanvas{ position:absolute; inset:0; width:100%; height:100%; }
+  .hw-annot-bar{
+    display:flex; gap:5px; flex-wrap:wrap; padding:6px 8px; border-top:1px solid #aed6f7;
+    background:#eaf5ff; align-items:center;
+  }
+  .hw-annot-bar button{
+    background:#d3ecff; border:1px solid #7fc0f0; color:#123a68; border-radius:7px;
+    padding:5px 8px; font-size:11px; cursor:pointer; white-space:nowrap;
+  }
+  .hw-annot-bar button.active{ background:#1e88e5; color:#062a4a; border-color:#1e88e5; }
+  .hw-annot-bar input[type=range]{ accent-color: var(--gold); }
+  #hwDrop{
+    height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px; color:#4a7aa8; font-size:13px; text-align:center; padding:20px; cursor:pointer;
+    border:2px dashed #7fc0f0; margin:10px; border-radius:10px;
+  }
+  #hwDrop .gallery-btn{
+    background: var(--gold); color:#062a4a; border:none; border-radius:20px;
+    padding:10px 20px; font-size:13px; font-weight:600; cursor:pointer;
+  }
+  #hwTextWrap{ flex:1; overflow:auto; background:#f7f0e0; }
+  #hwText{
+    transform-origin: top right; direction:rtl; text-align:right; outline:none;
+    font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif; font-size:30px;
+    line-height:2.1; color:#062a4a; padding:16px; min-height:100%;
+  }
+  .fs-foot{ display:flex; gap:10px; padding:12px 16px; border-top:1px solid #aed6f7; background:#dceeff; }
+
+  /* book */
+  #bookGrid{ display:grid; grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); gap:14px; }
+  .book-page-card{
+    background:#eaf5ff; border:1px solid #aed6f7; border-radius:10px; overflow:hidden; cursor:pointer; position:relative;
+  }
+  .book-page-card .thumb{
+    height:170px; background:#f7f0e0; padding:8px; overflow:hidden; position:relative;
+    font-family:'Jameel Noori Nastaleeq',serif; font-size:9px; direction:rtl; color:#062a4a;
+  }
+  .book-page-card .thumb .pg-frame{ position:absolute; inset:4px; border:2px solid #b8923f; border-radius:6px; }
+  .book-page-card .num{ text-align:center; color:#2f6690; font-size:11.5px; padding:6px; }
+  .book-page-card .del{
+    position:absolute; top:4px; left:4px; background:#4a1420; color:#f3e6d8; border:none;
+    border-radius:5px; width:20px; height:20px; font-size:11px; cursor:pointer; z-index:2;
+  }
+  #paper.book-frame{ border: 8px solid #b8923f; border-radius: 16px; position:relative; }
+  .pg-number{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:13px; color:#7a6a4f; font-family:Tahoma,sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
+  <div id="topActions">
+    <button class="pill-btn" id="btnSaveDraft">محفوظ</button>
+    <button class="pill-btn" id="btnSharePage"><svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-2px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> شیئر</button>
+    <button class="pill-btn" id="btnSavePdf">📄 PDF</button>
+    <button class="pill-btn primary" id="btnExportImg">تصویر</button>
+  </div>
+</div>
+
+<div id="stage">
+  <div id="stageInner">
+    <div id="paper" class="theme-paper">
+      <div id="canvasText" contenteditable="true" data-placeholder="یہاں اپنی تحریر پیسٹ کریں یا لکھنا شروع کریں…"></div>
+    </div>
+  </div>
+</div>
+
+<div id="quickZoom">
+  <span>🔍</span>
+  <input type="range" id="qzSlider" min="50" max="400" value="100">
+  <span id="qzVal">100%</span>
+</div>
+
+<div id="selToolbar">
+  <button id="selToggle">Aa ⌄</button>
+  <div id="selToolbarBody">
+  <select id="selFont"></select>
+  <button id="selMinus">–</button>
+  <span id="selSizeVal" style="color:#2f6690;font-size:11px;min-width:24px;text-align:center;">34</span>
+  <button id="selPlus">+</button>
+  <button id="selBold" title="بولڈ">B</button>
+  <button id="selSpace" title="لفظوں میں فاصلہ">☰</button>
+  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
+  <button class="icon-toggle" data-align="right" title="دائیں">◄</button>
+  <button class="icon-toggle" data-align="center" title="درمیان">◆</button>
+  <button class="icon-toggle" data-align="left" title="بائیں">►</button>
+  <button class="icon-toggle" data-align="justify" title="برابر">▤</button>
+  <button id="selLineSpace" title="سطروں کا فاصلہ">↕</button>
+  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
+  <button id="selColorBtn" title="لفظ کا رنگ">🎨</button>
+  <button id="selBgBtn" title="لفظ کا بیک گراؤنڈ">🖍️</button>
+  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
+  <button class="selPunct" data-ch="،">،</button>
+  <button class="selPunct" data-ch="۔">۔</button>
+  <button class="selPunct" data-ch="؟">؟</button>
+  <button class="selPunct" data-ch="!">!</button>
+  <div id="selColorRow" style="display:none;width:100%;justify-content:center;gap:6px;padding-top:6px;"></div>
+  </div>
+</div>
+
+<div id="rail">
+  <button class="rail-btn" data-panel="font">Aa<span class="lbl">فونٹ</span></button>
+  <button class="rail-btn" data-panel="style">⇕<span class="lbl">سائز / انداز</span></button>
+  <button class="rail-btn" data-panel="align">☰<span class="lbl">ترتیب</span></button>
+  <button class="rail-btn" data-panel="theme">◐<span class="lbl">پس منظر</span></button>
+  <button class="rail-btn" data-panel="punct">٫<span class="lbl">اوقاف</span></button>
+  <button class="rail-btn" data-panel="zoom">⤢<span class="lbl">زوم</span></button>
+  <button class="rail-btn" data-panel="export">⇩<span class="lbl">محفوظ / شیئر</span></button>
+  <button class="rail-btn" id="btnOpenHW">✍<span class="lbl">ہاتھ کی تحریر</span></button>
+  <button class="rail-btn" id="btnOpenBook">📖<span class="lbl">کتاب</span></button>
+</div>
+
+<div id="drawer">
+  <div id="panel-font">
+    <h2>فونٹ منتخب کریں <button data-close="1">✕</button></h2>
+    <div class="hint" style="margin-top:-8px;margin-bottom:12px;">پہلے تحریر میں سے کوئی لفظ یا سطر منتخب کریں، پھر فونٹ چنیں — صرف وہی حصہ تبدیل ہوگا۔ کچھ منتخب نہ ہو تو پورے صفحے پر لاگو ہوگا۔</div>
+    <div id="fontList"></div>
+  </div>
+
+  <div id="panel-style" style="display:none;">
+    <h2>سائز اور انداز <button data-close="1">✕</button></h2>
+    <span class="field-label">فونٹ سائز</span>
+    <input type="range" id="rngSize" min="14" max="90" value="34">
+    <div class="row-between"><span id="rngSizeVal">34px</span><span>حجم</span></div>
+
+    <span class="field-label">موٹائی (بولڈ / پتلا)</span>
+    <input type="range" id="rngWeight" min="200" max="800" step="100" value="400">
+    <div class="row-between"><span id="rngWeightVal">عام</span><span>موٹائی</span></div>
+
+    <span class="field-label">لفظوں کے درمیان فاصلہ</span>
+    <input type="range" id="rngWordSpace" min="0" max="30" value="0">
+
+    <span class="field-label">رنگ</span>
+    <div class="color-row" id="colorRow"></div>
+
+    <div class="hint">یہ تبدیلیاں بھی منتخب شدہ حصے پر لاگو ہوں گی — یا پورے صفحے پر اگر کچھ منتخب نہیں۔</div>
+  </div>
+
+  <div id="panel-align" style="display:none;">
+    <h2>ترتیب <button data-close="1">✕</button></h2>
+    <span class="field-label">صف بندی (منتخب سطر یا پورا صفحہ)</span>
+    <div class="btn-grid4">
+      <button class="icon-toggle" data-align="right">◄ دائیں</button>
+      <button class="icon-toggle" data-align="center">◆ درمیان</button>
+      <button class="icon-toggle" data-align="left">► بائیں</button>
+      <button class="icon-toggle" data-align="justify">▤ برابر</button>
+    </div>
+  </div>
+
+  <div id="panel-theme" style="display:none;">
+    <h2>پس منظر / پوسٹر تھیم <button data-close="1">✕</button></h2>
+    <div id="themeGrid" style="margin-top:20px;"></div>
+  </div>
+
+  <div id="panel-punct" style="display:none;">
+    <h2>اوقاف اور علامات <button data-close="1">✕</button></h2>
+    <div class="hint" style="margin-top:-8px;margin-bottom:12px;">جہاں کرسر ہو وہاں علامت شامل ہو جائے گی۔</div>
+    <div id="punctGrid"></div>
+  </div>
+
+  <div id="panel-zoom" style="display:none;">
+    <h2>زوم <button data-close="1">✕</button></h2>
+    <span class="field-label">صفحہ بڑا / چھوٹا کریں</span>
+    <input type="range" id="rngZoom" min="50" max="400" value="100">
+    <div class="row-between"><span id="zoomVal">100%</span><span></span></div>
+  </div>
+
+  <div id="panel-export" style="display:none;">
+    <h2>محفوظ / شیئر کریں <button data-close="1">✕</button></h2>
+    <button class="pill-btn primary" style="width:100%;margin-bottom:10px;" id="btnExportImg2">📷 بطور تصویر محفوظ کریں</button>
+    <button class="pill-btn" style="width:100%;margin-bottom:10px;" id="btnShare"><svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-2px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> شیئر کریں (واٹس ایپ وغیرہ)</button>
+    <button class="pill-btn" style="width:100%;margin-bottom:10px;" id="btnPrint">🖨️ پرنٹ / PDF</button>
+    <button class="pill-btn" style="width:100%;" id="btnSaveDraft2">💾 ڈرافٹ محفوظ کریں</button>
+    <div class="hint">ڈرافٹ اسی براؤزر میں محفوظ ہوتا ہے۔ اگلی بار یہ فائل کھولنے پر خودکار لوڈ ہونے کی کوشش کرے گا۔</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ===== ہاتھ کی تحریر ماڈیول ===== -->
+<div class="fs-modal" id="hwModal">
+  <div class="fs-head">
+    <h2>ہاتھ کی تحریر — دستی نقل (تصویر دیکھ کر ٹائپ کریں)</h2>
+    <button id="hwClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body">
+    <div class="hw-panes">
+      <div class="hw-pane">
+        <div class="hw-pane-head">
+          <span>تصویر</span>
+          <span class="zoom-ctl">
+            <button id="hwImgMinus">–</button>
+            <input type="range" id="hwImgZoom" min="50" max="400" value="100">
+            <button id="hwImgPlus">+</button>
+            <span id="hwImgZoomVal">100%</span>
+          </span>
+        </div>
+        <div class="hw-view" id="hwView">
+          <div id="hwDrop">
+            <span>ہاتھ کی تحریر والی تصویر یہاں دکھائی جائے گی</span>
+            <button type="button" class="gallery-btn" id="hwGalleryBtn">🖼️ گیلری سے تصویر منتخب کریں</button>
+            <span style="font-size:11px;">یا تصویر کاپی کر کے یہاں پیسٹ کریں (Ctrl+V)</span>
+            <input type="file" id="hwFile" accept="image/*" style="display:none">
+          </div>
+          <div id="hwImageWrap" style="display:none;">
+            <canvas id="hwBaseCanvas"></canvas>
+            <canvas id="hwDrawCanvas"></canvas>
+          </div>
+        </div>
+        <div class="hw-annot-bar">
+          <span style="color:#123a68;font-size:11.5px;">☀️ برائٹنس</span>
+          <input type="range" id="hwBright" min="50" max="200" value="100" style="width:70px;">
+          <span style="color:#123a68;font-size:11.5px;">◑ کنٹراسٹ</span>
+          <input type="range" id="hwContrast" min="50" max="200" value="100" style="width:70px;">
+          <button id="hwAutoEnhance">✨ خودکار صاف کریں</button>
+          <button id="hwResetEnhance">↺ اصل حالت</button>
+        </div>
+        <div class="hw-annot-bar">
+          <button id="hwToolView" class="active">✋ دیکھیں</button>
+          <button id="hwToolPen">🖊️ قلم (نشان)</button>
+          <button id="hwToolHi">🖍️ ہائی لائٹ</button>
+          <button id="hwToolEraser">🧽 مٹائیں</button>
+          <button id="hwClearMarks">🗑️ نشانات صاف</button>
+          <button id="hwShareMarked"><svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px;vertical-align:-1px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> نشان زدہ تصویر بھیجیں</button>
+        </div>
+        <div style="padding:8px 10px;border-top:1px solid #aed6f7;">
+          <button class="pill-btn" id="hwChangeImg" style="width:100%;">🖼️ گیلری سے دوسری تصویر منتخب کریں</button>
+        </div>
+      </div>
+      <div class="hw-pane">
+        <div class="hw-pane-head">
+          <span>نستعلیق میں لکھیں (تصویر دیکھ کر درست کریں)</span>
+          <span class="zoom-ctl">
+            <button id="hwTxtMinus">–</button>
+            <input type="range" id="hwTxtZoom" min="50" max="400" value="100">
+            <button id="hwTxtPlus">+</button>
+            <span id="hwTxtZoomVal">100%</span>
+          </span>
+        </div>
+        <div id="hwTextWrap">
+          <div id="hwText" contenteditable="true" data-placeholder="یہاں تصویر دیکھ کر ٹائپ کریں…"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fs-foot">
+    <button class="pill-btn primary" id="hwInsertPage" style="flex:1;">مرکزی صفحے میں شامل کریں</button>
+    <button class="pill-btn" id="hwSaveBookPage" style="flex:1;">کتاب کے نئے صفحے میں محفوظ کریں</button>
+  </div>
+</div>
+
+<!-- ===== کتاب ماڈیول ===== -->
+<div class="fs-modal" id="bookModal">
+  <div class="fs-head">
+    <h2>کتاب — صفحات</h2>
+    <button id="bookClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body">
+    <div id="bookGrid"></div>
+  </div>
+  <div class="fs-foot">
+    <button class="pill-btn primary" id="bookNewPage" style="flex:1;">نیا صفحہ شروع کریں</button>
+    <button class="pill-btn" id="bookSaveCurrent" style="flex:1;">موجودہ صفحہ کتاب میں محفوظ کریں</button>
+    <button class="pill-btn" id="bookExportPdf" style="flex:1;">📄 پوری کتاب PDF بنائیں</button>
+  </div>
+</div>
+
+<!-- ===== PDF ترتیب / پریویو ===== -->
+<div class="fs-modal" id="pdfModal">
+  <div class="fs-head">
+    <h2>PDF ترتیب — پورا A4 صفحہ</h2>
+    <button id="pdfClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body">
+    <div style="color:#2f6690;font-size:12.5px;margin-bottom:6px;">صف بندی</div>
+    <div class="btn-grid4" style="margin-bottom:12px;">
+      <button class="icon-toggle" data-pdf-align="right">◄ دائیں</button>
+      <button class="icon-toggle" data-pdf-align="center">◆ درمیان</button>
+      <button class="icon-toggle" data-pdf-align="left">► بائیں</button>
+      <button class="icon-toggle" data-pdf-align="justify">▤ برابر</button>
+    </div>
+    <div style="color:#2f6690;font-size:12.5px;margin-bottom:6px;">صفحے کا بارڈر</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+      <button class="pill-btn primary" data-border="none">بغیر بارڈر</button>
+      <button class="pill-btn" data-border="thin">پتلا</button>
+      <button class="pill-btn" data-border="thick">موٹا</button>
+      <button class="pill-btn" data-border="double">ڈبل لائن</button>
+      <button class="pill-btn" data-border="floral">پھولوں والا</button>
+      <button class="pill-btn" data-border="rounded-gold">گول سنہری</button>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
+      <button class="pill-btn primary" id="pdfPortrait" style="flex:1;">📄 پورٹریٹ</button>
+      <button class="pill-btn" id="pdfLandscape" style="flex:1;">📃 لینڈ اسکیپ</button>
+    </div>
+    <div style="color:#2f6690;font-size:12.5px;margin-bottom:6px;">پرنٹ کے لیے لکھائی کا سائز (صفحے کی ترتیب پر اثر انداز ہوگا، آپ کی اصل تحریر تبدیل نہیں ہوگی)</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <span style="color:#2f6690;font-size:12px;">A</span>
+      <input type="range" id="pdfFontSize" min="14" max="44" value="24" style="flex:1;">
+      <span style="color:#2f6690;font-size:16px;">A</span>
+      <span id="pdfFontSizeVal" style="color:#123a68;font-size:12px;min-width:34px;">24px</span>
+    </div>
+    <div id="pdfPageCount" style="text-align:center;color:#123a68;font-size:13px;font-weight:600;margin-bottom:10px;">حساب لگایا جا رہا ہے…</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;justify-content:center;">
+      <button id="pdfPrevZoomMinus" style="width:28px;height:28px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;">–</button>
+      <span style="color:#2f6690;font-size:12px;">پہلے صفحے کا پریویو</span>
+      <button id="pdfPrevZoomPlus" style="width:28px;height:28px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;">+</button>
+    </div>
+    <div id="pdfPreviewWrap" style="overflow:auto;max-height:48vh;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
+      <img id="pdfPreviewImg" style="max-width:none;transition:width .15s;" />
+    </div>
+  </div>
+  <div class="fs-foot">
+    <button class="pill-btn primary" id="pdfConfirmSave" style="flex:1;">✅ اسی ترتیب سے PDF محفوظ کریں</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const FONTS = [
+  { id:'jameel', label:'جمیل نوری نستعلیق', family:"'Jameel Noori Nastaleeq'", sample:'آزاد' },
+  { id:'noto',   label:'Noto Nastaliq Urdu', family:"'Noto Nastaliq Urdu','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'noto-medium', label:'Noto Nastaliq Urdu (میڈیم)', family:"'Noto Nastaliq Urdu Medium','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'noto-bold', label:'Noto Nastaliq Urdu (بولڈ)', family:"'Noto Nastaliq Urdu Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'pdms-multan', label:'PDMS ملتان', family:"'PDMS Multan','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'sameer-qamri', label:'سمیر قمری', family:"'Sameer Qamri','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'alfars-aban', label:'الفارس ابان', family:"'Al Fars Aban','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'syalbiyah', label:'سیالبیہ', family:"'Syalbiyah','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'atpinko', label:'AT Pinko', family:"'AT Pinko',sans-serif", sample:'Sample Aa' },
+  { id:'atpinko-bold', label:'AT Pinko بولڈ', family:"'AT Pinko Bold',sans-serif", sample:'Sample Aa' },
+  { id:'naskh',  label:'عام نسخ (سسٹم)', family:"'Traditional Arabic','Noto Naskh Arabic',serif", sample:'آزاد' },
+  { id:'sans',   label:'سادہ (Tahoma طرز)', family:"Tahoma,'Segoe UI',sans-serif", sample:'آزاد' },
+  { id:'en-arial', label:'Arial', family:"Arial,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-arialblack', label:'Arial Black', family:"'Arial Black',Arial,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-calibri', label:'Calibri', family:"Calibri,'Segoe UI',sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-georgia', label:'Georgia', family:"Georgia,serif", sample:'Sample Aa', group:'en' },
+  { id:'en-times', label:'Times New Roman', family:"'Times New Roman',Times,serif", sample:'Sample Aa', group:'en' },
+  { id:'en-verdana', label:'Verdana', family:"Verdana,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-trebuchet', label:'Trebuchet MS', family:"'Trebuchet MS',sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-impact', label:'Impact', family:"Impact,'Arial Black',sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-courier', label:'Courier New (موٹائی برابر)', family:"'Courier New',monospace", sample:'Sample Aa', group:'en' },
+  { id:'en-comic', label:'Comic Sans MS', family:"'Comic Sans MS',cursive,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-palatino', label:'Palatino', family:"Palatino,'Palatino Linotype',serif", sample:'Sample Aa', group:'en' },
+  { id:'en-garamond', label:'Garamond', family:"Garamond,serif", sample:'Sample Aa', group:'en' }
+];
+
+const THEMES = [
+  {id:'paper', label:'کاغذی'}, {id:'ivory', label:'ہاتھی دانت'}, {id:'gold', label:'سنہری کنارہ'},
+  {id:'sand', label:'ریگستانی'}, {id:'marble', label:'سنگ مرمر'}, {id:'ink', label:'روشنائی'},
+  {id:'night', label:'رات'}, {id:'maroon', label:'شاہی سرخ'}, {id:'emerald', label:'زمرد'},
+  {id:'teal', label:'فیروزی'}, {id:'desert', label:'صحرا'}, {id:'charcoal', label:'سرمئی'},
+  {id:'rose', label:'گلابی'}, {id:'indigo', label:'نیلگوں'}, {id:'forest', label:'جنگل'}, {id:'plum', label:'بینگنی'}
+];
+
+const COLORS = ['#241a12','#ffffff','#6b1f2a','#0f2e26','#b8862f','#1b2c46','#4a1420','#241833'];
+
+const PUNCT = ['،','۔','؟','!',':','؛','-','–','—','"','\u0022','٪','٫','ء','ّ','ْ'];
+
+const canvasText = document.getElementById('canvasText');
+const paper = document.getElementById('paper');
+const drawer = document.getElementById('drawer');
+const rail = document.getElementById('rail');
+
+/* ---------- init font list ---------- */
+const fontListEl = document.getElementById('fontList');
+FONTS.forEach(f=>{
+  const div = document.createElement('div');
+  div.className = 'font-option';
+  div.dataset.font = f.family;
+  div.innerHTML = `<span>${f.label}</span><span class="sample" style="font-family:${f.family}">${f.sample||'آزاد'}</span>`;
+  div.onclick = ()=> applyFont(f.family, div);
+  fontListEl.appendChild(div);
+});
+
+/* selection toolbar font dropdown mirrors FONTS */
+const selFont = document.getElementById('selFont');
+FONTS.forEach(f=>{
+  const o = document.createElement('option');
+  o.value = f.family; o.textContent = f.label;
+  selFont.appendChild(o);
+});
+
+/* ---------- init theme grid ---------- */
+const themeGrid = document.getElementById('themeGrid');
+THEMES.forEach(t=>{
+  const el = document.createElement('div');
+  el.className = 'theme-swatch theme-'+t.id;
+  el.style.marginBottom = '18px';
+  el.innerHTML = `<span>${t.label}</span>`;
+  el.onclick = ()=>{
+    document.querySelectorAll('.theme-swatch').forEach(s=>s.classList.remove('selected'));
+    el.classList.add('selected');
+    paper.className = 'theme-'+t.id;
+  };
+  if(t.id==='paper') el.classList.add('selected');
+  themeGrid.appendChild(el);
+});
+
+/* ---------- init color row ---------- */
+const colorRow = document.getElementById('colorRow');
+COLORS.forEach(c=>{
+  const sw = document.createElement('div');
+  sw.className='swatch'; sw.style.background=c;
+  sw.onclick = ()=>{
+    document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected'));
+    sw.classList.add('selected');
+    styleSelection(st=> st.color = c, ()=> canvasText.style.color = c);
+  };
+  colorRow.appendChild(sw);
+});
+
+/* ---------- init punctuation grid ---------- */
+const punctGrid = document.getElementById('punctGrid');
+PUNCT.forEach(ch=>{
+  const b = document.createElement('button');
+  b.className='punct-btn'; b.textContent = ch;
+  b.onclick = ()=>{ canvasText.focus(); document.execCommand('insertText', false, ch); };
+  punctGrid.appendChild(b);
+});
+
+/* ---------- rail / drawer toggling ---------- */
+document.querySelectorAll('.rail-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    const panel = btn.dataset.panel;
+    const isOpen = drawer.classList.contains('open') && btn.classList.contains('active');
+    document.querySelectorAll('.rail-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('#drawer > div').forEach(p=>p.style.display='none');
+    if(isOpen){ drawer.classList.remove('open'); return; }
+    btn.classList.add('active');
+    document.getElementById('panel-'+panel).style.display='block';
+    drawer.classList.add('open');
+  };
+});
+document.querySelectorAll('[data-close]').forEach(b=> b.onclick = ()=>{
+  drawer.classList.remove('open');
+  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.remove('active'));
+});
+
+/* remember the last real (non-collapsed) selection inside canvasText, since opening
+   the drawer/panels moves focus away and collapses the live browser selection */
+let savedRange = null;
+document.addEventListener('selectionchange', ()=>{
+  const s = window.getSelection();
+  if(s.rangeCount && !s.isCollapsed && canvasText.contains(s.anchorNode) && canvasText.contains(s.focusNode)){
+    savedRange = s.getRangeAt(0).cloneRange();
+  }
+});
+
+/* ---------- generic: wrap current selection in styled span, or apply globally ---------- */
+function styleSelection(applyToSpanStyle, applyGlobalFn){
+  let sel = window.getSelection();
+  if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
+     savedRange && canvasText.contains(savedRange.startContainer)){
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+  if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
+    applyGlobalFn();
+    return;
+  }
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  applyToSpanStyle(span.style);
+  try{
+    range.surroundContents(span);
+  }catch(e){
+    const frag = range.extractContents();
+    span.appendChild(frag);
+    range.insertNode(span);
+  }
+  sel.removeAllRanges();
+  const nr = document.createRange();
+  nr.selectNodeContents(span);
+  sel.addRange(nr);
+}
+
+function applyFont(family, optionEl){
+  document.querySelectorAll('.font-option').forEach(o=>o.classList.remove('selected'));
+  if(optionEl) optionEl.classList.add('selected');
+  styleSelection(
+    st => st.fontFamily = family,
+    () => canvasText.style.fontFamily = family
+  );
+  selFont.value = family;
+  showToast('فونٹ لاگو ہو گیا');
+}
+
+/* ---------- style panel: size / weight / word spacing ---------- */
+const rngSize = document.getElementById('rngSize');
+const rngSizeVal = document.getElementById('rngSizeVal');
+rngSize.oninput = ()=>{
+  rngSizeVal.textContent = rngSize.value+'px';
+  styleSelection(st=> st.fontSize = rngSize.value+'px', ()=> canvasText.style.fontSize = rngSize.value+'px');
+};
+
+const rngWeight = document.getElementById('rngWeight');
+const rngWeightVal = document.getElementById('rngWeightVal');
+const weightNames = {200:'پتلا',300:'پتلا',400:'عام',500:'عام',600:'گہرا',700:'بولڈ',800:'بہت بولڈ'};
+rngWeight.oninput = ()=>{
+  rngWeightVal.textContent = weightNames[rngWeight.value] || rngWeight.value;
+  styleSelection(st=> st.fontWeight = rngWeight.value, ()=> canvasText.style.fontWeight = rngWeight.value);
+};
+
+const rngWordSpace = document.getElementById('rngWordSpace');
+rngWordSpace.oninput = ()=>{
+  styleSelection(st=> st.wordSpacing = rngWordSpace.value+'px', ()=> canvasText.style.wordSpacing = rngWordSpace.value+'px');
+};
+
+/* ---------- align ---------- */
+document.querySelectorAll('[data-align]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-align]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const val = btn.dataset.align;
+    const sel = window.getSelection();
+    if(sel.rangeCount && !sel.isCollapsed && canvasText.contains(sel.anchorNode)){
+      let node = sel.anchorNode;
+      while(node && node !== canvasText && node.parentElement !== canvasText) node = node.parentElement;
+      if(node && node !== canvasText) node.style.textAlign = val;
+      else canvasText.style.textAlign = val;
+    } else {
+      canvasText.style.textAlign = val;
+    }
+  };
+});
+
+/* ---------- line spacing (cycles through common values) ---------- */
+const LINE_SPACES = [1.5, 1.8, 2.1, 2.5, 3.0];
+let lineSpaceIdx = 2;
+document.getElementById('selLineSpace').onclick = ()=>{
+  lineSpaceIdx = (lineSpaceIdx + 1) % LINE_SPACES.length;
+  canvasText.style.lineHeight = LINE_SPACES[lineSpaceIdx];
+  showToast('سطروں کا فاصلہ: ' + LINE_SPACES[lineSpaceIdx]);
+};
+
+/* ---------- zoom (adjusts TEXT SIZE only — the page/paper stays put) ---------- */
+const rngZoom = document.getElementById('rngZoom');
+const zoomVal = document.getElementById('zoomVal');
+const stageInner = document.getElementById('stageInner');
+const BASE_FONT_PX = 34;
+let curZoomPct = 100;
+function applyZoom(pct){
+  curZoomPct = Math.max(50, Math.min(400, Math.round(pct)));
+  rngZoom.value = curZoomPct;
+  zoomVal.textContent = curZoomPct+'%';
+  document.getElementById('qzVal').textContent = curZoomPct+'%';
+  document.getElementById('qzSlider').value = curZoomPct;
+  const px = Math.round(BASE_FONT_PX * (curZoomPct/100));
+  canvasText.style.fontSize = px+'px';
+  rngSize.value = Math.min(90, Math.max(14, px));
+  rngSizeVal.textContent = px+'px';
+}
+rngZoom.oninput = ()=> applyZoom(+rngZoom.value);
+document.getElementById('qzSlider').oninput = (e)=> applyZoom(+e.target.value);
+
+/* two-finger pinch to zoom text size, right on the page */
+let pinchStartDist = 0, pinchStartPct = 100;
+function touchDist(t){
+  const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+  return Math.hypot(dx, dy);
+}
+const stageEl2 = document.getElementById('stage');
+stageEl2.addEventListener('touchstart', (e)=>{
+  if(e.touches.length===2){
+    pinchStartDist = touchDist(e.touches);
+    pinchStartPct = curZoomPct;
+  }
+}, {passive:true});
+stageEl2.addEventListener('touchmove', (e)=>{
+  if(e.touches.length===2 && pinchStartDist>0){
+    e.preventDefault();
+    const d = touchDist(e.touches);
+    applyZoom(pinchStartPct * (d/pinchStartDist));
+  }
+}, {passive:false});
+stageEl2.addEventListener('touchend', (e)=>{
+  if(e.touches.length<2) pinchStartDist = 0;
+});
+
+/* ---------- floating selection toolbar (stays visible throughout editing) ---------- */
+const selToolbar = document.getElementById('selToolbar');
+function showSelToolbarPinned(){
+  selToolbar.style.position = 'fixed';
+  selToolbar.style.top = '58px';
+  selToolbar.style.left = '50%';
+  selToolbar.style.transform = 'translateX(-50%)';
+  selToolbar.style.display = 'flex';
+}
+document.addEventListener('selectionchange', ()=>{
+  if(document.activeElement !== canvasText) return;
+  const sel = window.getSelection();
+  if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
+    showSelToolbarPinned();
+    return;
+  }
+  const rect = sel.getRangeAt(0).getBoundingClientRect();
+  if(rect.width===0 && rect.height===0){ showSelToolbarPinned(); return; }
+  selToolbar.style.position = 'absolute';
+  selToolbar.style.transform = 'none';
+  selToolbar.style.display='flex';
+  selToolbar.style.top = (window.scrollY + rect.top - 44) + 'px';
+  selToolbar.style.left = (window.scrollX + rect.left + rect.width/2 - selToolbar.offsetWidth/2) + 'px';
+});
+canvasText.addEventListener('focus', showSelToolbarPinned);
+canvasText.addEventListener('blur', ()=>{
+  setTimeout(()=>{
+    if(document.activeElement !== canvasText && !selToolbar.contains(document.activeElement)){
+      selToolbar.style.display = 'none';
+    }
+  }, 150);
+});
+document.getElementById('selToggle').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selToggle').onclick = ()=>{
+  const body = document.getElementById('selToolbarBody');
+  const expanded = body.classList.toggle('expanded');
+  document.getElementById('selToggle').textContent = 'Aa ' + (expanded ? '⌃' : '⌄');
+};
+document.querySelectorAll('.selPunct').forEach(btn=>{
+  btn.onmousedown = (e)=> e.preventDefault();
+  btn.onclick = ()=>{ canvasText.focus(); document.execCommand('insertText', false, btn.dataset.ch); };
+});
+
+/* quick text-color / background-color popover in the pinned toolbar */
+const selColorRow = document.getElementById('selColorRow');
+let selColorMode = 'text';
+function buildSelColorSwatches(){
+  selColorRow.innerHTML = '';
+  COLORS.forEach(c=>{
+    const sw = document.createElement('div');
+    sw.style.cssText = 'width:22px;height:22px;border-radius:50%;border:1px solid #7fc0f0;cursor:pointer;background:'+c;
+    sw.onmousedown = (e)=> e.preventDefault();
+    sw.onclick = ()=>{
+      if(selColorMode === 'text'){
+        styleSelection(st=> st.color = c, ()=> canvasText.style.color = c);
+      } else {
+        styleSelection(st=> st.backgroundColor = c, ()=> canvasText.style.backgroundColor = c);
+      }
+    };
+    selColorRow.appendChild(sw);
+  });
+  const clearSw = document.createElement('div');
+  clearSw.textContent = '✕';
+  clearSw.style.cssText = 'width:22px;height:22px;border-radius:50%;border:1px solid #7fc0f0;cursor:pointer;background:#ffffff;color:#123a68;font-size:11px;display:flex;align-items:center;justify-content:center;';
+  clearSw.onmousedown = (e)=> e.preventDefault();
+  clearSw.onclick = ()=>{
+    if(selColorMode === 'text'){ styleSelection(st=> st.color = '', ()=> canvasText.style.color = ''); }
+    else{ styleSelection(st=> st.backgroundColor = '', ()=> canvasText.style.backgroundColor = ''); }
+  };
+  selColorRow.appendChild(clearSw);
+}
+buildSelColorSwatches();
+document.getElementById('selColorBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selColorBtn').onclick = ()=>{
+  selColorMode = 'text';
+  selColorRow.style.display = (selColorRow.style.display === 'flex') ? 'none' : 'flex';
+};
+document.getElementById('selBgBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selBgBtn').onclick = ()=>{
+  selColorMode = 'background';
+  selColorRow.style.display = (selColorRow.style.display === 'flex') ? 'none' : 'flex';
+};
+
+selFont.onchange = ()=> applyFont(selFont.value, null);
+let curSelSize = 34;
+document.getElementById('selMinus').onclick = ()=>{
+  curSelSize = Math.max(10, curSelSize-2);
+  document.getElementById('selSizeVal').textContent = curSelSize;
+  styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{});
+};
+document.getElementById('selPlus').onclick = ()=>{
+  curSelSize = curSelSize+2;
+  document.getElementById('selSizeVal').textContent = curSelSize;
+  styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{});
+};
+document.getElementById('selBold').onclick = (e)=>{
+  e.target.classList.toggle('active');
+  const w = e.target.classList.contains('active') ? '700' : '400';
+  styleSelection(st=> st.fontWeight = w, ()=>{});
+};
+document.getElementById('selSpace').onclick = ()=>{
+  styleSelection(st=> st.wordSpacing = '10px', ()=>{});
+};
+
+/* ---------- export as image ---------- */
+/* ---------- robust capture: clone the paper, strip editing/placeholder artifacts, guard against empty pages ---------- */
+async function captureCleanPaper(bg){
+  if(!canvasText.innerText || !canvasText.innerText.trim()){
+    showToast('یہ صفحہ خالی ہے — پہلے کچھ لکھیں');
+    return null;
+  }
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+  const clone = paper.cloneNode(true);
+  const cloneText = clone.querySelector('#canvasText');
+  if(cloneText){
+    cloneText.removeAttribute('contenteditable');
+    cloneText.removeAttribute('data-placeholder');
+  }
+  clone.style.position = 'fixed';
+  clone.style.left = '-99999px';
+  clone.style.top = '0';
+  clone.style.transform = 'none';
+  document.body.appendChild(clone);
+  await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
+  const canvas = await html2canvas(clone, {backgroundColor: bg, scale: 2});
+  document.body.removeChild(clone);
+  return canvas;
+}
+
+/* slice a tall canvas into proper A4-proportioned pages instead of one unreadable strip */
+function buildPaginatedPDF(canvas){
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit:'pt', format:'a4' });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const scale = pageW / canvas.width;
+  const sliceHeightPx = Math.max(50, Math.floor(pageH / scale));
+  let y = 0, first = true;
+  while(y < canvas.height){
+    const sliceH = Math.min(sliceHeightPx, canvas.height - y);
+    const sliceCanvas = document.createElement('canvas');
+    sliceCanvas.width = canvas.width;
+    sliceCanvas.height = sliceH;
+    const sctx = sliceCanvas.getContext('2d');
+    sctx.fillStyle = '#ffffff';
+    sctx.fillRect(0,0,sliceCanvas.width, sliceCanvas.height);
+    sctx.drawImage(canvas, 0, y, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+    const imgData = sliceCanvas.toDataURL('image/jpeg', 0.95);
+    if(!first) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', 0, 0, pageW, sliceH*scale);
+    first = false;
+    y += sliceH;
+  }
+  return pdf;
+}
+
+async function exportImage(cb){
+  showToast('تصویر تیار ہو رہی ہے…');
+  const canvas = await captureCleanPaper(null);
+  if(!canvas) return;
+  canvas.toBlob(blob=>{ if(cb) cb(blob, canvas); });
+}
+function downloadBlob(blob, filename){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+document.getElementById('btnExportImg').onclick = ()=> exportImage(b=> downloadBlob(b,'urdu-design.png'));
+document.getElementById('btnExportImg2').onclick = ()=> exportImage(b=> downloadBlob(b,'urdu-design.png'));
+
+/* ---------- share: short pages share as a clean image; long pages auto-share as a proper multi-page PDF ---------- */
+function shareCurrentPage(){
+  exportImage(async (blob, canvas)=>{
+    const tooTall = canvas.height > canvas.width * 2.2;
+    if(tooTall){
+      const printCanvas = await buildPrintCanvas(22, 'portrait', 2);
+      const pdf = buildFullPagePDF(printCanvas, 'portrait');
+      const pdfBlob = pdf.output('blob');
+      const file = new File([pdfBlob], 'urdu-tehreer.pdf', {type:'application/pdf'});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        try{ await navigator.share({files:[file], title:'اردو تحریر'}); return; }catch(e){}
+      }
+      downloadBlob(pdfBlob, 'urdu-tehreer.pdf');
+      showToast('تحریر لمبی تھی، اس لیے صاف A4 صفحات کی PDF بنائی');
+      return;
+    }
+    const file = new File([blob], 'urdu-design.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file], title:'اردو ڈیزائن'});
+        return;
+      }catch(e){}
+    }
+    downloadBlob(blob, 'urdu-design.png');
+    showToast('تصویر ڈاؤن لوڈ ہو گئی — اب اسے واٹس ایپ میں اٹیچ کر دیں');
+  });
+}
+document.getElementById('btnShare').onclick = shareCurrentPage;
+document.getElementById('btnSharePage').onclick = shareCurrentPage;
+
+/* ---------- PDF: fixed full-A4 pages, independent of on-screen editing zoom ---------- */
+const A4_PT = {portrait:{w:595,h:842}, landscape:{w:842,h:595}};
+const PX_PER_PT = 1.5;   // resolution for measuring/preview
+let pdfOrientation = 'portrait';
+let pdfBorderStyle = 'none';
+
+function roundRectPath(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function drawPageBorder(ctx, w, h, style){
+  if(!style || style==='none') return;
+  const margin = w*0.025;
+  ctx.save();
+  ctx.strokeStyle = '#b8923f';
+  if(style==='thin'){
+    ctx.lineWidth = w*0.004;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+  } else if(style==='thick'){
+    ctx.lineWidth = w*0.012;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+  } else if(style==='double'){
+    ctx.lineWidth = w*0.004;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    const m2 = margin + w*0.014;
+    ctx.strokeRect(m2, m2, w-m2*2, h-m2*2);
+  } else if(style==='floral'){
+    ctx.lineWidth = w*0.005;
+    ctx.setLineDash([w*0.014, w*0.009]);
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    ctx.setLineDash([]);
+    ctx.font = (w*0.028)+'px serif';
+    ctx.fillStyle = '#b8923f';
+    ctx.textAlign = 'center';
+    ctx.fillText('❖', margin+w*0.01, margin+w*0.03);
+    ctx.fillText('❖', w-margin-w*0.01, margin+w*0.03);
+    ctx.fillText('❖', margin+w*0.01, h-margin-w*0.01);
+    ctx.fillText('❖', w-margin-w*0.01, h-margin-w*0.01);
+  } else if(style==='rounded-gold'){
+    ctx.lineWidth = w*0.01;
+    roundRectPath(ctx, margin, margin, w-margin*2, h-margin*2, w*0.02);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+async function buildPrintCanvas(fontSizePx, orientation, renderScale){
+  const dims = A4_PT[orientation];
+  const containerWpx = dims.w * PX_PER_PT;
+  const div = document.createElement('div');
+  div.style.position = 'fixed'; div.style.left = '-99999px'; div.style.top = '0';
+  div.style.width = containerWpx + 'px';
+  div.style.boxSizing = 'border-box';
+  div.style.padding = '38px 42px';
+  div.style.background = '#ffffff';
+  div.style.direction = 'rtl'; div.style.textAlign = canvasText.style.textAlign || 'right';
+  div.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
+  div.style.fontSize = fontSizePx + 'px';
+  div.style.lineHeight = canvasText.style.lineHeight || '2.1';
+  div.innerHTML = canvasText.innerHTML;
+  document.body.appendChild(div);
+  await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+  const canvas = await html2canvas(div, {backgroundColor:'#ffffff', scale: renderScale});
+  document.body.removeChild(div);
+  return canvas;
+}
+
+function buildFullPagePDF(canvas, orientation, borderStyle){
+  const dims = A4_PT[orientation];
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({unit:'pt', format:'a4', orientation: orientation==='landscape' ? 'l':'p'});
+  const canvasPxPerPt = canvas.width / dims.w;
+  const pageHeightCanvasPx = dims.h * canvasPxPerPt;
+  let y = 0, first = true, pageNum = 1;
+  while(y < canvas.height){
+    const sliceH = Math.min(pageHeightCanvasPx, canvas.height - y);
+    const sliceCanvas = document.createElement('canvas');
+    sliceCanvas.width = canvas.width;
+    sliceCanvas.height = pageHeightCanvasPx;
+    const sctx = sliceCanvas.getContext('2d');
+    sctx.fillStyle = '#ffffff';
+    sctx.fillRect(0,0,sliceCanvas.width, sliceCanvas.height);
+    sctx.drawImage(canvas, 0, y, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+    drawPageBorder(sctx, sliceCanvas.width, sliceCanvas.height, borderStyle);
+    sctx.fillStyle = '#7a6a4f';
+    sctx.font = (24*canvasPxPerPt/2.5)+'px Tahoma, sans-serif';
+    sctx.textAlign = 'center';
+    sctx.fillText(String(pageNum), sliceCanvas.width/2, sliceCanvas.height - (18*canvasPxPerPt/2.5));
+    const imgData = sliceCanvas.toDataURL('image/jpeg', 0.95);
+    if(!first) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', 0, 0, dims.w, dims.h);
+    first = false;
+    y += sliceH;
+    pageNum++;
+  }
+  return pdf;
+}
+
+const pdfModal = document.getElementById('pdfModal');
+const pdfFontSizeInput = document.getElementById('pdfFontSize');
+const pdfPageCountEl = document.getElementById('pdfPageCount');
+const pdfPreviewImg = document.getElementById('pdfPreviewImg');
+let pdfPreviewZoom = 100;
+let pdfUpdateTimer = null;
+
+async function updatePdfPreview(){
+  if(!canvasText.innerText || !canvasText.innerText.trim()){
+    pdfPageCountEl.textContent = 'یہ صفحہ خالی ہے';
+    return;
+  }
+  pdfPageCountEl.textContent = 'حساب لگایا جا رہا ہے…';
+  const fontPx = +pdfFontSizeInput.value;
+  const canvas = await buildPrintCanvas(fontPx, pdfOrientation, 1);
+  const dims = A4_PT[pdfOrientation];
+  const canvasPxPerPt = canvas.width / dims.w;
+  const pageHeightCanvasPx = dims.h * canvasPxPerPt;
+  const pages = Math.max(1, Math.ceil(canvas.height / pageHeightCanvasPx));
+  pdfPageCountEl.textContent = 'اس ترتیب میں تقریباً ' + pages + ' صفحات بنیں گی (A4، ' + (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ')';
+
+  const pageCanvas = document.createElement('canvas');
+  pageCanvas.width = canvas.width;
+  pageCanvas.height = pageHeightCanvasPx;
+  const pctx = pageCanvas.getContext('2d');
+  pctx.fillStyle = '#ffffff'; pctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
+  pctx.drawImage(canvas, 0, 0, canvas.width, Math.min(pageHeightCanvasPx, canvas.height), 0, 0, canvas.width, Math.min(pageHeightCanvasPx, canvas.height));
+  drawPageBorder(pctx, pageCanvas.width, pageCanvas.height, pdfBorderStyle);
+  pctx.fillStyle = '#7a6a4f';
+  pctx.font = (24*canvasPxPerPt/2.5)+'px Tahoma, sans-serif';
+  pctx.textAlign = 'center';
+  pctx.fillText('1', pageCanvas.width/2, pageCanvas.height - (18*canvasPxPerPt/2.5));
+  pdfPreviewImg.src = pageCanvas.toDataURL('image/jpeg', 0.92);
+  pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
+}
+function queuePdfPreviewUpdate(){
+  clearTimeout(pdfUpdateTimer);
+  pdfUpdateTimer = setTimeout(updatePdfPreview, 350);
+}
+
+document.querySelectorAll('[data-border]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-border]').forEach(b=> b.classList.remove('primary'));
+    btn.classList.add('primary');
+    pdfBorderStyle = btn.dataset.border;
+    queuePdfPreviewUpdate();
+  };
+});
+document.querySelectorAll('[data-pdf-align]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-pdf-align]').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    canvasText.style.textAlign = btn.dataset.pdfAlign;
+    document.querySelectorAll('[data-align]').forEach(b=>{
+      b.classList.toggle('active', b.dataset.align === btn.dataset.pdfAlign);
+    });
+    queuePdfPreviewUpdate();
+  };
+});
+
+document.getElementById('pdfPortrait').onclick = function(){
+  pdfOrientation = 'portrait';
+  this.classList.add('primary');
+  document.getElementById('pdfLandscape').classList.remove('primary');
+  queuePdfPreviewUpdate();
+};
+document.getElementById('pdfLandscape').onclick = function(){
+  pdfOrientation = 'landscape';
+  this.classList.add('primary');
+  document.getElementById('pdfPortrait').classList.remove('primary');
+  queuePdfPreviewUpdate();
+};
+pdfFontSizeInput.oninput = ()=>{
+  document.getElementById('pdfFontSizeVal').textContent = pdfFontSizeInput.value+'px';
+  queuePdfPreviewUpdate();
+};
+document.getElementById('pdfPrevZoomMinus').onclick = ()=>{
+  pdfPreviewZoom = Math.max(50, pdfPreviewZoom-15);
+  pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
+};
+document.getElementById('pdfPrevZoomPlus').onclick = ()=>{
+  pdfPreviewZoom = Math.min(300, pdfPreviewZoom+15);
+  pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
+};
+document.getElementById('pdfClose').onclick = ()=> pdfModal.classList.remove('open');
+
+document.getElementById('btnSavePdf').onclick = ()=>{
+  if(!canvasText.innerText || !canvasText.innerText.trim()){
+    showToast('یہ صفحہ خالی ہے — پہلے کچھ لکھیں');
+    return;
+  }
+  pdfModal.classList.add('open');
+  pdfPreviewZoom = 100;
+  updatePdfPreview();
+};
+
+document.getElementById('pdfConfirmSave').onclick = async ()=>{
+  showToast('PDF تیار ہو رہی ہے…');
+  const fontPx = +pdfFontSizeInput.value;
+  const canvas = await buildPrintCanvas(fontPx, pdfOrientation, 2);
+  const pdf = buildFullPagePDF(canvas, pdfOrientation, pdfBorderStyle);
+  pdf.save('urdu-page.pdf');
+  pdfModal.classList.remove('open');
+  showToast('PDF محفوظ ہو گئی — پورے A4 صفحات پر مشتمل');
+};
+
+/* ---------- print ---------- */
+document.getElementById('btnPrint').onclick = ()=> window.print();
+
+/* ---------- save / load draft ---------- */
+function saveDraft(silent){
+  try{
+    localStorage.setItem('urdu_studio_draft', JSON.stringify({
+      html: canvasText.innerHTML,
+      theme: paper.className,
+      fontSize: canvasText.style.fontSize || '',
+      lineHeight: canvasText.style.lineHeight || '',
+      textAlign: canvasText.style.textAlign || ''
+    }));
+    if(!silent) showToast('ڈرافٹ محفوظ ہو گیا');
+  }catch(e){
+    if(!silent) showToast('یہ براؤزر ڈرافٹ محفوظ کرنے کی اجازت نہیں دے رہا');
+  }
+}
+document.getElementById('btnSaveDraft').onclick = ()=> saveDraft(false);
+document.getElementById('btnSaveDraft2').onclick = ()=> saveDraft(false);
+
+/* auto-save silently a moment after any edit, so nothing is lost if the app is closed */
+let autoSaveTimer = null;
+/* ---------- keep the page always clear of the top bar, whatever its actual height is ---------- */
+const topbarEl = document.getElementById('topbar');
+const stageEl3 = document.getElementById('stage');
+function syncStageTop(){
+  stageEl3.style.top = (topbarEl.offsetHeight + 14) + 'px';
+}
+window.addEventListener('load', syncStageTop);
+window.addEventListener('resize', syncStageTop);
+new ResizeObserver(syncStageTop).observe(topbarEl);
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(syncStageTop).catch(()=>{}); }
+setTimeout(syncStageTop, 300);
+setTimeout(syncStageTop, 1200);
+syncStageTop();
+
+canvasText.addEventListener('input', ()=>{
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(()=> saveDraft(true), 1500);
+});
+window.addEventListener('beforeunload', ()=> saveDraft(true));
+
+window.addEventListener('load', ()=>{
+  try{
+    const raw = localStorage.getItem('urdu_studio_draft');
+    if(raw){
+      const d = JSON.parse(raw);
+      if(d.html && d.html.trim()){
+        canvasText.innerHTML = d.html;
+        if(d.theme) paper.className = d.theme;
+        if(d.fontSize) canvasText.style.fontSize = d.fontSize;
+        if(d.lineHeight) canvasText.style.lineHeight = d.lineHeight;
+        if(d.textAlign) canvasText.style.textAlign = d.textAlign;
+      }
+    }
+  }catch(e){}
+});
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=> t.classList.remove('show'), 1800);
+}
+
+/* ================== ہاتھ کی تحریر (دستی نقل) ================== */
+const hwModal = document.getElementById('hwModal');
+const hwDrop = document.getElementById('hwDrop');
+const hwFile = document.getElementById('hwFile');
+const hwImageWrap = document.getElementById('hwImageWrap');
+const hwBaseCanvas = document.getElementById('hwBaseCanvas');
+const hwDrawCanvas = document.getElementById('hwDrawCanvas');
+const hwBaseCtx = hwBaseCanvas.getContext('2d');
+const hwDrawCtx = hwDrawCanvas.getContext('2d');
+const hwText = document.getElementById('hwText');
+let hwImgZoomPct = 100, hwTxtZoomPct = 100;
+
+document.getElementById('btnOpenHW').onclick = ()=>{ hwModal.classList.add('open'); };
+document.getElementById('hwClose').onclick = ()=>{ hwModal.classList.remove('open'); };
+
+document.getElementById('hwGalleryBtn').onclick = ()=> hwFile.click();
+document.getElementById('hwChangeImg').onclick = ()=> hwFile.click();
+hwFile.onchange = ()=>{ if(hwFile.files[0]) loadHwImage(hwFile.files[0]); };
+
+hwModal.addEventListener('paste', (e)=>{
+  const items = e.clipboardData && e.clipboardData.items;
+  if(!items) return;
+  for(const it of items){
+    if(it.type && it.type.indexOf('image')===0){
+      const blob = it.getAsFile();
+      if(blob){ loadHwImage(blob); e.preventDefault(); return; }
+    }
+  }
+});
+
+let hwOrigImg = null;
+function loadHwImage(file){
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = ()=>{
+    hwOrigImg = img;
+    hwBaseCanvas.width = hwDrawCanvas.width = img.naturalWidth;
+    hwBaseCanvas.height = hwDrawCanvas.height = img.naturalHeight;
+    hwBaseCtx.filter = 'none';
+    hwBaseCtx.drawImage(img, 0, 0);
+    hwDrawCtx.clearRect(0,0,hwDrawCanvas.width,hwDrawCanvas.height);
+    document.getElementById('hwBright').value = 100;
+    document.getElementById('hwContrast').value = 100;
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+  hwDrop.style.display = 'none';
+  hwImageWrap.style.display = 'block';
+  hwImgZoomPct = 100;
+  document.getElementById('hwImgZoom').value = 100;
+  document.getElementById('hwImgZoomVal').textContent = '100%';
+  hwImageWrap.style.transform = 'scale(1)';
+}
+
+/* ---- brightness / contrast enhancement (non-destructive, re-drawn from original) ---- */
+function hwApplyEnhance(){
+  if(!hwOrigImg) return;
+  const b = document.getElementById('hwBright').value;
+  const c = document.getElementById('hwContrast').value;
+  hwBaseCtx.clearRect(0,0,hwBaseCanvas.width,hwBaseCanvas.height);
+  hwBaseCtx.filter = `brightness(${b}%) contrast(${c}%)`;
+  hwBaseCtx.drawImage(hwOrigImg, 0, 0);
+  hwBaseCtx.filter = 'none';
+}
+document.getElementById('hwBright').oninput = hwApplyEnhance;
+document.getElementById('hwContrast').oninput = hwApplyEnhance;
+document.getElementById('hwAutoEnhance').onclick = ()=>{
+  document.getElementById('hwBright').value = 128;
+  document.getElementById('hwContrast').value = 140;
+  hwApplyEnhance();
+  showToast('تصویر صاف ستھری کر دی');
+};
+document.getElementById('hwResetEnhance').onclick = ()=>{
+  document.getElementById('hwBright').value = 100;
+  document.getElementById('hwContrast').value = 100;
+  hwApplyEnhance();
+};
+
+/* ---- annotation tools: pen / highlighter / eraser / view(pan) ---- */
+let hwTool = 'view';
+const hwToolBtns = {
+  view: document.getElementById('hwToolView'),
+  pen: document.getElementById('hwToolPen'),
+  hi: document.getElementById('hwToolHi'),
+  eraser: document.getElementById('hwToolEraser')
+};
+function setHwTool(t){
+  hwTool = t;
+  Object.keys(hwToolBtns).forEach(k=> hwToolBtns[k].classList.toggle('active', k===t));
+  if(t === 'view'){
+    hwDrawCanvas.style.pointerEvents = 'none';
+  } else {
+    hwDrawCanvas.style.pointerEvents = 'auto';
+    hwDrawCanvas.style.touchAction = 'none';
+  }
+}
+hwToolBtns.view.onclick = ()=> setHwTool('view');
+hwToolBtns.pen.onclick = ()=> setHwTool('pen');
+hwToolBtns.hi.onclick = ()=> setHwTool('hi');
+hwToolBtns.eraser.onclick = ()=> setHwTool('eraser');
+setHwTool('view');
+
+let hwDrawing = false, hwLastX = 0, hwLastY = 0;
+function hwCanvasPoint(e){
+  const rect = hwDrawCanvas.getBoundingClientRect();
+  const scaleX = hwDrawCanvas.width / rect.width;
+  const scaleY = hwDrawCanvas.height / rect.height;
+  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+}
+function hwStrokeStyle(){
+  if(hwTool==='pen'){ hwDrawCtx.globalCompositeOperation='source-over'; hwDrawCtx.globalAlpha=1; hwDrawCtx.strokeStyle='#ff2d2d'; hwDrawCtx.lineWidth = Math.max(3, hwDrawCanvas.width*0.004); }
+  else if(hwTool==='hi'){ hwDrawCtx.globalCompositeOperation='source-over'; hwDrawCtx.globalAlpha=0.35; hwDrawCtx.strokeStyle='#ffe600'; hwDrawCtx.lineWidth = Math.max(18, hwDrawCanvas.width*0.03); }
+  else if(hwTool==='eraser'){ hwDrawCtx.globalCompositeOperation='destination-out'; hwDrawCtx.globalAlpha=1; hwDrawCtx.lineWidth = Math.max(24, hwDrawCanvas.width*0.04); }
+  hwDrawCtx.lineCap='round'; hwDrawCtx.lineJoin='round';
+}
+hwDrawCanvas.addEventListener('pointerdown', (e)=>{
+  if(hwTool==='view') return;
+  hwDrawing = true;
+  hwStrokeStyle();
+  const p = hwCanvasPoint(e);
+  hwLastX=p.x; hwLastY=p.y;
+  hwDrawCtx.beginPath(); hwDrawCtx.moveTo(p.x,p.y); hwDrawCtx.lineTo(p.x+0.1,p.y+0.1); hwDrawCtx.stroke();
+});
+hwDrawCanvas.addEventListener('pointermove', (e)=>{
+  if(!hwDrawing) return;
+  const p = hwCanvasPoint(e);
+  hwDrawCtx.beginPath(); hwDrawCtx.moveTo(hwLastX,hwLastY); hwDrawCtx.lineTo(p.x,p.y); hwDrawCtx.stroke();
+  hwLastX=p.x; hwLastY=p.y;
+});
+window.addEventListener('pointerup', ()=> hwDrawing=false);
+
+document.getElementById('hwClearMarks').onclick = ()=>{
+  hwDrawCtx.clearRect(0,0,hwDrawCanvas.width,hwDrawCanvas.height);
+  showToast('نشانات صاف کر دیے');
+};
+
+document.getElementById('hwShareMarked').onclick = async ()=>{
+  if(!hwBaseCanvas.width){ showToast('پہلے تصویر منتخب کریں'); return; }
+  const out = document.createElement('canvas');
+  out.width = hwBaseCanvas.width; out.height = hwBaseCanvas.height;
+  const octx = out.getContext('2d');
+  octx.drawImage(hwBaseCanvas, 0, 0);
+  octx.drawImage(hwDrawCanvas, 0, 0);
+  out.toBlob(async (blob)=>{
+    const file = new File([blob], 'nishaan-zada-tasveer.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file], title:'نشان زدہ تصویر — یہ لفظ بتائیں'}); return; }catch(e){}
+    }
+    downloadBlob(blob, 'nishaan-zada-tasveer.png');
+    showToast('تصویر ڈاؤن لوڈ ہو گئی — اب واٹس ایپ میں بھیج دیں');
+  });
+};
+
+function setHwImgZoom(val){
+  hwImgZoomPct = Math.max(50, Math.min(400, val));
+  document.getElementById('hwImgZoom').value = hwImgZoomPct;
+  document.getElementById('hwImgZoomVal').textContent = hwImgZoomPct + '%';
+  hwImageWrap.style.transform = 'scale(' + (hwImgZoomPct/100) + ')';
+}
+document.getElementById('hwImgZoom').oninput = (e)=> setHwImgZoom(+e.target.value);
+document.getElementById('hwImgMinus').onclick = ()=> setHwImgZoom(hwImgZoomPct-10);
+document.getElementById('hwImgPlus').onclick = ()=> setHwImgZoom(hwImgZoomPct+10);
+
+function setHwTxtZoom(val){
+  hwTxtZoomPct = Math.max(50, Math.min(400, val));
+  document.getElementById('hwTxtZoom').value = hwTxtZoomPct;
+  document.getElementById('hwTxtZoomVal').textContent = hwTxtZoomPct + '%';
+  hwText.style.transform = 'scale(' + (hwTxtZoomPct/100) + ')';
+  hwText.style.width = (10000/hwTxtZoomPct) + '%';
+}
+document.getElementById('hwTxtZoom').oninput = (e)=> setHwTxtZoom(+e.target.value);
+document.getElementById('hwTxtMinus').onclick = ()=> setHwTxtZoom(hwTxtZoomPct-10);
+document.getElementById('hwTxtPlus').onclick = ()=> setHwTxtZoom(hwTxtZoomPct+10);
+
+document.getElementById('hwInsertPage').onclick = ()=>{
+  if(!hwText.innerHTML.trim()){ showToast('پہلے کچھ لکھیں'); return; }
+  canvasText.innerHTML += (canvasText.innerHTML.trim()?'<div><br></div>':'') + hwText.innerHTML;
+  hwModal.classList.remove('open');
+  showToast('مرکزی صفحے میں شامل ہو گیا');
+};
+document.getElementById('hwSaveBookPage').onclick = ()=>{
+  if(!hwText.innerHTML.trim()){ showToast('پہلے کچھ لکھیں'); return; }
+  bookAddPage(hwText.innerHTML, paper.className);
+  hwText.innerHTML = '';
+  hwModal.classList.remove('open');
+  showToast('کتاب کے نئے صفحے میں محفوظ ہو گیا');
+};
+
+/* ================== کتاب (Book) ================== */
+const bookModal = document.getElementById('bookModal');
+const bookGrid = document.getElementById('bookGrid');
+let bookPages = [];
+let bookEditingIndex = -1;
+
+function loadBook(){
+  try{
+    const raw = localStorage.getItem('urdu_studio_book');
+    bookPages = raw ? JSON.parse(raw) : [];
+  }catch(e){ bookPages = []; }
+}
+function saveBook(){
+  try{ localStorage.setItem('urdu_studio_book', JSON.stringify(bookPages)); }
+  catch(e){ showToast('کتاب محفوظ کرنے میں مسئلہ ہوا'); }
+}
+function bookAddPage(html, theme){
+  bookPages.push({ html: html, theme: theme || 'theme-paper' });
+  saveBook();
+  renderBookGrid();
+}
+function renderBookGrid(){
+  bookGrid.innerHTML = '';
+  bookPages.forEach((p, i)=>{
+    const card = document.createElement('div');
+    card.className = 'book-page-card';
+    card.innerHTML = `
+      <button class="del" data-i="${i}">✕</button>
+      <div class="thumb"><div class="pg-frame"></div>${p.html}</div>
+      <div class="num">صفحہ ${i+1}</div>`;
+    card.querySelector('.thumb').onclick = ()=> bookEditPage(i);
+    card.querySelector('.num').onclick = ()=> bookEditPage(i);
+    card.querySelector('.del').onclick = (e)=>{
+      e.stopPropagation();
+      if(confirm('یہ صفحہ حذف کریں؟')){ bookPages.splice(i,1); saveBook(); renderBookGrid(); }
+    };
+    bookGrid.appendChild(card);
+  });
+}
+function bookEditPage(i){
+  bookEditingIndex = i;
+  canvasText.innerHTML = bookPages[i].html;
+  paper.className = bookPages[i].theme || 'theme-paper';
+  bookModal.classList.remove('open');
+  showToast('صفحہ ' + (i+1) + ' ترمیم کے لیے کھل گیا — تبدیلی کے بعد "موجودہ صفحہ کتاب میں محفوظ کریں" دبائیں');
+}
+
+document.getElementById('btnOpenBook').onclick = ()=>{ loadBook(); renderBookGrid(); bookModal.classList.add('open'); };
+document.getElementById('bookClose').onclick = ()=>{ bookModal.classList.remove('open'); };
+document.getElementById('bookNewPage').onclick = ()=>{
+  canvasText.innerHTML = '';
+  bookEditingIndex = -1;
+  bookModal.classList.remove('open');
+  showToast('نیا صفحہ — لکھیں پھر کتاب میں محفوظ کریں');
+};
+document.getElementById('bookSaveCurrent').onclick = ()=>{
+  loadBook();
+  if(!canvasText.innerHTML.trim()){ showToast('صفحہ خالی ہے'); return; }
+  if(bookEditingIndex >= 0 && bookEditingIndex < bookPages.length){
+    bookPages[bookEditingIndex] = { html: canvasText.innerHTML, theme: paper.className };
+  } else {
+    bookPages.push({ html: canvasText.innerHTML, theme: paper.className });
+    bookEditingIndex = bookPages.length - 1;
+  }
+  saveBook();
+  renderBookGrid();
+  showToast('کتاب میں محفوظ ہو گیا (صفحہ ' + (bookEditingIndex+1) + ')');
+};
+
+document.getElementById('bookExportPdf').onclick = async ()=>{
+  loadBook();
+  if(!bookPages.length){ showToast('کتاب میں ابھی کوئی صفحہ نہیں'); return; }
+  let bookTitle = prompt('اس کتاب / کتابچے کا عنوان لکھیں:', '');
+  if(bookTitle === null) return;
+  if(!bookTitle.trim()) bookTitle = 'میری تحریر';
+  showToast('PDF تیار ہو رہی ہے، براہ کرم انتظار کریں…');
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit:'pt', format:'a4' });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const esc = (s)=> s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  const stageEl = document.createElement('div');
+  stageEl.style.position = 'fixed';
+  stageEl.style.left = '-99999px';
+  stageEl.style.top = '0';
+  stageEl.style.width = '760px';
+  stageEl.style.background = '#ffffff';
+  document.body.appendChild(stageEl);
+
+  const coverHtml = `
+    <div style="width:760px;min-height:1000px;background:#fdfaf3;border:10px double #b8923f;border-radius:22px;padding:26px;box-sizing:border-box;">
+      <div style="border:2px solid #b8923f;border-radius:14px;height:948px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;box-sizing:border-box;">
+        <div style="font-size:26px;color:#b8923f;letter-spacing:10px;">❖ ❖ ❖</div>
+        <div style="direction:rtl;font-family:'Jameel Noori Nastaleeq',serif;font-size:46px;color:#241a12;line-height:1.7;margin:34px 0;">${esc(bookTitle)}</div>
+        <div style="font-size:26px;color:#b8923f;letter-spacing:10px;">❖ ❖ ❖</div>
+      </div>
+    </div>`;
+  const closingHtml = `
+    <div style="width:760px;min-height:1000px;background:#fdfaf3;border:8px solid #b8923f;border-radius:16px;"></div>`;
+  const contentHtml = bookPages.map((p,i)=> `
+    <div style="width:760px;min-height:1000px;background:#ffffff;border:8px solid #b8923f;border-radius:16px;padding:60px 55px;box-sizing:border-box;position:relative;">
+      <div style="direction:rtl;text-align:right;font-family:'Jameel Noori Nastaleeq',serif;font-size:30px;line-height:2.1;color:#241a12;">${p.html}</div>
+      <div style="position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:14px;color:#7a6a4f;font-family:Tahoma,sans-serif;">${i+1}</div>
+    </div>`);
+  const pagesHtml = [coverHtml, ...contentHtml, closingHtml];
+
+  for(let i=0;i<pagesHtml.length;i++){
+    stageEl.innerHTML = pagesHtml[i];
+    await new Promise(r=>setTimeout(r,60));
+    const canvas = await html2canvas(stageEl.firstElementChild, {backgroundColor:'#ffffff', scale:2});
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const ratio = Math.min(pageW/canvas.width, pageH/canvas.height);
+    const w = canvas.width*ratio, h = canvas.height*ratio;
+    if(i>0) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', (pageW-w)/2, (pageH-h)/2, w, h);
+  }
+  document.body.removeChild(stageEl);
+  pdf.save('urdu-book.pdf');
+  showToast('کتاب PDF بن گئی — عنوان کا صفحہ، نمبر والے صفحات اور آخری صفحہ شامل ہیں');
+};
+
+loadBook();
+</script>
+</body>
+</html>
