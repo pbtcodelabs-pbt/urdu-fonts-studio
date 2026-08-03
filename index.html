@@ -234,7 +234,7 @@
     position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
     right: auto; margin-inline-end: calc(var(--rail-w) / 2 * -1);
     display:flex; align-items:center; gap:10px;
-    background: var(--topbar-grad-2)ee; border:1px solid var(--gold); border-radius: 24px;
+    background: color-mix(in srgb, var(--topbar-grad-2) 93%, transparent); border:1px solid var(--gold); border-radius: 24px;
     padding: 8px 16px; z-index: 60; box-shadow: 0 8px 24px rgba(0,0,0,.5);
     width: min(78vw, 360px);
   }
@@ -244,30 +244,32 @@
     #quickZoom{ margin-inline-end: 0; bottom: 14px; }
   }
 
-  .font-wheel{
-    position: fixed; bottom: 76px; z-index: 59;
-    display:flex; flex-direction:column; align-items:center; gap:4px;
-    background: var(--topbar-grad-2)ee; border:1px solid var(--gold); border-radius:16px;
-    padding:6px; box-shadow:0 8px 20px rgba(0,0,0,.4);
-    width: 96px;
+  #fontWheelBar{
+    position: fixed; left:0; right:0; top:0; z-index: 39;
+    display:flex; flex-direction:row; height: 40px;
+    background: var(--panel-bg-2); border-bottom:1px solid var(--border-1);
   }
-  #urduFontWheel{ right: 8px; }
-  #enFontWheel{ left: 8px; }
+  .fw-half{
+    flex:1 1 50%; display:flex; align-items:center; gap:2px; padding:0 4px;
+    min-width:0;
+  }
+  #urduFontWheel{ border-inline-start: 1px solid var(--border-1); }
   .fw-btn{
-    width:28px;height:28px;border-radius:50%;border:1px solid var(--border-2);
-    background:var(--panel-bg-2); color:var(--text-dark); font-size:15px; cursor:pointer;
+    width:24px;height:24px;min-width:24px;border-radius:50%;border:1px solid var(--border-2);
+    background:var(--panel-bg); color:var(--text-dark); font-size:13px; cursor:pointer;
     display:flex;align-items:center;justify-content:center;
   }
   .fw-scroll{
-    height: 108px; width:100%; overflow-y:auto; scroll-snap-type:y mandatory;
-    padding: 36px 0; -webkit-overflow-scrolling:touch;
+    flex:1; min-width:0; height:100%; overflow-x:auto; overflow-y:hidden;
+    scroll-snap-type:x mandatory; display:flex; align-items:center;
+    padding: 0 42%; -webkit-overflow-scrolling:touch;
   }
   .fw-item{
-    height:36px; display:flex; align-items:center; justify-content:center;
-    scroll-snap-align:center; font-size:12px; color:var(--text-muted); text-align:center;
-    padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    flex:0 0 auto; min-width:72px; height:100%; display:flex; align-items:center; justify-content:center;
+    scroll-snap-align:center; font-size:11px; color:var(--text-muted); text-align:center;
+    padding:0 8px; white-space:nowrap;
   }
-  .fw-item.center{ color:var(--gold); font-weight:700; font-size:14px; }
+  .fw-item.center{ color:var(--gold); font-weight:700; font-size:13px; }
 
   #paper{
     width: 100%; min-height: 520px; max-width: 980px;
@@ -313,33 +315,34 @@
   /* floating selection toolbar */
   #selToolbar{
     position: absolute; display:none; z-index: 50;
-    background: var(--topbar-grad-2); border:1px solid var(--border-2); border-radius: 10px;
+    background: #fff4e0; border:1.5px solid #e0a83e; border-radius: 10px;
     padding: 6px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
     align-items:center; gap:6px; flex-wrap:wrap; max-width: 94vw; justify-content:center;
   }
   #selToolbar select, #selToolbar input[type=number]{
-    background:var(--panel-bg-2); color:var(--text-dark); border:1px solid var(--border-2); border-radius:6px;
+    background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
     font-size:12px; padding:4px 6px;
   }
   #selToolbar button{
-    background:var(--panel-bg-2); color:var(--text-dark); border:1px solid var(--border-2); border-radius:6px;
+    background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
     width:26px; height:26px; cursor:pointer; font-size:13px;
   }
-  #selToolbar button.active{ background:var(--gold); color:var(--on-accent); }
+  #selToolbar button.active{ background:#e0a83e; color:#3a2400; }
   #selToolbarBody{ display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; }
   #selToolbarBody.expanded{ display:flex; }
   #selDragHandle{
     cursor: move; touch-action: none; user-select: none; -webkit-user-select: none;
-    color: var(--on-accent); font-size:17px; padding:0; margin-inline-end:2px;
+    color: #3a2400; font-size:17px; padding:0; margin-inline-end:2px;
     width:30px; height:30px; min-width:30px; border-radius:50%;
-    background: var(--gold); display:flex; align-items:center; justify-content:center;
+    background: #e0a83e; display:flex; align-items:center; justify-content:center;
     box-shadow: 0 1px 4px rgba(0,0,0,.3);
   }
   #selToolbar{ opacity:.6; transition: opacity .15s; }
   #selToolbar.touched, #selToolbar:has(#selToolbarBody.expanded){ opacity:1; }
   #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
 
-  ::selection{ background: var(--gold)66; }
+  ::selection{ background: rgba(30,136,229,.55); }
+  #canvasText ::selection{ background: rgba(30,136,229,.55); }
 
   #toast{
     position: fixed; bottom: 24px; left:50%; transform: translateX(-50%);
@@ -456,7 +459,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS011</span>
+      <span id="verTag">UFS014</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -485,15 +488,17 @@
   <span id="qzVal">100%</span>
 </div>
 
-<div id="urduFontWheel" class="font-wheel">
-  <button class="fw-btn fw-minus" data-wheel="ur">–</button>
-  <div class="fw-scroll" id="urduWheelScroll"></div>
-  <button class="fw-btn fw-plus" data-wheel="ur">+</button>
-</div>
-<div id="enFontWheel" class="font-wheel">
-  <button class="fw-btn fw-minus" data-wheel="en">–</button>
-  <div class="fw-scroll" id="enWheelScroll"></div>
-  <button class="fw-btn fw-plus" data-wheel="en">+</button>
+<div id="fontWheelBar">
+  <div class="fw-half" id="urduFontWheel">
+    <button class="fw-btn fw-minus" data-wheel="ur">–</button>
+    <div class="fw-scroll" id="urduWheelScroll" dir="ltr"></div>
+    <button class="fw-btn fw-plus" data-wheel="ur">+</button>
+  </div>
+  <div class="fw-half" id="enFontWheel">
+    <button class="fw-btn fw-minus" data-wheel="en">–</button>
+    <div class="fw-scroll" id="enWheelScroll" dir="ltr"></div>
+    <button class="fw-btn fw-plus" data-wheel="en">+</button>
+  </div>
 </div>
 
 <div id="selToolbar">
@@ -513,6 +518,8 @@
   <button class="icon-toggle" data-align="justify" title="برابر">▤</button>
   <button id="selLineSpace" title="سطروں کا فاصلہ">↕</button>
   <button id="selFitLine" title="ایک لائن میں فٹ کریں">↔️1</button>
+  <input type="range" id="selFitSlider" min="8" max="90" value="34" style="width:70px;display:none;">
+  <span id="selFitSliderVal" style="display:none;color:var(--text-muted);font-size:11px;min-width:26px;">34</span>
   <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
   <button id="selColorBtn" title="لفظ کا رنگ">🎨</button>
   <button id="selBgBtn" title="لفظ کا بیک گراؤنڈ">🖍️</button>
@@ -1072,6 +1079,7 @@ document.getElementById('selLineSpace').onclick = ()=>{
 };
 
 /* ---------- fit a selected heading/word into a single line by shrinking its size ---------- */
+let fitLineSpan = null;
 function fitToOneLine(){
   let sel = window.getSelection();
   if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
@@ -1102,10 +1110,35 @@ function fitToOneLine(){
   const nr = document.createRange();
   nr.selectNodeContents(span);
   sel.addRange(nr);
-  showToast('ایک لائن میں فٹ کر دیا (سائز ' + size + 'px)');
+  fitLineSpan = span;
+  const slider = document.getElementById('selFitSlider');
+  const sliderVal = document.getElementById('selFitSliderVal');
+  slider.style.display = 'inline-block';
+  sliderVal.style.display = 'inline-block';
+  slider.value = size;
+  sliderVal.textContent = size;
+  showToast('ایک لائن میں فٹ کر دیا (سائز ' + size + 'px) — سلائیڈر سے مزید بڑا/چھوٹا کریں');
 }
 document.getElementById('selFitLine').onmousedown = (e)=> e.preventDefault();
 document.getElementById('selFitLine').onclick = fitToOneLine;
+
+document.getElementById('selFitSlider').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selFitSlider').oninput = (e)=>{
+  if(!fitLineSpan || !canvasText.contains(fitLineSpan)) return;
+  const containerWidth = canvasText.clientWidth - 20;
+  let size = +e.target.value;
+  fitLineSpan.style.whiteSpace = 'nowrap';
+  fitLineSpan.style.fontSize = size + 'px';
+  let guard = 0;
+  while(fitLineSpan.getBoundingClientRect().width > containerWidth && size > 8 && guard < 100){
+    size -= 1;
+    fitLineSpan.style.fontSize = size + 'px';
+    guard++;
+  }
+  fitLineSpan.style.whiteSpace = '';
+  document.getElementById('selFitSliderVal').textContent = size;
+  if(size !== +e.target.value) e.target.value = size;
+};
 
 /* ---------- zoom (adjusts TEXT SIZE only — the page/paper stays put) ---------- */
 const rngZoom = document.getElementById('rngZoom');
@@ -1162,6 +1195,7 @@ function showSelToolbarPinned(){
     selToolbar.style.left = toolbarPos.left + 'px';
     selToolbar.style.transform = 'none';
     selToolbar.style.display = 'flex';
+    if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
     return;
   }
   selToolbar.style.position = 'fixed';
@@ -1169,6 +1203,7 @@ function showSelToolbarPinned(){
   selToolbar.style.left = '50%';
   selToolbar.style.transform = 'translateX(-50%)';
   selToolbar.style.display = 'flex';
+  if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
 }
 document.addEventListener('selectionchange', ()=>{
   if(document.activeElement !== canvasText) return;
@@ -1183,10 +1218,18 @@ document.addEventListener('selectionchange', ()=>{
   selToolbar.style.position = 'absolute';
   selToolbar.style.transform = 'none';
   selToolbar.style.display='flex';
-  selToolbar.style.top = (window.scrollY + rect.top - 44) + 'px';
+  let topPx = window.scrollY + rect.top - 44;
+  const kh0 = (typeof getKeyboardHeight === 'function') ? getKeyboardHeight() : 0;
+  const safeMaxTopAbs = window.scrollY + window.innerHeight - kh0 - 100;
+  if(topPx > safeMaxTopAbs) topPx = safeMaxTopAbs;
+  selToolbar.style.top = topPx + 'px';
   selToolbar.style.left = (window.scrollX + rect.left + rect.width/2 - selToolbar.offsetWidth/2) + 'px';
 });
-canvasText.addEventListener('focus', showSelToolbarPinned);
+canvasText.addEventListener('focus', ()=>{
+  showSelToolbarPinned();
+  setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 350);
+  setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 700);
+});
 canvasText.addEventListener('blur', ()=>{
   setTimeout(()=>{
     if(document.activeElement !== canvasText && !selToolbar.contains(document.activeElement)){
@@ -1221,7 +1264,7 @@ selDragHandle.addEventListener('pointermove', (e)=>{
   let newTop = dragOrigTop + (e.clientY - dragStartY);
   let newLeft = dragOrigLeft + (e.clientX - dragStartX);
   const kh = (typeof getKeyboardHeight === 'function') ? getKeyboardHeight() : 0;
-  const safeMaxTop = Math.min(window.innerHeight - kh - 40, window.innerHeight * 0.42);
+  const safeMaxTop = window.innerHeight - kh - 40;
   newTop = Math.max(4, Math.min(safeMaxTop, newTop));
   newLeft = Math.max(4, Math.min(window.innerWidth-40, newLeft));
   selToolbar.style.top = newTop + 'px';
@@ -1320,9 +1363,16 @@ function wireWheel(scrollEl, list){
   scrollEl.addEventListener('scroll', ()=>{
     clearTimeout(timer);
     timer = setTimeout(()=>{
-      const idx = Math.max(0, Math.min(list.length-1, Math.round(scrollEl.scrollTop / 36)));
-      Array.from(scrollEl.children).forEach((el,i)=> el.classList.toggle('center', i===idx));
-      const fam = list[idx].family;
+      const containerRect = scrollEl.getBoundingClientRect();
+      const containerCenter = containerRect.left + containerRect.width/2;
+      let bestIdx = 0, bestDist = Infinity;
+      Array.from(scrollEl.children).forEach((el,i)=>{
+        const r = el.getBoundingClientRect();
+        const d = Math.abs((r.left + r.width/2) - containerCenter);
+        if(d < bestDist){ bestDist = d; bestIdx = i; }
+      });
+      Array.from(scrollEl.children).forEach((el,i)=> el.classList.toggle('center', i===bestIdx));
+      const fam = list[bestIdx].family;
       styleSelection(st=> st.fontFamily = fam, ()=> canvasText.style.fontFamily = fam);
     }, 160);
   });
@@ -1708,9 +1758,14 @@ function getKeyboardHeight(){
 function adjustForKeyboard(){
   const kh = getKeyboardHeight();
   drawer.style.bottom = kh + 'px';
+  const body = document.getElementById('selToolbarBody');
+  if(kh > 100 && body.classList.contains('expanded')){
+    body.classList.remove('expanded');
+    document.getElementById('selToggle').textContent = 'Aa ⌄';
+  }
   if(selToolbar.style.display === 'flex'){
     const isAbsolute = selToolbar.style.position === 'absolute';
-    const safeMaxTop = Math.min(window.innerHeight - kh - selToolbar.offsetHeight - 10, window.innerHeight * 0.42);
+    const safeMaxTop = window.innerHeight - kh - selToolbar.offsetHeight - 10;
     const maxTop = safeMaxTop + (isAbsolute ? window.scrollY : 0);
     if(parseFloat(selToolbar.style.top) > maxTop){
       selToolbar.style.top = maxTop + 'px';
@@ -1724,16 +1779,20 @@ if(window.visualViewport){
 }
 
 const railEl2 = document.getElementById('rail');
+const fontWheelBarEl = document.getElementById('fontWheelBar');
 function syncStageTop(){
   const topbarH = topbarEl.offsetHeight;
   railEl2.style.top = topbarH + 'px';
   const railH = railEl2.offsetHeight;
-  stageEl3.style.top = (topbarH + railH + 10) + 'px';
+  fontWheelBarEl.style.top = (topbarH + railH) + 'px';
+  const wheelH = fontWheelBarEl.offsetHeight;
+  stageEl3.style.top = (topbarH + railH + wheelH + 10) + 'px';
 }
 window.addEventListener('load', syncStageTop);
 window.addEventListener('resize', syncStageTop);
 new ResizeObserver(syncStageTop).observe(topbarEl);
 new ResizeObserver(syncStageTop).observe(railEl2);
+new ResizeObserver(syncStageTop).observe(fontWheelBarEl);
 if(document.fonts && document.fonts.ready){ document.fonts.ready.then(syncStageTop).catch(()=>{}); }
 setTimeout(syncStageTop, 300);
 setTimeout(syncStageTop, 1200);
