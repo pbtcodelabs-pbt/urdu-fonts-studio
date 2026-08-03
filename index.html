@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>اردو فونٹ اسٹوڈیو</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2647">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
 <style>
   @font-face {
     font-family: 'Jameel Noori Nastaleeq';
@@ -280,6 +284,10 @@
   #selToolbarBody{ display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; }
   #selToolbarBody.expanded{ display:flex; }
   #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
+  #selDragHandle{
+    cursor: move; touch-action: none; user-select: none; -webkit-user-select: none;
+    color:#7fc0f0; font-size:16px; padding:0 4px; display:flex; align-items:center;
+  }
 
   ::selection{ background: #1e88e566; }
 
@@ -398,7 +406,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS001</span>
+      <span id="verTag">UFS003</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -425,6 +433,7 @@
 </div>
 
 <div id="selToolbar">
+  <span id="selDragHandle" title="پکڑ کر گھسیٹیں">⠿</span>
   <button id="selToggle">Aa ⌄</button>
   <div id="selToolbarBody">
   <select id="selFont"></select>
@@ -932,7 +941,17 @@ stageEl2.addEventListener('touchend', (e)=>{
 
 /* ---------- floating selection toolbar (stays visible throughout editing) ---------- */
 const selToolbar = document.getElementById('selToolbar');
+let toolbarDragged = false;
+let toolbarPos = null; // {top, left} in px, once user has dragged it
 function showSelToolbarPinned(){
+  if(toolbarDragged && toolbarPos){
+    selToolbar.style.position = 'fixed';
+    selToolbar.style.top = toolbarPos.top + 'px';
+    selToolbar.style.left = toolbarPos.left + 'px';
+    selToolbar.style.transform = 'none';
+    selToolbar.style.display = 'flex';
+    return;
+  }
   selToolbar.style.position = 'fixed';
   selToolbar.style.top = '58px';
   selToolbar.style.left = '50%';
@@ -941,6 +960,7 @@ function showSelToolbarPinned(){
 }
 document.addEventListener('selectionchange', ()=>{
   if(document.activeElement !== canvasText) return;
+  if(toolbarDragged){ selToolbar.style.display = 'flex'; return; }
   const sel = window.getSelection();
   if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
     showSelToolbarPinned();
@@ -968,6 +988,40 @@ document.getElementById('selToggle').onclick = ()=>{
   const expanded = body.classList.toggle('expanded');
   document.getElementById('selToggle').textContent = 'Aa ' + (expanded ? '⌃' : '⌄');
 };
+/* drag the pinned toolbar anywhere on screen */
+const selDragHandle = document.getElementById('selDragHandle');
+let dragging = false, dragStartX=0, dragStartY=0, dragOrigTop=0, dragOrigLeft=0;
+selDragHandle.addEventListener('pointerdown', (e)=>{
+  e.preventDefault();
+  dragging = true;
+  const rect = selToolbar.getBoundingClientRect();
+  dragOrigTop = rect.top; dragOrigLeft = rect.left;
+  dragStartX = e.clientX; dragStartY = e.clientY;
+  selToolbar.style.position = 'fixed';
+  selToolbar.style.transform = 'none';
+  selToolbar.style.top = dragOrigTop + 'px';
+  selToolbar.style.left = dragOrigLeft + 'px';
+  selDragHandle.setPointerCapture(e.pointerId);
+});
+selDragHandle.addEventListener('pointermove', (e)=>{
+  if(!dragging) return;
+  let newTop = dragOrigTop + (e.clientY - dragStartY);
+  let newLeft = dragOrigLeft + (e.clientX - dragStartX);
+  newTop = Math.max(4, Math.min(window.innerHeight-40, newTop));
+  newLeft = Math.max(4, Math.min(window.innerWidth-40, newLeft));
+  selToolbar.style.top = newTop + 'px';
+  selToolbar.style.left = newLeft + 'px';
+  toolbarDragged = true;
+  toolbarPos = {top:newTop, left:newLeft};
+});
+function endDrag(e){
+  if(!dragging) return;
+  dragging = false;
+  try{ selDragHandle.releasePointerCapture(e.pointerId); }catch(err){}
+}
+selDragHandle.addEventListener('pointerup', endDrag);
+selDragHandle.addEventListener('pointercancel', endDrag);
+
 document.querySelectorAll('.selPunct').forEach(btn=>{
   btn.onmousedown = (e)=> e.preventDefault();
   btn.onclick = ()=>{ canvasText.focus(); document.execCommand('insertText', false, btn.dataset.ch); };
@@ -1737,6 +1791,12 @@ document.getElementById('bookExportPdf').onclick = async ()=>{
 };
 
 loadBook();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
 </script>
 </body>
 </html>
