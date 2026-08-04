@@ -579,7 +579,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS029</span>
+      <span id="verTag">UFS030</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -1899,10 +1899,21 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
   div.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
   div.style.fontSize = fontSizePx + 'px';
   div.style.lineHeight = canvasText.style.lineHeight || '2.1';
+  const liveTopNodes = Array.from(canvasText.children);
   div.innerHTML = (htmlOverride !== undefined && htmlOverride !== null) ? htmlOverride : canvasText.innerHTML;
   div.querySelectorAll('span[style*="text-align"]').forEach(sp=>{
     sp.style.display = 'block';
   });
+  if(htmlOverride === undefined || htmlOverride === null){
+    const clonedTopNodes = Array.from(div.children);
+    liveTopNodes.forEach((liveEl, i)=>{
+      const cloneEl = clonedTopNodes[i];
+      if(!cloneEl) return;
+      const cs = getComputedStyle(liveEl);
+      cloneEl.style.textAlign = cs.textAlign;
+      cloneEl.style.direction = 'rtl';
+    });
+  }
   document.body.appendChild(div);
   await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
