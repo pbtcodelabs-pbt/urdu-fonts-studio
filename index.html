@@ -568,7 +568,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS025</span>
+      <span id="verTag">UFS027</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -633,6 +633,7 @@
   <span id="selFitSliderVal" style="color:var(--text-muted);font-size:11px;min-width:26px;">34</span>
   <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
   <button id="selColorBtn" title="لفظ کا رنگ">🎨</button>
+  <button id="selFreePos" title="پکڑ کر کہیں بھی رکھیں">📦</button>
   <button id="selBgBtn" title="لفظ کا بیک گراؤنڈ">🖍️</button>
   <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
   <button class="selPunct" data-ch="،">،</button>
@@ -655,6 +656,7 @@
   <button class="rail-btn" id="btnOpenHW">✍<span class="lbl">ہاتھ کی تحریر</span></button>
   <button class="rail-btn" id="btnOpenBook">📖<span class="lbl">کتاب</span></button>
   <button class="rail-btn" id="btnCollapseBlank">🧹<span class="lbl">اضافی خالی جگہ ہٹائیں</span></button>
+  <button class="rail-btn" data-panel="pageborder">🖼️<span class="lbl">صفحے کا بارڈر</span></button>
 </div>
 
 <div id="drawer">
@@ -700,6 +702,22 @@
     <span class="field-label" style="margin-top:20px;">اس تھیم کا رنگ ہلکا / گہرا کریں</span>
     <input type="range" id="rngPaperBrightness" min="55" max="145" value="100">
     <div class="row-between"><span id="rngPaperBrightnessVal">100%</span><span>چمک</span></div>
+  </div>
+
+  <div id="panel-pageborder" style="display:none;">
+    <h2>صفحے کا بارڈر (فوری جھلک) <button data-close="1">✕</button></h2>
+    <span class="field-label">یہ فوری طور پر صفحے پر لگے گا تاکہ آپ دیکھ سکیں کیسا لگتا ہے</span>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+      <button class="pill-btn primary" data-pborder="none">بغیر بارڈر</button>
+      <button class="pill-btn" data-pborder="thin">پتلا</button>
+      <button class="pill-btn" data-pborder="thick">موٹا</button>
+      <button class="pill-btn" data-pborder="double">ڈبل لائن</button>
+      <button class="pill-btn" data-pborder="dotted">نقطے دار</button>
+      <button class="pill-btn" data-pborder="rounded-gold">گول سنہری</button>
+      <button class="pill-btn" data-pborder="shadow">سایہ دار</button>
+      <button class="pill-btn" data-pborder="ornate">شاہی ڈبل</button>
+    </div>
+    <div class="hint" style="margin-top:12px;">یہی بارڈر PDF بناتے وقت بھی منتخب کر سکتے ہیں (وہاں الگ سے چننا ہوگا) — یہ صرف اسکرین پر دیکھنے کے لیے ہے۔</div>
   </div>
 
   <div id="panel-apptheme" style="display:none;">
@@ -1090,6 +1108,87 @@ APP_THEMES.forEach(t=>{
 document.getElementById('rngAppLightness').oninput = (e)=>{
   applyAppTheme(currentAppTheme, +e.target.value);
 };
+
+/* ---------- live page border preview (screen only) ---------- */
+function applyPageBorderCSS(style){
+  paper.style.borderRadius = '4px';
+  paper.style.outline = 'none';
+  paper.style.boxShadow = '0 20px 60px rgba(0,0,0,.45)';
+  switch(style){
+    case 'none': paper.style.border = 'none'; break;
+    case 'thin': paper.style.border = '2px solid #b8923f'; break;
+    case 'thick': paper.style.border = '7px solid #b8923f'; break;
+    case 'double': paper.style.border = '5px double #b8923f'; break;
+    case 'dotted': paper.style.border = '3px dotted #b8923f'; break;
+    case 'rounded-gold': paper.style.border = '6px solid #b8923f'; paper.style.borderRadius = '26px'; break;
+    case 'shadow': paper.style.border = '2px solid #b8923f'; paper.style.boxShadow = '0 20px 60px rgba(0,0,0,.55), 0 0 0 10px rgba(184,146,63,.15)'; break;
+    case 'ornate': paper.style.border = '5px solid #b8923f'; paper.style.outline = '2px solid #b8923f'; paper.style.outlineOffset = '6px'; break;
+  }
+}
+document.querySelectorAll('[data-pborder]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-pborder]').forEach(b=> b.classList.remove('primary'));
+    btn.classList.add('primary');
+    applyPageBorderCSS(btn.dataset.pborder);
+  };
+});
+
+/* ---------- free-position draggable text ---------- */
+document.getElementById('selFreePos').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selFreePos').onclick = ()=>{
+  let sel = window.getSelection();
+  if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
+     savedRange && canvasText.contains(savedRange.startContainer)){
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+  if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
+    showToast('پہلے وہ لفظ/سطر منتخب کریں');
+    return;
+  }
+  if(typeof captureSnapshot === 'function') captureSnapshot();
+  const range = sel.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+  const paperRect = paper.getBoundingClientRect();
+  const box = document.createElement('div');
+  box.className = 'free-pos-box';
+  try{ range.surroundContents(box); }
+  catch(e){ const frag = range.extractContents(); box.appendChild(frag); range.insertNode(box); }
+  box.style.position = 'absolute';
+  box.style.left = (rect.left - paperRect.left) + 'px';
+  box.style.top = (rect.top - paperRect.top) + 'px';
+  box.style.cursor = 'move';
+  box.style.zIndex = 20;
+  box.style.touchAction = 'none';
+  box.style.outline = '1.5px dashed #1e88e5';
+  box.style.padding = '2px 4px';
+  makeBoxDraggable(box);
+  sel.removeAllRanges();
+  showToast('اب اسے پکڑ کر جہاں چاہیں لے جائیں');
+};
+function makeBoxDraggable(box){
+  let dragging = false, sx=0, sy=0, ol=0, ot=0;
+  box.addEventListener('pointerdown', (e)=>{
+    e.preventDefault();
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    ol = parseFloat(box.style.left)||0; ot = parseFloat(box.style.top)||0;
+    box.setPointerCapture(e.pointerId);
+  });
+  box.addEventListener('pointermove', (e)=>{
+    if(!dragging) return;
+    const paperRect = paper.getBoundingClientRect();
+    let newLeft = ol + (e.clientX - sx);
+    let newTop = ot + (e.clientY - sy);
+    newLeft = Math.max(0, Math.min(paperRect.width - box.offsetWidth, newLeft));
+    newTop = Math.max(0, Math.min(paperRect.height - box.offsetHeight, newTop));
+    box.style.left = newLeft + 'px';
+    box.style.top = newTop + 'px';
+  });
+  function endDrag(e){ dragging = false; try{ box.releasePointerCapture(e.pointerId); }catch(err){} }
+  box.addEventListener('pointerup', endDrag);
+  box.addEventListener('pointercancel', endDrag);
+}
 
 /* ---------- init color row ---------- */
 const colorRow = document.getElementById('colorRow');
@@ -1737,7 +1836,7 @@ function clusterLineBands(rects, refTop){
 /* Builds all pages for the given content, breaking only between lines (never mid-line),
    with the border drawn safely outside the text margin. Returns an array of finished,
    bordered, numbered page canvases. */
-async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderStyle){
+async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderStyle, htmlOverride, startPageNum){
   const dims = A4_PT[orientation];
   const pageWpx = dims.w * PX_PER_PT;
   const pageHpx = dims.h * PX_PER_PT;
@@ -1753,7 +1852,7 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
   div.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
   div.style.fontSize = fontSizePx + 'px';
   div.style.lineHeight = canvasText.style.lineHeight || '2.1';
-  div.innerHTML = canvasText.innerHTML;
+  div.innerHTML = (htmlOverride !== undefined && htmlOverride !== null) ? htmlOverride : canvasText.innerHTML;
   div.querySelectorAll('span[style*="text-align"]').forEach(sp=>{
     sp.style.display = 'block';
   });
@@ -1781,7 +1880,7 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
     pctx.fillStyle = '#7a6a4f';
     pctx.font = (22*renderScale*PX_PER_PT/2.2)+'px Tahoma, sans-serif';
     pctx.textAlign = 'center';
-    pctx.fillText(String(pages.length+1), pageCanvas.width/2, pageCanvas.height - (16*renderScale*PX_PER_PT/2.2));
+    pctx.fillText(String((startPageNum||1) + pages.length), pageCanvas.width/2, pageCanvas.height - (16*renderScale*PX_PER_PT/2.2));
     pages.push(pageCanvas);
     y += sliceH;
   }
@@ -2447,10 +2546,6 @@ document.getElementById('bookExportPdf').onclick = async ()=>{
   if(bookTitle === null) return;
   if(!bookTitle.trim()) bookTitle = 'میری تحریر';
   showToast('PDF تیار ہو رہی ہے، براہ کرم انتظار کریں…');
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ unit:'pt', format:'a4' });
-  const pageW = pdf.internal.pageSize.getWidth();
-  const pageH = pdf.internal.pageSize.getHeight();
   const esc = (s)=> s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   const stageEl = document.createElement('div');
@@ -2471,26 +2566,43 @@ document.getElementById('bookExportPdf').onclick = async ()=>{
     </div>`;
   const closingHtml = `
     <div style="width:760px;min-height:1000px;background:#fdfaf3;border:8px solid #b8923f;border-radius:16px;"></div>`;
-  const contentHtml = bookPages.map((p,i)=> `
-    <div style="width:760px;min-height:1000px;background:#ffffff;border:8px solid #b8923f;border-radius:16px;padding:60px 55px;box-sizing:border-box;position:relative;">
-      <div style="direction:rtl;text-align:right;font-family:'Jameel Noori Nastaleeq',serif;font-size:30px;line-height:2.1;color:#241a12;">${p.html}</div>
-      <div style="position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:14px;color:#7a6a4f;font-family:Tahoma,sans-serif;">${i+1}</div>
-    </div>`);
-  const pagesHtml = [coverHtml, ...contentHtml, closingHtml];
 
-  for(let i=0;i<pagesHtml.length;i++){
-    stageEl.innerHTML = pagesHtml[i];
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit:'pt', format:'a4' });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  let firstImage = true;
+
+  async function addFlatPage(html){
+    stageEl.innerHTML = html;
     await new Promise(r=>setTimeout(r,60));
     const canvas = await html2canvas(stageEl.firstElementChild, {backgroundColor:'#ffffff', scale:2});
     const imgData = canvas.toDataURL('image/jpeg', 0.95);
     const ratio = Math.min(pageW/canvas.width, pageH/canvas.height);
     const w = canvas.width*ratio, h = canvas.height*ratio;
-    if(i>0) pdf.addPage();
+    if(!firstImage) pdf.addPage();
     pdf.addImage(imgData, 'JPEG', (pageW-w)/2, (pageH-h)/2, w, h);
+    firstImage = false;
   }
+
+  await addFlatPage(coverHtml);
+
+  let pageNum = 1;
+  for(let i=0;i<bookPages.length;i++){
+    const canvases = await buildPaginatedPages(30, 'portrait', 2, 'thin', bookPages[i].html, pageNum);
+    canvases.forEach(c=>{
+      const imgData = c.toDataURL('image/jpeg', 0.95);
+      if(!firstImage) pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, 0, pageW, pageH);
+      firstImage = false;
+      pageNum++;
+    });
+  }
+
+  await addFlatPage(closingHtml);
   document.body.removeChild(stageEl);
   pdf.save('urdu-book.pdf');
-  showToast('کتاب PDF بن گئی — عنوان کا صفحہ، نمبر والے صفحات اور آخری صفحہ شامل ہیں');
+  showToast('کتاب PDF بن گئی — کوئی سطر کہیں کٹی نہیں، جتنے صفحات ضرورت ہوئی بن گئے');
 };
 
 loadBook();
