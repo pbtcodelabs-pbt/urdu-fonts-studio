@@ -426,19 +426,30 @@
   #selToolbar button.active{ background:#e0a83e; color:#3a2400; }
   #selToolbarBody{ display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; }
   #selToolbarBody.expanded{ display:flex; }
+  .free-pos-box{ display:inline-block; }
+  .free-pos-box.placed{ outline: none !important; }
+  .free-pos-box.placed .free-pos-done{ display:none; }
+  .free-pos-done{
+    position:absolute; top:-11px; left:-11px; width:22px; height:22px;
+    background:#2ecc71; color:#fff; border-radius:50%; border:2px solid #fff;
+    display:flex; align-items:center; justify-content:center; font-size:12px;
+    cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.4); z-index:6;
+  }
   #selDragHandle{
     cursor: move; touch-action: none; user-select: none; -webkit-user-select: none;
-    color: #3a2400; font-size:17px; padding:0; margin-inline-end:2px;
+    color: #3a2400; font-size:15px; padding:0; margin-inline-end:2px;
     width:30px; height:30px; min-width:30px; border-radius:50%;
     background: #e0a83e; display:flex; align-items:center; justify-content:center;
     box-shadow: 0 1px 4px rgba(0,0,0,.3);
   }
   #selCloseBtn{
-    width:24px; height:24px; min-width:24px; border-radius:50%; border:none;
+    position: absolute; top:-9px; right:-9px;
+    width:24px; height:24px; min-width:24px; border-radius:50%; border:2px solid #fff;
     background:#c0392b; color:#fff; font-size:12px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; margin-inline-end:2px;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.4); z-index: 5;
   }
-  #selToolbar{ opacity:.6; transition: opacity .15s; }
+  #selToolbar{ opacity:.6; transition: opacity .15s; position:absolute; }
   #selToolbar.touched, #selToolbar:has(#selToolbarBody.expanded){ opacity:1; }
   #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
 
@@ -568,7 +579,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS027</span>
+      <span id="verTag">UFS029</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -612,7 +623,7 @@
 </div>
 
 <div id="selToolbar">
-  <span id="selDragHandle" title="پکڑ کر گھسیٹیں">⠿</span>
+  <span id="selDragHandle" title="پکڑ کر گھسیٹیں">✥</span>
   <button id="selCloseBtn" title="بند کریں">✕</button>
   <button id="selToggle">Aa ⌄</button>
   <div id="selToolbarBody">
@@ -1130,6 +1141,14 @@ document.querySelectorAll('[data-pborder]').forEach(btn=>{
     document.querySelectorAll('[data-pborder]').forEach(b=> b.classList.remove('primary'));
     btn.classList.add('primary');
     applyPageBorderCSS(btn.dataset.pborder);
+    if(typeof pdfBorderStyle !== 'undefined'){
+      pdfBorderStyle = btn.dataset.pborder;
+      const pdfBtn = document.querySelector('[data-border="'+btn.dataset.pborder+'"]');
+      if(pdfBtn){
+        document.querySelectorAll('[data-border]').forEach(b=> b.classList.remove('primary'));
+        pdfBtn.classList.add('primary');
+      }
+    }
   };
 });
 
@@ -1155,24 +1174,47 @@ document.getElementById('selFreePos').onclick = ()=>{
   try{ range.surroundContents(box); }
   catch(e){ const frag = range.extractContents(); box.appendChild(frag); range.insertNode(box); }
   box.style.position = 'absolute';
-  box.style.left = (rect.left - paperRect.left) + 'px';
-  box.style.top = (rect.top - paperRect.top) + 'px';
+  box.style.left = ((rect.left - paperRect.left) / paperRect.width * 100) + '%';
+  box.style.top = ((rect.top - paperRect.top) / paperRect.height * 100) + '%';
   box.style.cursor = 'move';
   box.style.zIndex = 20;
   box.style.touchAction = 'none';
   box.style.outline = '1.5px dashed #1e88e5';
   box.style.padding = '2px 4px';
+  const doneBtn = document.createElement('span');
+  doneBtn.textContent = '✓';
+  doneBtn.className = 'free-pos-done';
+  doneBtn.title = 'مکمل — یہاں سے باہر آئیں';
+  doneBtn.onmousedown = (e)=>{ e.preventDefault(); e.stopPropagation(); };
+  doneBtn.onclick = (e)=>{
+    e.preventDefault(); e.stopPropagation();
+    box.classList.add('placed');
+    activeFreeBox = null;
+    canvasText.focus();
+    const r = document.createRange();
+    r.selectNodeContents(canvasText);
+    r.collapse(false);
+    const s = window.getSelection();
+    s.removeAllRanges(); s.addRange(r);
+    showToast('مکمل — اب باہر لکھ سکتے ہیں');
+  };
+  box.appendChild(doneBtn);
   makeBoxDraggable(box);
+  activeFreeBox = box;
   sel.removeAllRanges();
-  showToast('اب اسے پکڑ کر جہاں چاہیں لے جائیں');
+  showToast('اب اسے پکڑ کر جہاں چاہیں لے جائیں، مکمل ہو تو ✓ دبائیں');
 };
+let activeFreeBox = null;
 function makeBoxDraggable(box){
   let dragging = false, sx=0, sy=0, ol=0, ot=0;
   box.addEventListener('pointerdown', (e)=>{
     e.preventDefault();
+    activeFreeBox = box;
     dragging = true;
     sx = e.clientX; sy = e.clientY;
-    ol = parseFloat(box.style.left)||0; ot = parseFloat(box.style.top)||0;
+    const paperRect = paper.getBoundingClientRect();
+    ol = parseFloat(box.style.left)/100 * paperRect.width || 0;
+    ot = parseFloat(box.style.top)/100 * paperRect.height || 0;
     box.setPointerCapture(e.pointerId);
   });
   box.addEventListener('pointermove', (e)=>{
@@ -1182,8 +1224,8 @@ function makeBoxDraggable(box){
     let newTop = ot + (e.clientY - sy);
     newLeft = Math.max(0, Math.min(paperRect.width - box.offsetWidth, newLeft));
     newTop = Math.max(0, Math.min(paperRect.height - box.offsetHeight, newTop));
-    box.style.left = newLeft + 'px';
-    box.style.top = newTop + 'px';
+    box.style.left = (newLeft / paperRect.width * 100) + '%';
+    box.style.top = (newTop / paperRect.height * 100) + '%';
   });
   function endDrag(e){ dragging = false; try{ box.releasePointerCapture(e.pointerId); }catch(err){} }
   box.addEventListener('pointerup', endDrag);
@@ -1541,6 +1583,11 @@ function buildSelColorSwatches(){
     sw.style.cssText = 'width:22px;height:22px;border-radius:50%;border:1px solid #7fc0f0;cursor:pointer;background:'+c;
     sw.onmousedown = (e)=> e.preventDefault();
     sw.onclick = ()=>{
+      if(typeof activeFreeBox !== 'undefined' && activeFreeBox){
+        if(selColorMode === 'text'){ activeFreeBox.style.color = c; }
+        else{ activeFreeBox.style.backgroundColor = c; }
+        return;
+      }
       if(selColorMode === 'text'){
         styleSelection(st=> st.color = c, ()=> canvasText.style.color = c);
       } else {
@@ -2249,8 +2296,6 @@ document.addEventListener('keydown', (e)=>{
 canvasText.addEventListener('input', ()=>{
   clearTimeout(snapshotTimer);
   snapshotTimer = setTimeout(captureSnapshot, 500);
-  clearTimeout(autoSaveTimer);
-  autoSaveTimer = setTimeout(()=> saveDraft(true), 1500);
 });
 window.addEventListener('beforeunload', ()=> saveDraft(true));
 document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveDraft(true); });
