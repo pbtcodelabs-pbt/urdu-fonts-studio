@@ -580,7 +580,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS031</span>
+      <span id="verTag">UFS034</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -1193,10 +1193,16 @@ document.getElementById('selFreePos').onclick = ()=>{
     activeFreeBox = null;
     canvasText.focus();
     const r = document.createRange();
-    r.selectNodeContents(canvasText);
-    r.collapse(false);
+    try{
+      r.setStartAfter(box);
+      r.collapse(true);
+    }catch(err){
+      r.selectNodeContents(box);
+      r.collapse(false);
+    }
     const s = window.getSelection();
     s.removeAllRanges(); s.addRange(r);
+    box.scrollIntoView({block:'nearest'});
     showToast('مکمل — اب باہر لکھ سکتے ہیں');
   };
   box.appendChild(doneBtn);
@@ -1459,8 +1465,11 @@ function applyZoom(pct){
 rngZoom.oninput = ()=> applyZoom(+rngZoom.value);
 document.getElementById('qzSlider').oninput = (e)=> applyZoom(+e.target.value);
 
-/* two-finger pinch to zoom text size, right on the page */
+/* two-finger pinch: resizes the current SELECTION if one is active, otherwise zooms the whole page */
 let pinchStartDist = 0, pinchStartPct = 100;
+let pinchMode = 'page';
+let pinchSpan = null;
+let pinchSpanStartSize = 34;
 function touchDist(t){
   const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
   return Math.hypot(dx, dy);
@@ -1469,18 +1478,51 @@ const stageEl2 = document.getElementById('stage');
 stageEl2.addEventListener('touchstart', (e)=>{
   if(e.touches.length===2){
     pinchStartDist = touchDist(e.touches);
-    pinchStartPct = curZoomPct;
+    let sel = window.getSelection();
+    if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
+       typeof savedRange !== 'undefined' && savedRange && canvasText.contains(savedRange.startContainer)){
+      sel.removeAllRanges();
+      sel.addRange(savedRange);
+    }
+    if(sel.rangeCount && !sel.isCollapsed && canvasText.contains(sel.anchorNode)){
+      pinchMode = 'selection';
+      if(typeof captureSnapshot === 'function') captureSnapshot();
+      const range = sel.getRangeAt(0);
+      const span = document.createElement('span');
+      try{ range.surroundContents(span); }
+      catch(err){ const frag = range.extractContents(); span.appendChild(frag); range.insertNode(span); }
+      pinchSpan = span;
+      pinchSpanStartSize = parseInt(getComputedStyle(span).fontSize) || 34;
+      const r2 = document.createRange();
+      r2.selectNodeContents(span);
+      sel.removeAllRanges(); sel.addRange(r2);
+    } else {
+      pinchMode = 'page';
+      pinchStartPct = curZoomPct;
+    }
   }
 }, {passive:true});
 stageEl2.addEventListener('touchmove', (e)=>{
   if(e.touches.length===2 && pinchStartDist>0){
     e.preventDefault();
     const d = touchDist(e.touches);
-    applyZoom(pinchStartPct * (d/pinchStartDist));
+    const ratio = d / pinchStartDist;
+    if(pinchMode === 'selection' && pinchSpan){
+      let size = Math.max(8, Math.min(160, Math.round(pinchSpanStartSize * ratio)));
+      pinchSpan.style.fontSize = size + 'px';
+      const slider = document.getElementById('selFitSlider');
+      if(slider){ slider.value = size; document.getElementById('selFitSliderVal').textContent = size; }
+    } else {
+      applyZoom(pinchStartPct * ratio);
+    }
   }
 }, {passive:false});
 stageEl2.addEventListener('touchend', (e)=>{
-  if(e.touches.length<2) pinchStartDist = 0;
+  if(e.touches.length<2){
+    pinchStartDist = 0;
+    pinchMode = 'page';
+    pinchSpan = null;
+  }
 });
 
 /* ---------- floating selection toolbar (stays visible throughout editing) ---------- */
@@ -1664,7 +1706,11 @@ function wireWheel(scrollEl, list){
       });
       Array.from(scrollEl.children).forEach((el,i)=> el.classList.toggle('center', i===bestIdx));
       const fam = list[bestIdx].family;
-      styleSelection(st=> st.fontFamily = fam, ()=> canvasText.style.fontFamily = fam);
+      if(typeof activeFreeBox !== 'undefined' && activeFreeBox){
+        activeFreeBox.style.fontFamily = fam;
+      } else {
+        styleSelection(st=> st.fontFamily = fam, ()=> canvasText.style.fontFamily = fam);
+      }
     }, 160);
   });
 }
@@ -1675,11 +1721,13 @@ if(enFonts.length) enScroll.children[0].classList.add('center');
 
 document.querySelectorAll('.fw-minus').forEach(btn=> btn.onclick = ()=>{
   curSelSize = Math.max(10, curSelSize-2);
-  styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{});
+  if(typeof activeFreeBox !== 'undefined' && activeFreeBox){ activeFreeBox.style.fontSize = curSelSize+'px'; }
+  else{ styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{}); }
 });
 document.querySelectorAll('.fw-plus').forEach(btn=> btn.onclick = ()=>{
   curSelSize = curSelSize+2;
-  styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{});
+  if(typeof activeFreeBox !== 'undefined' && activeFreeBox){ activeFreeBox.style.fontSize = curSelSize+'px'; }
+  else{ styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{}); }
 });
 document.getElementById('selBold').onclick = (e)=>{
   e.target.classList.toggle('active');
