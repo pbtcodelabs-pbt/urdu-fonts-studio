@@ -3,7 +3,7 @@
 // سرور سے لائی جائے گی۔ صرف آف لائن ہونے کی صورت میں cache استعمال ہوگا۔
 // ہر نئی ریلیز کے ساتھ CACHE_VERSION کو بڑھایا جائے (مثلاً v1 → v2) تاکہ پرانا cache خودکار صاف ہو جائے۔
 
-const CACHE_VERSION = 'ufs-v22';
+const CACHE_VERSION = 'ufs-v24';
 const CACHE_NAME = `urdu-font-studio-cache-${CACHE_VERSION}`;
 
 self.addEventListener('install', () => {
