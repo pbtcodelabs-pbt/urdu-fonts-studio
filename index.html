@@ -568,7 +568,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS024</span>
+      <span id="verTag">UFS025</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -880,7 +880,7 @@
       <span style="color:#2f6690;font-size:12px;">صفحے کا پریویو</span>
       <button id="pdfPrevZoomPlus" style="width:28px;height:28px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;">+</button>
     </div>
-    <div id="pdfPreviewWrap" style="overflow:auto;max-height:44vh;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
+    <div id="pdfPreviewWrap" style="overflow:auto;max-height:58vh;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
       <img id="pdfPreviewImg" style="max-width:none;transition:width .15s;" />
     </div>
     <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px;">
@@ -1754,6 +1754,9 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
   div.style.fontSize = fontSizePx + 'px';
   div.style.lineHeight = canvasText.style.lineHeight || '2.1';
   div.innerHTML = canvasText.innerHTML;
+  div.querySelectorAll('span[style*="text-align"]').forEach(sp=>{
+    sp.style.display = 'block';
+  });
   document.body.appendChild(div);
   await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
