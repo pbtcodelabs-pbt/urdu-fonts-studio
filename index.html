@@ -580,7 +580,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS034</span>
+      <span id="verTag">UFS035</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -639,13 +639,16 @@
   <button class="icon-toggle" data-align="center" title="درمیان">◆</button>
   <button class="icon-toggle" data-align="left" title="بائیں">►</button>
   <button class="icon-toggle" data-align="justify" title="برابر">▤</button>
-  <button id="selLineSpace" title="سطروں کا فاصلہ">↕</button>
+  <button id="selLineSpaceMinus" title="سطروں کا فاصلہ کم کریں">↕−</button>
+  <button id="selLineSpacePlus" title="سطروں کا فاصلہ بڑھائیں">↕+</button>
+  <button id="selFromHereBtn" title="یہاں سے آخر تک منتخب کریں">⬇️منتخب</button>
   <button id="selFitLine" title="ایک لائن میں فٹ کریں">↔️1</button>
   <input type="range" id="selFitSlider" min="8" max="140" value="34" style="width:90px;">
   <span id="selFitSliderVal" style="color:var(--text-muted);font-size:11px;min-width:26px;">34</span>
   <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
   <button id="selColorBtn" title="لفظ کا رنگ">🎨</button>
   <button id="selFreePos" title="پکڑ کر کہیں بھی رکھیں">📦</button>
+  <button id="btnReleaseAllBoxes" title="سب آزاد باکس واپس عام تحریر میں لائیں">🧲</button>
   <button id="selBgBtn" title="لفظ کا بیک گراؤنڈ">🖍️</button>
   <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
   <button class="selPunct" data-ch="،">،</button>
@@ -863,6 +866,7 @@
   </div>
   <div class="fs-body">
     <div class="hint" style="margin-bottom:10px;">یہ اسی فون/براؤزر پر محفوظ ہوتے ہیں — GitHub لنک سے کھولیں تو ہمیشہ ملیں گے۔</div>
+    <button class="pill-btn" id="historyClearAll" style="width:100%;margin-bottom:10px;background:#c0392b;color:#fff;border-color:#c0392b;">🗑️ سارا ریکارڈ صاف کریں</button>
     <div id="historyList"></div>
   </div>
 </div>
@@ -1189,7 +1193,7 @@ document.getElementById('selFreePos').onclick = ()=>{
   doneBtn.onmousedown = (e)=>{ e.preventDefault(); e.stopPropagation(); };
   doneBtn.onclick = (e)=>{
     e.preventDefault(); e.stopPropagation();
-    box.classList.add('placed');
+    releaseFreeBox(box);
     activeFreeBox = null;
     canvasText.focus();
     const r = document.createRange();
@@ -1203,7 +1207,7 @@ document.getElementById('selFreePos').onclick = ()=>{
     const s = window.getSelection();
     s.removeAllRanges(); s.addRange(r);
     box.scrollIntoView({block:'nearest'});
-    showToast('مکمل — اب باہر لکھ سکتے ہیں');
+    showToast('مکمل — اب یہ عام تحریر کا حصہ ہے');
   };
   box.appendChild(doneBtn);
   makeBoxDraggable(box);
@@ -1212,6 +1216,29 @@ document.getElementById('selFreePos').onclick = ()=>{
   showToast('اب اسے پکڑ کر جہاں چاہیں لے جائیں، مکمل ہو تو ✓ دبائیں');
 };
 let activeFreeBox = null;
+function releaseFreeBox(box){
+  box.classList.add('placed');
+  box.style.position = '';
+  box.style.left = '';
+  box.style.top = '';
+  box.style.zIndex = '';
+  box.style.cursor = '';
+  box.style.touchAction = '';
+  box.style.outline = 'none';
+  box.style.padding = '';
+  const doneBtn = box.querySelector('.free-pos-done');
+  if(doneBtn) doneBtn.remove();
+}
+document.getElementById('btnReleaseAllBoxes').onmousedown = (e)=> e.preventDefault();
+document.getElementById('btnReleaseAllBoxes').onclick = ()=>{
+  const boxes = canvasText.querySelectorAll('.free-pos-box');
+  if(!boxes.length){ showToast('کوئی آزاد باکس موجود نہیں'); return; }
+  if(typeof captureSnapshot === 'function') captureSnapshot();
+  boxes.forEach(b=> releaseFreeBox(b));
+  activeFreeBox = null;
+  if(typeof captureSnapshot === 'function') captureSnapshot();
+  showToast(boxes.length + ' آزاد باکس واپس عام تحریر میں مل گئے — اب سلیکشن ٹھیک ہونی چاہیے');
+};
 function makeBoxDraggable(box){
   let dragging = false, sx=0, sy=0, ol=0, ot=0;
   box.addEventListener('pointerdown', (e)=>{
@@ -1370,13 +1397,42 @@ document.querySelectorAll('[data-align]').forEach(btn=>{
   };
 });
 
-/* ---------- line spacing (cycles through common values) ---------- */
-const LINE_SPACES = [1.5, 1.8, 2.1, 2.5, 3.0];
-let lineSpaceIdx = 2;
-document.getElementById('selLineSpace').onclick = ()=>{
-  lineSpaceIdx = (lineSpaceIdx + 1) % LINE_SPACES.length;
-  canvasText.style.lineHeight = LINE_SPACES[lineSpaceIdx];
-  showToast('سطروں کا فاصلہ: ' + LINE_SPACES[lineSpaceIdx]);
+/* ---------- line spacing: direct +/- (can decrease to close up gaps) ---------- */
+let curLineSpace = parseFloat(canvasText.style.lineHeight) || 2.1;
+document.getElementById('selLineSpaceMinus').onclick = ()=>{
+  curLineSpace = Math.max(1.0, Math.round((curLineSpace - 0.1)*10)/10);
+  canvasText.style.lineHeight = curLineSpace;
+  showToast('سطروں کا فاصلہ: ' + curLineSpace);
+};
+document.getElementById('selLineSpacePlus').onclick = ()=>{
+  curLineSpace = Math.min(4.0, Math.round((curLineSpace + 0.1)*10)/10);
+  canvasText.style.lineHeight = curLineSpace;
+  showToast('سطروں کا فاصلہ: ' + curLineSpace);
+};
+
+/* ---------- select from the current cursor position to the end (not before it) ---------- */
+document.getElementById('selFromHereBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selFromHereBtn').onclick = ()=>{
+  const sel = window.getSelection();
+  let startNode, startOffset;
+  if(sel.rangeCount && canvasText.contains(sel.anchorNode)){
+    const r0 = sel.getRangeAt(0);
+    startNode = r0.startContainer;
+    startOffset = r0.startOffset;
+  } else if(typeof savedRange !== 'undefined' && savedRange && canvasText.contains(savedRange.startContainer)){
+    startNode = savedRange.startContainer;
+    startOffset = savedRange.startOffset;
+  } else {
+    showToast('پہلے وہ جگہ منتخب کریں جہاں سے آگے سب لینا ہے');
+    return;
+  }
+  const r = document.createRange();
+  r.setStart(startNode, startOffset);
+  r.setEndAfter(canvasText.lastChild || canvasText);
+  sel.removeAllRanges();
+  sel.addRange(r);
+  savedRange = r.cloneRange();
+  showToast('یہاں سے آخر تک سب منتخب ہو گیا — پیچھے والا کچھ متاثر نہیں ہوگا');
 };
 
 /* ---------- fit a selected heading/word into a single line by shrinking its size ---------- */
@@ -2199,8 +2255,17 @@ function renderHistoryList(){
         <div class="time">${fmtTime(h.ts)}</div>
         <div class="snippet">${snippet || '—'}</div>
       </div>
-      <button class="pill-btn primary" data-idx="${i}">بحال کریں</button>`;
-    row.querySelector('button').onclick = ()=>{
+      <button class="pill-btn primary" data-idx="${i}">بحال کریں</button>
+      <button class="pill-btn" data-del="${i}" style="background:#c0392b;color:#fff;border-color:#c0392b;">🗑️</button>`;
+    row.querySelector('[data-del]').onclick = (e)=>{
+      e.stopPropagation();
+      let h2 = [];
+      try{ h2 = JSON.parse(localStorage.getItem('urdu_studio_draft_history') || '[]'); }catch(err){ h2 = []; }
+      h2.splice(i, 1);
+      localStorage.setItem('urdu_studio_draft_history', JSON.stringify(h2));
+      renderHistoryList();
+    };
+    row.querySelector('[data-idx]').onclick = ()=>{
       if(confirm('موجودہ صفحہ بدل کر یہ پرانا نسخہ واپس لایا جائے؟')){
         captureSnapshot();
         canvasText.innerHTML = h.html;
@@ -2218,6 +2283,13 @@ document.getElementById('btnDraftHistory').onclick = ()=>{
   historyModal.classList.add('open');
 };
 document.getElementById('historyClose').onclick = ()=> historyModal.classList.remove('open');
+document.getElementById('historyClearAll').onclick = ()=>{
+  if(confirm('سارا پرانا ریکارڈ صاف کر دیں؟ یہ واپس نہیں آئے گا۔')){
+    localStorage.setItem('urdu_studio_draft_history', '[]');
+    renderHistoryList();
+    showToast('ریکارڈ صاف کر دیا گیا');
+  }
+};
 
 /* auto-save silently a moment after any edit, so nothing is lost if the app is closed */
 let autoSaveTimer = null;
@@ -2355,8 +2427,6 @@ canvasText.addEventListener('input', ()=>{
 window.addEventListener('beforeunload', ()=> saveDraft(true));
 document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveDraft(true); });
 window.addEventListener('pagehide', ()=> saveDraft(true));
-window.addEventListener('blur', ()=> saveDraft(true));
-canvasText.addEventListener('blur', ()=> saveDraft(true));
 
 window.addEventListener('load', ()=>{
   try{
