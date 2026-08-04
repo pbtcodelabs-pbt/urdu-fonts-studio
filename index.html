@@ -436,11 +436,12 @@
     cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.4); z-index:6;
   }
   #selDragHandle{
+    position: absolute; top:-9px; left:-9px;
     cursor: move; touch-action: none; user-select: none; -webkit-user-select: none;
-    color: #3a2400; font-size:15px; padding:0; margin-inline-end:2px;
-    width:30px; height:30px; min-width:30px; border-radius:50%;
+    color: #3a2400; font-size:14px; padding:0;
+    width:26px; height:26px; min-width:26px; border-radius:50%;
     background: #e0a83e; display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    box-shadow: 0 1px 4px rgba(0,0,0,.3); border:2px solid #fff; z-index:5;
   }
   #selCloseBtn{
     position: absolute; top:-9px; right:-9px;
@@ -579,7 +580,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS030</span>
+      <span id="verTag">UFS031</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -2201,11 +2202,6 @@ function getKeyboardHeight(){
 function adjustForKeyboard(){
   const kh = getKeyboardHeight();
   drawer.style.bottom = kh + 'px';
-  const body = document.getElementById('selToolbarBody');
-  if(kh > 100 && body.classList.contains('expanded')){
-    body.classList.remove('expanded');
-    document.getElementById('selToggle').textContent = 'Aa ⌄';
-  }
   if(selToolbar.style.display === 'flex'){
     const isAbsolute = selToolbar.style.position === 'absolute';
     const safeMaxTop = window.innerHeight - kh - selToolbar.offsetHeight - 10;
