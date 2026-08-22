@@ -1,39 +1,91 @@
-// ---------- اردو فونٹس اسٹوڈیو — Service Worker ----------
-// نوٹ: "Network First" حکمتِ عملی — جب تک انٹرنیٹ چل رہا ہو، ہمیشہ تازہ ترین فائل
-// سرور سے لائی جائے گی۔ صرف آف لائن ہونے کی صورت میں cache استعمال ہوگا۔
-// ہر نئی ریلیز کے ساتھ CACHE_VERSION کو بڑھایا جائے (مثلاً v1 → v2) تاکہ پرانا cache خودکار صاف ہو جائے۔
+/* اردو فونٹ اسٹوڈیو — سروس ورکر
+   ورژن: UF228Sa0814AM
+   مقصد: ایپ آن لائن اور آف لائن دونوں حالتوں میں بغیر کسی رکاوٹ کے چلے۔ */
 
-const CACHE_VERSION = 'ufs-v35';
-const CACHE_NAME = `urdu-font-studio-cache-${CACHE_VERSION}`;
+const APP_VERSION   = "UF228Sa0814AM";
+const CACHE_NAME    = "urdu-font-studio-" + APP_VERSION;
+const CORE_ASSETS   = [
+  "./",
+  "./index.html",
+  "./UF228Sa0814AM.html",
+  "./manifest.json",
+  "./icon-192.png",
+  "./icon-180.png"
+];
 
-self.addEventListener('install', () => {
+/* نصب ہوتے ہی بنیادی فائلیں محفوظ کر لو — اگر کوئی فائل موجود نہ ہو تو باقی انسٹال روکے نہیں */
+self.addEventListener("install", (event) => {
   self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await Promise.all(
+        CORE_ASSETS.map((url) =>
+          cache.add(url).catch(() => {})
+        )
+      );
+    })
   );
 });
 
-// ایپ کا اپنا ریفریش بٹن اسی میسج کے ذریعے نئے ورژن کو فوراً فعال کر سکتا ہے
-self.addEventListener('message', (event) => {
-  if (event.data === 'SKIP_WAITING') {
-    self.skipWaiting();
+/* پرانے ورژن کی کیش صاف کر دو تاکہ ہمیشہ تازہ ترین نسخہ فعال رہے */
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(
+        keys
+          .filter((k) => k.startsWith("urdu-font-studio-") && k !== CACHE_NAME)
+          .map((k) => caches.delete(k))
+      );
+      await self.clients.claim();
+    })()
+  );
+});
+
+/* صفحہ کھولنے کی درخواست (navigation): پہلے نیٹ ورک آزمائیں تاکہ تازہ ترین ورژن ملے،
+   نیٹ ورک نہ ہو تو فوراً محفوظ شدہ (آف لائن) نسخہ دکھا دیں — ایپ کبھی خالی/ناکام نہیں ہوگی۔ */
+self.addEventListener("fetch", (event) => {
+  const req = event.request;
+  if (req.method !== "GET") return;
+
+  if (req.mode === "navigate") {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then((c) => c.put(req, resClone)).catch(() => {});
+          return res;
+        })
+        .catch(async () => {
+          const cached =
+            (await caches.match(req)) ||
+            (await caches.match("./index.html")) ||
+            (await caches.match("./UF228Sa0814AM.html"));
+          return cached || Response.error();
+        })
+    );
+    return;
   }
+
+  /* باقی فائلیں (فونٹس، CSS، JS، آئیکنز، CDN اسکرپٹس): پہلے کیش دیکھیں (تیز رفتار + آف لائن)،
+     ساتھ ہی پس منظر میں نیٹ ورک سے تازہ کاپی لا کر کیش اپڈیٹ کر دیں۔ */
+  event.respondWith(
+    caches.match(req).then((cached) => {
+      const networkFetch = fetch(req)
+        .then((res) => {
+          if (res && res.status === 200) {
+            const resClone = res.clone();
+            caches.open(CACHE_NAME).then((c) => c.put(req, resClone)).catch(() => {});
+          }
+          return res;
+        })
+        .catch(() => cached);
+      return cached || networkFetch;
+    })
+  );
 });
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone)).catch(() => {});
-        return response;
-      })
-      .catch(() => caches.match(event.request))
-  );
+/* ایپ خود چاہے تو نئے ورژن کی فوری اطلاع لے سکتی ہے */
+self.addEventListener("message", (event) => {
+  if (event.data === "SKIP_WAITING") self.skipWaiting();
 });

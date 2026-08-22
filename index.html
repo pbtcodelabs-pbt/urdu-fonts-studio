@@ -197,8 +197,14 @@
   #onlineDot.offline{ background:#e74c3c; box-shadow:0 0 4px #e74c3c; }
   #onlineText{ font-size:10px; color:var(--text-muted); }
   #verTag{
-    font-size:10px; color:var(--text-dark); background:var(--panel-bg-2); border:1px solid var(--border-2);
-    border-radius:8px; padding:1px 7px; font-weight:600;
+    font-size:10px; color:#ffffff; background:var(--gold); border:1px solid var(--gold);
+    border-radius:8px; padding:2px 8px; font-weight:700; letter-spacing:.3px;
+    animation: verPulse 1.4s ease-out 1;
+  }
+  @keyframes verPulse{
+    0%{ box-shadow:0 0 0 0 rgba(30,136,229,.65); transform:scale(1.12); }
+    70%{ box-shadow:0 0 0 8px rgba(30,136,229,0); }
+    100%{ box-shadow:0 0 0 0 rgba(30,136,229,0); transform:scale(1); }
   }
   #btnRefresh{
     background:none; border:none; font-size:12px; cursor:pointer; padding:0 2px;
@@ -491,6 +497,33 @@
   }
   .fs-body{ flex:1; overflow:auto; padding: 14px; }
 
+  /* ---------- PDF modal: preview on top, all controls in bottom grid ---------- */
+  .pdf-body{ display:flex; flex-direction:column; padding:10px 12px 0; overflow:hidden; }
+  .pdf-preview-area{ flex:1; min-height:0; display:flex; flex-direction:column; }
+  .pdf-panel-label{ color:#2f6690; font-size:12px; font-weight:600; margin-bottom:8px; }
+  .pdf-ctrl-panel{
+    max-height:0; overflow:hidden; flex-shrink:0;
+    transition: max-height .22s ease;
+    background:#eaf5ff; border-radius:12px 12px 0 0;
+  }
+  .pdf-ctrl-panel.open{ max-height:230px; overflow-y:auto; margin-top:8px; border:1px solid #aed6f7; border-bottom:none; }
+  .pdf-ctrl-panel-inner{ padding:12px 10px; }
+  .pdf-mini-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
+  @media (min-width:520px){ .pdf-mini-grid{ grid-template-columns:repeat(3,1fr); } }
+  .pdf-ctrl-grid{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:6px;
+    background:#d3ecff; border:1px solid #aed6f7; border-radius:12px;
+    padding:8px 6px; margin: 8px 0 12px; flex-shrink:0;
+  }
+  .pdf-ctrl-btn{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+    background:linear-gradient(180deg,#ffffff,#f0f8ff); border:1.5px solid #7fc0f0; color:#2f6690;
+    border-radius:11px; padding:9px 2px; cursor:pointer; font-size:10.5px; font-weight:700;
+    box-shadow:0 1px 3px rgba(30,100,180,.15);
+  }
+  .pdf-ctrl-btn .ic{ font-size:18px; line-height:1; }
+  .pdf-ctrl-btn.active{ background: var(--gold); color:#fff; border-color:var(--gold); }
+
   /* handwriting split panes */
   .hw-panes{ display:flex; gap:12px; height:100%; }
   @media (max-width: 780px){
@@ -580,7 +613,7 @@
     <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
     <div id="statusRow">
       <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
-      <span id="verTag">UFS035</span>
+      <span id="verTag">…</span>
       <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
     </div>
   </div>
@@ -873,54 +906,91 @@
 
 <div class="fs-modal" id="pdfModal">
   <div class="fs-head">
-    <h2>PDF ترتیب — پورا A4 صفحہ</h2>
+    <h2>PDF ترتیب — پورا A4 صفحہ <span id="pdfSummaryTag" style="font-size:10.5px;color:var(--gold-soft);background:var(--panel-bg-2);border:1px solid var(--border-2);border-radius:7px;padding:2px 6px;margin-inline-start:6px;">پورٹریٹ · بغیر بارڈر</span></h2>
     <button id="pdfClose">بند کریں ✕</button>
   </div>
-  <div class="fs-body">
-    <div style="color:#2f6690;font-size:12.5px;margin-bottom:6px;">صف بندی</div>
-    <div class="btn-grid4" style="margin-bottom:12px;">
-      <button class="icon-toggle" data-pdf-align="right">◄ دائیں</button>
-      <button class="icon-toggle" data-pdf-align="center">◆ درمیان</button>
-      <button class="icon-toggle" data-pdf-align="left">► بائیں</button>
-      <button class="icon-toggle" data-pdf-align="justify">▤ برابر</button>
+  <div class="fs-body pdf-body">
+    <div class="pdf-preview-area">
+      <div id="pdfPageCount" style="text-align:center;color:#123a68;font-size:12.5px;font-weight:600;margin-bottom:6px;">حساب لگایا جا رہا ہے…</div>
+      <div id="pdfPreviewWrap" style="overflow:auto;flex:1;min-height:0;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
+        <img id="pdfPreviewImg" style="max-width:none;transition:width .15s;" />
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px;">
+        <button id="pdfPrevPage" class="pill-btn">◄ پچھلا صفحہ</button>
+        <span id="pdfPreviewNavLabel" style="color:#123a68;font-size:13px;font-weight:600;">صفحہ 1 / 1</span>
+        <button id="pdfNextPage" class="pill-btn">اگلا صفحہ ►</button>
+      </div>
     </div>
-    <div style="color:#2f6690;font-size:12.5px;margin-bottom:6px;">صفحے کا بارڈر</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
-      <button class="pill-btn primary" data-border="none">بغیر بارڈر</button>
-      <button class="pill-btn" data-border="thin">پتلا</button>
-      <button class="pill-btn" data-border="thick">موٹا</button>
-      <button class="pill-btn" data-border="double">ڈبل لائن</button>
-      <button class="pill-btn" data-border="floral">پھولوں والا</button>
-      <button class="pill-btn" data-border="rounded-gold">گول سنہری</button>
-      <button class="pill-btn" data-border="dotted">نقطے دار</button>
-      <button class="pill-btn" data-border="corner">صرف کونے</button>
-      <button class="pill-btn" data-border="shadow">سایہ دار</button>
-      <button class="pill-btn" data-border="ornate">شاہی ڈبل</button>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-align">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صف بندی</div>
+        <div class="btn-grid4">
+          <button class="icon-toggle" data-pdf-align="right">◄ دائیں</button>
+          <button class="icon-toggle" data-pdf-align="center">◆ درمیان</button>
+          <button class="icon-toggle" data-pdf-align="left">► بائیں</button>
+          <button class="icon-toggle" data-pdf-align="justify">▤ برابر</button>
+        </div>
+      </div>
     </div>
-    <div style="display:flex;gap:10px;margin-bottom:12px;">
-      <button class="pill-btn primary" id="pdfPortrait" style="flex:1;">📄 پورٹریٹ</button>
-      <button class="pill-btn" id="pdfLandscape" style="flex:1;">📃 لینڈ اسکیپ</button>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-border">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صفحے کا بارڈر</div>
+        <div class="pdf-mini-grid">
+          <button class="pill-btn primary" data-border="none">بغیر بارڈر</button>
+          <button class="pill-btn" data-border="thin">پتلا</button>
+          <button class="pill-btn" data-border="thick">موٹا</button>
+          <button class="pill-btn" data-border="double">ڈبل لائن</button>
+          <button class="pill-btn" data-border="floral">پھولوں والا</button>
+          <button class="pill-btn" data-border="rounded-gold">گول سنہری</button>
+          <button class="pill-btn" data-border="dotted">نقطے دار</button>
+          <button class="pill-btn" data-border="corner">صرف کونے</button>
+          <button class="pill-btn" data-border="shadow">سایہ دار</button>
+          <button class="pill-btn" data-border="ornate">شاہی ڈبل</button>
+        </div>
+      </div>
     </div>
-    <div style="color:#2f6690;font-size:12.5px;margin-bottom:6px;">پرنٹ کے لیے لکھائی کا سائز (صفحے کی ترتیب پر اثر انداز ہوگا، آپ کی اصل تحریر تبدیل نہیں ہوگی)</div>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-      <span style="color:#2f6690;font-size:12px;">A</span>
-      <input type="range" id="pdfFontSize" min="14" max="44" value="24" style="flex:1;">
-      <span style="color:#2f6690;font-size:16px;">A</span>
-      <span id="pdfFontSizeVal" style="color:#123a68;font-size:12px;min-width:34px;">24px</span>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-orient">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صفحے کا رخ</div>
+        <div style="display:flex;gap:10px;">
+          <button class="pill-btn primary" id="pdfPortrait" style="flex:1;">📄 پورٹریٹ</button>
+          <button class="pill-btn" id="pdfLandscape" style="flex:1;">📃 لینڈ اسکیپ</button>
+        </div>
+      </div>
     </div>
-    <div id="pdfPageCount" style="text-align:center;color:#123a68;font-size:13px;font-weight:600;margin-bottom:10px;">حساب لگایا جا رہا ہے…</div>
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;justify-content:center;">
-      <button id="pdfPrevZoomMinus" style="width:28px;height:28px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;">–</button>
-      <span style="color:#2f6690;font-size:12px;">صفحے کا پریویو</span>
-      <button id="pdfPrevZoomPlus" style="width:28px;height:28px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;">+</button>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-size">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">پرنٹ کے لیے لکھائی کا سائز (اصل تحریر تبدیل نہیں ہوگی)</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="color:#2f6690;font-size:12px;">A</span>
+          <input type="range" id="pdfFontSize" min="14" max="44" value="24" style="flex:1;">
+          <span style="color:#2f6690;font-size:16px;">A</span>
+          <span id="pdfFontSizeVal" style="color:#123a68;font-size:12px;min-width:34px;">24px</span>
+        </div>
+      </div>
     </div>
-    <div id="pdfPreviewWrap" style="overflow:auto;max-height:58vh;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
-      <img id="pdfPreviewImg" style="max-width:none;transition:width .15s;" />
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-zoom">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صفحے کے پریویو کا زوم</div>
+        <div style="display:flex;align-items:center;gap:14px;justify-content:center;">
+          <button id="pdfPrevZoomMinus" style="width:32px;height:32px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;font-size:16px;">–</button>
+          <span id="pdfZoomLbl" style="color:#123a68;font-size:13px;font-weight:600;min-width:44px;text-align:center;">100%</span>
+          <button id="pdfPrevZoomPlus" style="width:32px;height:32px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;font-size:16px;">+</button>
+        </div>
+      </div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px;">
-      <button id="pdfPrevPage" class="pill-btn">◄ پچھلا صفحہ</button>
-      <span id="pdfPreviewNavLabel" style="color:#123a68;font-size:13px;font-weight:600;">صفحہ 1 / 1</span>
-      <button id="pdfNextPage" class="pill-btn">اگلا صفحہ ►</button>
+
+    <div class="pdf-ctrl-grid">
+      <button class="pdf-ctrl-btn" data-pdfpanel="align"><span class="ic">☰</span>صف بندی</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="border"><span class="ic">🖼️</span>بارڈر</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="orient"><span class="ic">⤢</span>رخ</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="size"><span class="ic">Aa</span>سائز</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="zoom"><span class="ic">🔍</span>زوم</button>
     </div>
   </div>
   <div class="fs-foot">
@@ -2127,11 +2197,18 @@ function queuePdfPreviewUpdate(){
   pdfUpdateTimer = setTimeout(updatePdfPreview, 350);
 }
 
+const BORDER_LABELS = {none:'بغیر بارڈر',thin:'پتلا',thick:'موٹا',double:'ڈبل لائن',floral:'پھولوں والا','rounded-gold':'گول سنہری',dotted:'نقطے دار',corner:'صرف کونے',shadow:'سایہ دار',ornate:'شاہی ڈبل'};
+const pdfSummaryTag = document.getElementById('pdfSummaryTag');
+function updatePdfSummaryTag(){
+  pdfSummaryTag.textContent = (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ' · ' + (BORDER_LABELS[pdfBorderStyle]||'بغیر بارڈر');
+}
+
 document.querySelectorAll('[data-border]').forEach(btn=>{
   btn.onclick = ()=>{
     document.querySelectorAll('[data-border]').forEach(b=> b.classList.remove('primary'));
     btn.classList.add('primary');
     pdfBorderStyle = btn.dataset.border;
+    updatePdfSummaryTag();
     queuePdfPreviewUpdate();
   };
 });
@@ -2151,29 +2228,46 @@ document.getElementById('pdfPortrait').onclick = function(){
   pdfOrientation = 'portrait';
   this.classList.add('primary');
   document.getElementById('pdfLandscape').classList.remove('primary');
+  updatePdfSummaryTag();
   queuePdfPreviewUpdate();
 };
 document.getElementById('pdfLandscape').onclick = function(){
   pdfOrientation = 'landscape';
   this.classList.add('primary');
   document.getElementById('pdfPortrait').classList.remove('primary');
+  updatePdfSummaryTag();
   queuePdfPreviewUpdate();
 };
 pdfFontSizeInput.oninput = ()=>{
   document.getElementById('pdfFontSizeVal').textContent = pdfFontSizeInput.value+'px';
   queuePdfPreviewUpdate();
 };
-document.getElementById('pdfPrevZoomMinus').onclick = ()=>{
-  pdfPreviewZoom = Math.max(50, pdfPreviewZoom-15);
+const pdfZoomLbl = document.getElementById('pdfZoomLbl');
+function setPdfPreviewZoom(v){
+  pdfPreviewZoom = Math.max(50, Math.min(300, v));
   pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
-};
-document.getElementById('pdfPrevZoomPlus').onclick = ()=>{
-  pdfPreviewZoom = Math.min(300, pdfPreviewZoom+15);
-  pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
-};
+  if(pdfZoomLbl) pdfZoomLbl.textContent = pdfPreviewZoom + '%';
+}
+document.getElementById('pdfPrevZoomMinus').onclick = ()=> setPdfPreviewZoom(pdfPreviewZoom-15);
+document.getElementById('pdfPrevZoomPlus').onclick = ()=> setPdfPreviewZoom(pdfPreviewZoom+15);
 document.getElementById('pdfPrevPage').onclick = ()=> renderPdfPreviewPage(pdfCurrentPreviewPage - 1);
 document.getElementById('pdfNextPage').onclick = ()=> renderPdfPreviewPage(pdfCurrentPreviewPage + 1);
 document.getElementById('pdfClose').onclick = ()=> pdfModal.classList.remove('open');
+
+/* ---------- bottom control grid: toggles one options panel at a time, page preview stays fully visible above ---------- */
+document.querySelectorAll('.pdf-ctrl-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    const key = btn.dataset.pdfpanel;
+    const panel = document.getElementById('pdfPanel-'+key);
+    const isOpen = panel.classList.contains('open');
+    document.querySelectorAll('.pdf-ctrl-panel').forEach(p=> p.classList.remove('open'));
+    document.querySelectorAll('.pdf-ctrl-btn').forEach(b=> b.classList.remove('active'));
+    if(!isOpen){
+      panel.classList.add('open');
+      btn.classList.add('active');
+    }
+  };
+});
 
 document.getElementById('btnSavePdf').onclick = ()=>{
   if(!canvasText.innerText || !canvasText.innerText.trim()){
@@ -2181,7 +2275,10 @@ document.getElementById('btnSavePdf').onclick = ()=>{
     return;
   }
   pdfModal.classList.add('open');
-  pdfPreviewZoom = 100;
+  document.querySelectorAll('.pdf-ctrl-panel').forEach(p=> p.classList.remove('open'));
+  document.querySelectorAll('.pdf-ctrl-btn').forEach(b=> b.classList.remove('active'));
+  setPdfPreviewZoom(100);
+  updatePdfSummaryTag();
   updatePdfPreview();
 };
 
@@ -2297,6 +2394,24 @@ let autoSaveTimer = null;
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF228Sa0814AM) ---------- */
+const APP_BUILD_VERSION = "UF228Sa0814AM";
+function computeLiveVersionTag(){
+  const d = new Date();
+  const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let h = d.getHours();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12; if(h === 0) h = 12;
+  const hh = String(h).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  return 'UF' + d.getDate() + (d.getMonth()+1) + dayNames[d.getDay()] + hh + mm + ampm;
+}
+(function initVersionTag(){
+  const vEl = document.getElementById('verTag');
+  if(vEl) vEl.textContent = APP_BUILD_VERSION;
+  vEl.title = 'یہ ایپ کا تازہ ترین بلڈ ورژن ہے — ہر اپڈیٹ پر یہ بدل جاتا ہے';
+})();
+
 function updateOnlineStatus(){
   const dot = document.getElementById('onlineDot');
   const txt = document.getElementById('onlineText');
