@@ -61,49 +61,24 @@
   }
 
   @font-face {
-    font-family: 'Aligarh Arabic';
-    src: url('fonts/AligarhArabic-Regular.otf') format('opentype');
+    font-family: 'Jameel Noori Nastaleeq New';
+    src: url('fonts/JameelNooriNastaleeqRegular-New.ttf') format('truetype');
     font-weight: 400;
   }
   @font-face {
-    font-family: 'Aligarh Arabic Bold';
-    src: url('fonts/AligarhArabic-Bold.otf') format('opentype');
-    font-weight: 700;
+    font-family: 'Jameel Noori Nastaleeq Kasheeda';
+    src: url('fonts/JameelNooriNastaleeqKasheeda.ttf') format('truetype');
+    font-weight: 400;
   }
   @font-face {
-    font-family: 'Aligarh Arabic Black';
-    src: url('fonts/AligarhArabic-Black.otf') format('opentype');
-    font-weight: 900;
+    font-family: 'AA Sameer Almas';
+    src: url('fonts/AASameerAlmas-Regular.ttf') format('truetype');
+    font-weight: 400;
   }
   @font-face {
-    font-family: 'Aligarh Arabic ExtraBold';
-    src: url('fonts/AligarhArabic-ExtraBold.otf') format('opentype');
-    font-weight: 800;
-  }
-  @font-face {
-    font-family: 'Aligarh Arabic SemiBold';
-    src: url('fonts/AligarhArabic-SemiBold.otf') format('opentype');
-    font-weight: 600;
-  }
-  @font-face {
-    font-family: 'Aligarh Arabic Medium';
-    src: url('fonts/AligarhArabic-Medium.otf') format('opentype');
-    font-weight: 500;
-  }
-  @font-face {
-    font-family: 'Aligarh Arabic Light';
-    src: url('fonts/AligarhArabic-Light.otf') format('opentype');
-    font-weight: 300;
-  }
-  @font-face {
-    font-family: 'Aligarh Arabic ExtraLight';
-    src: url('fonts/AligarhArabic-ExtraLight.otf') format('opentype');
-    font-weight: 200;
-  }
-  @font-face {
-    font-family: 'Aligarh Arabic Thin';
-    src: url('fonts/AligarhArabic-Thin.otf') format('opentype');
-    font-weight: 100;
+    font-family: '300 Regular';
+    src: url('fonts/300-Regular.ttf') format('truetype');
+    font-weight: 400;
   }
   @font-face {
     font-family: 'Retro Floral';
@@ -430,6 +405,13 @@
     width:26px; height:26px; cursor:pointer; font-size:13px;
   }
   #selToolbar button.active{ background:#e0a83e; color:#3a2400; }
+  #selFontToggle{ width:auto !important; padding:0 8px; font-weight:700; }
+  .sel-fw-scroll{
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 75%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 75%, transparent 100%);
+  }
+  .sel-fw-scroll .fw-item{ color:#8a5a12; font-size:10.5px; }
+  .sel-fw-scroll .fw-item.center{ color:#3a2400; font-weight:700; font-size:12px; }
   #selToolbarBody{ display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; }
   #selToolbarBody.expanded{ display:flex; }
   .free-pos-box{ display:inline-block; }
@@ -456,7 +438,8 @@
     display:flex; align-items:center; justify-content:center;
     box-shadow: 0 1px 4px rgba(0,0,0,.4); z-index: 5;
   }
-  #selToolbar{ opacity:.6; transition: opacity .15s; position:absolute; }
+  #selToolbar{ opacity:.6; transition: opacity .15s, top .16s ease, left .16s ease; position:absolute; }
+  #selToolbar.dragging-now{ transition: opacity .15s; }
   #selToolbar.touched, #selToolbar:has(#selToolbarBody.expanded){ opacity:1; }
   #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
 
@@ -661,10 +644,15 @@
   <button id="selCloseBtn" title="بند کریں">✕</button>
   <button id="selToggle">Aa ⌄</button>
   <div id="selToolbarBody">
-  <select id="selFont" style="display:none;"></select>
-  <button id="selMinus" style="display:none;">–</button>
-  <span id="selSizeVal" style="display:none;">34</span>
-  <button id="selPlus" style="display:none;">+</button>
+  <button id="selFontToggle" title="فونٹ تبدیل کریں">🔤 فونٹ</button>
+  <div id="selFontWheelRow" style="display:none;width:100%;gap:8px;padding:6px 2px 2px;">
+    <div class="fw-half" style="flex:1;min-width:0;" dir="ltr">
+      <div class="fw-scroll sel-fw-scroll" id="selUrduWheelScroll" dir="ltr" style="height:70px;"></div>
+    </div>
+    <div class="fw-half" style="flex:1;min-width:0;border-inline-start:1px solid var(--border-1);" dir="ltr">
+      <div class="fw-scroll sel-fw-scroll" id="selEnWheelScroll" dir="ltr" style="height:70px;"></div>
+    </div>
+  </div>
   <button id="selBold" title="بولڈ">B</button>
   <button id="selSpace" title="لفظوں میں فاصلہ">☰</button>
   <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
@@ -1010,15 +998,10 @@ const FONTS = [
   { id:'sameer-qamri', label:'سمیر قمری', family:"'Sameer Qamri','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'alfars-aban', label:'الفارس ابان', family:"'Al Fars Aban','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'syalbiyah', label:'سیالبیہ', family:"'Syalbiyah','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh', label:'علی گڑھ عربی', family:"'Aligarh Arabic','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-bold', label:'علی گڑھ بولڈ', family:"'Aligarh Arabic Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-black', label:'علی گڑھ بلیک', family:"'Aligarh Arabic Black','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-extrabold', label:'علی گڑھ ایکسٹرا بولڈ', family:"'Aligarh Arabic ExtraBold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-semibold', label:'علی گڑھ سیمی بولڈ', family:"'Aligarh Arabic SemiBold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-medium', label:'علی گڑھ میڈیم', family:"'Aligarh Arabic Medium','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-light', label:'علی گڑھ لائٹ', family:"'Aligarh Arabic Light','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-extralight', label:'علی گڑھ ایکسٹرا لائٹ', family:"'Aligarh Arabic ExtraLight','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
-  { id:'aligarh-thin', label:'علی گڑھ تھن', family:"'Aligarh Arabic Thin','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'jameel-new', label:'جمیل نوری نستعلیق (نیا)', family:"'Jameel Noori Nastaleeq New','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'jameel-kasheeda', label:'جمیل نوری نستعلیق کشیدہ', family:"'Jameel Noori Nastaleeq Kasheeda','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aa-sameer-almas', label:'اے اے سمیر الماس', family:"'AA Sameer Almas','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'font-300', label:'فونٹ 300', family:"'300 Regular','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'retro-floral', label:'ریٹرو فلورل', family:"'Retro Floral','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'qilka-bold', label:'قلقہ بولڈ', family:"'Qilka Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
   { id:'qobliyah', label:'قبلیہ', family:"'Qobliyah','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
@@ -1148,13 +1131,8 @@ FONTS.forEach(f=>{
   fontListEl.appendChild(div);
 });
 
-/* selection toolbar font dropdown mirrors FONTS */
-const selFont = document.getElementById('selFont');
-FONTS.forEach(f=>{
-  const o = document.createElement('option');
-  o.value = f.family; o.textContent = f.label;
-  selFont.appendChild(o);
-});
+/* موجودہ منتخب فونٹ یاد رکھنے کے لیے (پہلے select استعمال ہوتا تھا، اب ویل سسٹم استعمال ہوتا ہے) */
+let selFontValue = FONTS[0].family;
 
 /* ---------- init theme grid ---------- */
 const themeGrid = document.getElementById('themeGrid');
@@ -1424,7 +1402,7 @@ function applyFont(family, optionEl){
     st => st.fontFamily = family,
     () => canvasText.style.fontFamily = family
   );
-  selFont.value = family;
+  selFontValue = family;
   showToast('فونٹ لاگو ہو گیا');
 }
 
@@ -1674,6 +1652,7 @@ function showSelToolbarPinned(){
   if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
 }
 document.addEventListener('selectionchange', ()=>{
+  if(dragging) return; /* ڈریگ کے دوران پوزیشن ری سیٹ نہ ہو */
   if(document.activeElement !== canvasText) return;
   showSelToolbarPinned();
 });
@@ -1681,8 +1660,7 @@ let toolbarManuallyClosed = false;
 canvasText.addEventListener('focus', ()=>{
   toolbarManuallyClosed = false;
   showSelToolbarPinned();
-  setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 350);
-  setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 700);
+  setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 320);
 });
 canvasText.addEventListener('blur', ()=>{
   /* intentionally does not auto-hide the toolbar anymore — only the ✕ button closes it */
@@ -1705,6 +1683,7 @@ selDragHandle.addEventListener('pointerdown', (e)=>{
   e.preventDefault();
   dragging = true;
   selToolbar.classList.add('touched');
+  selToolbar.classList.add('dragging-now');
   const rect = selToolbar.getBoundingClientRect();
   dragOrigTop = rect.top; dragOrigLeft = rect.left;
   dragStartX = e.clientX; dragStartY = e.clientY;
@@ -1716,12 +1695,15 @@ selDragHandle.addEventListener('pointerdown', (e)=>{
 });
 selDragHandle.addEventListener('pointermove', (e)=>{
   if(!dragging) return;
+  e.preventDefault();
   let newTop = dragOrigTop + (e.clientY - dragStartY);
   let newLeft = dragOrigLeft + (e.clientX - dragStartX);
   const kh = (typeof getKeyboardHeight === 'function') ? getKeyboardHeight() : 0;
-  const safeMaxTop = window.innerHeight - kh - 40;
-  newTop = Math.max(4, Math.min(safeMaxTop, newTop));
-  newLeft = Math.max(4, Math.min(window.innerWidth-40, newLeft));
+  const tw = selToolbar.offsetWidth || 60;
+  const th = selToolbar.offsetHeight || 40;
+  const safeMaxTop = window.innerHeight - kh - th - 4;
+  newTop = Math.max(4, Math.min(Math.max(4, safeMaxTop), newTop));
+  newLeft = Math.max(4, Math.min(Math.max(4, window.innerWidth - tw - 4), newLeft));
   selToolbar.style.top = newTop + 'px';
   selToolbar.style.left = newLeft + 'px';
   toolbarDragged = true;
@@ -1730,6 +1712,7 @@ selDragHandle.addEventListener('pointermove', (e)=>{
 function endDrag(e){
   if(!dragging) return;
   dragging = false;
+  selToolbar.classList.remove('dragging-now');
   try{ selDragHandle.releasePointerCapture(e.pointerId); }catch(err){}
   setTimeout(()=> selToolbar.classList.remove('touched'), 800);
 }
@@ -1787,18 +1770,7 @@ document.getElementById('selBgBtn').onclick = ()=>{
   selColorRow.style.display = (selColorRow.style.display === 'flex') ? 'none' : 'flex';
 };
 
-selFont.onchange = ()=> applyFont(selFont.value, null);
 let curSelSize = 34;
-document.getElementById('selMinus').onclick = ()=>{
-  curSelSize = Math.max(10, curSelSize-2);
-  document.getElementById('selSizeVal').textContent = curSelSize;
-  styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{});
-};
-document.getElementById('selPlus').onclick = ()=>{
-  curSelSize = curSelSize+2;
-  document.getElementById('selSizeVal').textContent = curSelSize;
-  styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{});
-};
 
 /* ---------- corner font wheels (replace the long font list) ---------- */
 const urduFonts = FONTS.filter(f=> f.group !== 'en');
@@ -1844,6 +1816,26 @@ wireWheel(urduScroll, urduFonts);
 wireWheel(enScroll, enFonts);
 if(urduFonts.length) urduScroll.children[0].classList.add('center');
 if(enFonts.length) enScroll.children[0].classList.add('center');
+
+/* ---------- ڈریگ ٹول بار کے اندر فونٹ ویل (سلیکٹ شدہ حصے کا فونٹ فوری بدلنے کے لیے) ---------- */
+const selUrduScroll = document.getElementById('selUrduWheelScroll');
+const selEnScroll = document.getElementById('selEnWheelScroll');
+if(selUrduScroll && selEnScroll){
+  buildWheel(selUrduScroll, urduFonts);
+  buildWheel(selEnScroll, enFonts);
+  wireWheel(selUrduScroll, urduFonts);
+  wireWheel(selEnScroll, enFonts);
+  if(urduFonts.length) selUrduScroll.children[0].classList.add('center');
+  if(enFonts.length) selEnScroll.children[0].classList.add('center');
+  const selFontToggle = document.getElementById('selFontToggle');
+  const selFontWheelRow = document.getElementById('selFontWheelRow');
+  selFontToggle.onmousedown = (e)=> e.preventDefault();
+  selFontToggle.onclick = ()=>{
+    const showing = selFontWheelRow.style.display === 'flex';
+    selFontWheelRow.style.display = showing ? 'none' : 'flex';
+    selFontToggle.classList.toggle('active', !showing);
+  };
+}
 
 document.querySelectorAll('.fw-minus').forEach(btn=> btn.onclick = ()=>{
   curSelSize = Math.max(10, curSelSize-2);
@@ -2394,8 +2386,8 @@ let autoSaveTimer = null;
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF228Sa0814AM) ---------- */
-const APP_BUILD_VERSION = "UF228Sa0814AM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0619PM) ---------- */
+const APP_BUILD_VERSION = "UF238Su0619PM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
