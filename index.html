@@ -1112,6 +1112,9 @@ const COLORS = ['#241a12','#ffffff','#6b1f2a','#0f2e26','#b8862f','#1b2c46','#4a
 const PUNCT = ['،','۔','؟','!',':','؛','-','–','—','"','\u0022','٪','٫','ء','ّ','ْ'];
 
 const canvasText = document.getElementById('canvasText');
+canvasText.setAttribute('spellcheck', 'false');
+canvasText.setAttribute('autocorrect', 'off');
+canvasText.setAttribute('autocapitalize', 'off');
 canvasText.addEventListener('paste', (e)=>{
   e.preventDefault();
   const text = (e.clipboardData || window.clipboardData).getData('text/plain');
@@ -2445,8 +2448,8 @@ new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'),
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0627PM) ---------- */
-const APP_BUILD_VERSION = "UF238Su0627PM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0635PM) ---------- */
+const APP_BUILD_VERSION = "UF238Su0635PM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
