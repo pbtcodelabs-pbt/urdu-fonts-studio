@@ -336,7 +336,7 @@
   .fw-scroll{
     flex:1; min-width:0; height:38px; overflow-y:auto; overflow-x:hidden;
     scroll-snap-type:y mandatory; display:flex; flex-direction:column; align-items:stretch;
-    padding: 7px 0; -webkit-overflow-scrolling:touch;
+    padding: 7px 0; -webkit-overflow-scrolling:touch; touch-action:pan-y;
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
     mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
   }
@@ -397,6 +397,7 @@
     align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;
     width: min(74vw, 260px); transform-origin: top right;
   }
+  #selToolbar input[type=range]{ touch-action:pan-x; }
   #selToolbar select, #selToolbar input[type=number]{
     background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
     font-size:12px; padding:4px 6px;
@@ -439,7 +440,8 @@
     display:flex; align-items:center; justify-content:center;
     box-shadow: 0 1px 4px rgba(0,0,0,.4); z-index: 5;
   }
-  #selToolbar{ opacity:.6; transition: opacity .15s, top .16s ease, left .16s ease; position:absolute; }
+  #selToolbar{ opacity:.6; transition: opacity .15s, top .16s ease, left .16s ease; position:absolute; touch-action:none; }
+  #selToolbarBody{ touch-action:none; }
   #selToolbar.dragging-now{ transition: opacity .15s; }
   #selToolbar.touched, #selToolbar:has(#selToolbarBody.expanded){ opacity:1; }
   #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
@@ -1728,32 +1730,31 @@ function endToolbarDrag(){
   selToolbar.classList.remove('dragging-now');
   setTimeout(()=> selToolbar.classList.remove('touched'), 800);
 }
-/* ہینڈل پر جہاں بھی انگلی رکھیں وہیں سے ڈریگ شروع ہو */
-selDragHandle.addEventListener('pointerdown', (e)=>{
-  e.preventDefault();
-  beginToolbarDrag(e.clientX, e.clientY);
-  try{ selDragHandle.setPointerCapture(e.pointerId); }catch(err){}
-});
-selDragHandle.addEventListener('pointermove', (e)=>{
-  if(!dragging) return;
-  e.preventDefault();
-  moveToolbarDrag(e.clientX, e.clientY);
-});
-selDragHandle.addEventListener('pointerup', (e)=>{
-  endToolbarDrag();
-  try{ selDragHandle.releasePointerCapture(e.pointerId); }catch(err){}
-});
-selDragHandle.addEventListener('pointercancel', endToolbarDrag);
-/* ٹول بار کے خالی (بغیر بٹن) حصے سے بھی ڈریگ ہو سکے */
+function isDragBlockedTarget(el){
+  return !!(el && el.closest && el.closest('button, input, select, .fw-scroll, .free-pos-box, #selColorRow, #selFontWheelRow'));
+}
+/* ٹول بار کے کسی بھی حصے سے ڈریگ — ہینڈل ہو، خالی جگہ ہو — سوائے اصل بٹنوں/سلائیڈر/ویل کے */
+let toolbarPointerId = null;
 selToolbar.addEventListener('pointerdown', (e)=>{
-  if(e.target !== selToolbar) return; /* صرف خالی جگہ پر، بٹن پر نہیں */
+  if(isDragBlockedTarget(e.target) && e.target !== selDragHandle) return;
   e.preventDefault();
+  toolbarPointerId = e.pointerId;
   beginToolbarDrag(e.clientX, e.clientY);
   try{ selToolbar.setPointerCapture(e.pointerId); }catch(err){}
 });
-selToolbar.addEventListener('pointermove', (e)=>{ if(dragging) { e.preventDefault(); moveToolbarDrag(e.clientX, e.clientY); } });
-selToolbar.addEventListener('pointerup', (e)=>{ endToolbarDrag(); try{ selToolbar.releasePointerCapture(e.pointerId); }catch(err){} });
-selToolbar.addEventListener('pointerdown', ()=> selToolbar.classList.add('touched'));
+selToolbar.addEventListener('pointermove', (e)=>{
+  if(!dragging || e.pointerId !== toolbarPointerId) return;
+  e.preventDefault();
+  moveToolbarDrag(e.clientX, e.clientY);
+});
+function releaseToolbarDrag(e){
+  if(e && e.pointerId !== toolbarPointerId) return;
+  endToolbarDrag();
+  try{ selToolbar.releasePointerCapture(toolbarPointerId); }catch(err){}
+  toolbarPointerId = null;
+}
+selToolbar.addEventListener('pointerup', releaseToolbarDrag);
+selToolbar.addEventListener('pointercancel', releaseToolbarDrag);
 
 /* دو انگلیوں سے پورا ٹول بار چھوٹا/بڑا (pinch zoom) — کہیں سے بھی ٹول بار پر */
 let tbPinchDist = 0, tbPinchStartScale = 1;
@@ -2457,8 +2458,8 @@ new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'),
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0644PM) ---------- */
-const APP_BUILD_VERSION = "UF238Su0644PM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0652PM) ---------- */
+const APP_BUILD_VERSION = "UF238Su0652PM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
