@@ -395,7 +395,7 @@
     background: #fff4e0; border:1.5px solid #e0a83e; border-radius: 10px;
     padding: 6px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
     align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;
-    width: min(84vw, 340px); transform-origin: top right;
+    width: min(74vw, 260px); transform-origin: top right;
   }
   #selToolbar select, #selToolbar input[type=number]{
     background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
@@ -640,7 +640,7 @@
   </div>
 </div>
 
-<div id="selToolbar">
+<div id="selToolbar" dir="ltr">
   <span id="selDragHandle" title="پکڑ کر گھسیٹیں">✥</span>
   <button id="selCloseBtn" title="بند کریں">✕</button>
   <button id="selToggle">Aa ⌄</button>
@@ -1744,6 +1744,15 @@ selDragHandle.addEventListener('pointerup', (e)=>{
   try{ selDragHandle.releasePointerCapture(e.pointerId); }catch(err){}
 });
 selDragHandle.addEventListener('pointercancel', endToolbarDrag);
+/* ٹول بار کے خالی (بغیر بٹن) حصے سے بھی ڈریگ ہو سکے */
+selToolbar.addEventListener('pointerdown', (e)=>{
+  if(e.target !== selToolbar) return; /* صرف خالی جگہ پر، بٹن پر نہیں */
+  e.preventDefault();
+  beginToolbarDrag(e.clientX, e.clientY);
+  try{ selToolbar.setPointerCapture(e.pointerId); }catch(err){}
+});
+selToolbar.addEventListener('pointermove', (e)=>{ if(dragging) { e.preventDefault(); moveToolbarDrag(e.clientX, e.clientY); } });
+selToolbar.addEventListener('pointerup', (e)=>{ endToolbarDrag(); try{ selToolbar.releasePointerCapture(e.pointerId); }catch(err){} });
 selToolbar.addEventListener('pointerdown', ()=> selToolbar.classList.add('touched'));
 
 /* دو انگلیوں سے پورا ٹول بار چھوٹا/بڑا (pinch zoom) — کہیں سے بھی ٹول بار پر */
@@ -2448,8 +2457,8 @@ new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'),
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0635PM) ---------- */
-const APP_BUILD_VERSION = "UF238Su0635PM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0644PM) ---------- */
+const APP_BUILD_VERSION = "UF238Su0644PM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
