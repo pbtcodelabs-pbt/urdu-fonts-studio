@@ -2,7 +2,7 @@
 <html lang="ur" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <title>اردو فونٹ اسٹوڈیو</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a2647">
@@ -361,7 +361,7 @@
     outline: none; direction: rtl; text-align: right;
     font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
     font-size: 34px; line-height: 2.1; color: var(--ink);
-    min-height: 380px;
+    min-height: 380px; position: relative;
   }
   #canvasText div{ min-height: 1.2em; }
   #canvasText:empty:before{
@@ -394,7 +394,8 @@
     position: absolute; display:none; z-index: 50;
     background: #fff4e0; border:1.5px solid #e0a83e; border-radius: 10px;
     padding: 6px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
-    align-items:center; gap:6px; flex-wrap:wrap; max-width: 94vw; justify-content:center;
+    align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;
+    width: min(84vw, 340px); transform-origin: top right;
   }
   #selToolbar select, #selToolbar input[type=number]{
     background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
@@ -1221,7 +1222,7 @@ document.getElementById('selFreePos').onclick = ()=>{
   if(typeof captureSnapshot === 'function') captureSnapshot();
   const range = sel.getRangeAt(0);
   const rect = range.getBoundingClientRect();
-  const paperRect = paper.getBoundingClientRect();
+  const paperRect = canvasText.getBoundingClientRect();
   const box = document.createElement('div');
   box.className = 'free-pos-box';
   try{ range.surroundContents(box); }
@@ -1294,22 +1295,29 @@ function makeBoxDraggable(box){
     activeFreeBox = box;
     dragging = true;
     sx = e.clientX; sy = e.clientY;
-    const paperRect = paper.getBoundingClientRect();
+    const paperRect = canvasText.getBoundingClientRect();
     ol = parseFloat(box.style.left)/100 * paperRect.width || 0;
     ot = parseFloat(box.style.top)/100 * paperRect.height || 0;
     box.setPointerCapture(e.pointerId);
   });
   box.addEventListener('pointermove', (e)=>{
     if(!dragging) return;
-    const paperRect = paper.getBoundingClientRect();
+    e.preventDefault();
+    const paperRect = canvasText.getBoundingClientRect();
     let newLeft = ol + (e.clientX - sx);
     let newTop = ot + (e.clientY - sy);
-    newLeft = Math.max(0, Math.min(paperRect.width - box.offsetWidth, newLeft));
-    newTop = Math.max(0, Math.min(paperRect.height - box.offsetHeight, newTop));
+    newLeft = Math.max(0, Math.min(Math.max(0,paperRect.width - box.offsetWidth), newLeft));
+    newTop = Math.max(0, Math.min(Math.max(0,paperRect.height - box.offsetHeight), newTop));
     box.style.left = (newLeft / paperRect.width * 100) + '%';
     box.style.top = (newTop / paperRect.height * 100) + '%';
   });
-  function endDrag(e){ dragging = false; try{ box.releasePointerCapture(e.pointerId); }catch(err){} }
+  function endDrag(e){
+    if(!dragging) return;
+    dragging = false;
+    try{ box.releasePointerCapture(e.pointerId); }catch(err){}
+    if(typeof captureSnapshot === 'function') captureSnapshot();
+    if(typeof scheduleAutoSave === 'function') scheduleAutoSave();
+  }
   box.addEventListener('pointerup', endDrag);
   box.addEventListener('pointercancel', endDrag);
 }
@@ -1639,21 +1647,22 @@ function showSelToolbarPinned(){
     selToolbar.style.position = 'fixed';
     selToolbar.style.top = toolbarPos.top + 'px';
     selToolbar.style.left = toolbarPos.left + 'px';
-    selToolbar.style.transform = 'none';
     selToolbar.style.display = 'flex';
+    if(typeof applyToolbarTransform === 'function') applyToolbarTransform(); else selToolbar.style.transform = 'none';
     if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
     return;
   }
   selToolbar.style.position = 'fixed';
   selToolbar.style.top = '58px';
   selToolbar.style.left = '50%';
-  selToolbar.style.transform = 'translateX(-50%)';
   selToolbar.style.display = 'flex';
+  if(typeof applyToolbarTransform === 'function') applyToolbarTransform(); else selToolbar.style.transform = 'translateX(-50%)';
   if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
 }
 document.addEventListener('selectionchange', ()=>{
   if(dragging) return; /* ڈریگ کے دوران پوزیشن ری سیٹ نہ ہو */
   if(document.activeElement !== canvasText) return;
+  if(selToolbar.style.display === 'flex') return; /* پہلے سے نظر آ رہا ہو تو بار بار جھٹکا نہ لگے */
   showSelToolbarPinned();
 });
 let toolbarManuallyClosed = false;
@@ -1676,31 +1685,32 @@ document.getElementById('selToggle').onclick = ()=>{
   const expanded = body.classList.toggle('expanded');
   document.getElementById('selToggle').textContent = 'Aa ' + (expanded ? '⌃' : '⌄');
 };
-/* drag the pinned toolbar anywhere on screen */
+/* ---------- ٹول بار: ہر پوائنٹ سے ڈریگ + دو انگلیوں سے زوم — کبھی خودکار غائب نہ ہو ---------- */
 const selDragHandle = document.getElementById('selDragHandle');
 let dragging = false, dragStartX=0, dragStartY=0, dragOrigTop=0, dragOrigLeft=0;
-selDragHandle.addEventListener('pointerdown', (e)=>{
-  e.preventDefault();
+let toolbarScale = 1;
+function applyToolbarTransform(){
+  selToolbar.style.transform = toolbarDragged ? ('scale('+toolbarScale+')') : ('translateX(-50%) scale('+toolbarScale+')');
+}
+function beginToolbarDrag(clientX, clientY){
   dragging = true;
   selToolbar.classList.add('touched');
   selToolbar.classList.add('dragging-now');
   const rect = selToolbar.getBoundingClientRect();
   dragOrigTop = rect.top; dragOrigLeft = rect.left;
-  dragStartX = e.clientX; dragStartY = e.clientY;
+  dragStartX = clientX; dragStartY = clientY;
   selToolbar.style.position = 'fixed';
-  selToolbar.style.transform = 'none';
   selToolbar.style.top = dragOrigTop + 'px';
   selToolbar.style.left = dragOrigLeft + 'px';
-  selDragHandle.setPointerCapture(e.pointerId);
-});
-selDragHandle.addEventListener('pointermove', (e)=>{
+  applyToolbarTransform();
+}
+function moveToolbarDrag(clientX, clientY){
   if(!dragging) return;
-  e.preventDefault();
-  let newTop = dragOrigTop + (e.clientY - dragStartY);
-  let newLeft = dragOrigLeft + (e.clientX - dragStartX);
+  let newTop = dragOrigTop + (clientY - dragStartY);
+  let newLeft = dragOrigLeft + (clientX - dragStartX);
   const kh = (typeof getKeyboardHeight === 'function') ? getKeyboardHeight() : 0;
-  const tw = selToolbar.offsetWidth || 60;
-  const th = selToolbar.offsetHeight || 40;
+  const tw = (selToolbar.offsetWidth || 60) * toolbarScale;
+  const th = (selToolbar.offsetHeight || 40) * toolbarScale;
   const safeMaxTop = window.innerHeight - kh - th - 4;
   newTop = Math.max(4, Math.min(Math.max(4, safeMaxTop), newTop));
   newLeft = Math.max(4, Math.min(Math.max(4, window.innerWidth - tw - 4), newLeft));
@@ -1708,17 +1718,57 @@ selDragHandle.addEventListener('pointermove', (e)=>{
   selToolbar.style.left = newLeft + 'px';
   toolbarDragged = true;
   toolbarPos = {top:newTop, left:newLeft};
-});
-function endDrag(e){
+}
+function endToolbarDrag(){
   if(!dragging) return;
   dragging = false;
   selToolbar.classList.remove('dragging-now');
-  try{ selDragHandle.releasePointerCapture(e.pointerId); }catch(err){}
   setTimeout(()=> selToolbar.classList.remove('touched'), 800);
 }
-selDragHandle.addEventListener('pointerup', endDrag);
-selDragHandle.addEventListener('pointercancel', endDrag);
+/* ہینڈل پر جہاں بھی انگلی رکھیں وہیں سے ڈریگ شروع ہو */
+selDragHandle.addEventListener('pointerdown', (e)=>{
+  e.preventDefault();
+  beginToolbarDrag(e.clientX, e.clientY);
+  try{ selDragHandle.setPointerCapture(e.pointerId); }catch(err){}
+});
+selDragHandle.addEventListener('pointermove', (e)=>{
+  if(!dragging) return;
+  e.preventDefault();
+  moveToolbarDrag(e.clientX, e.clientY);
+});
+selDragHandle.addEventListener('pointerup', (e)=>{
+  endToolbarDrag();
+  try{ selDragHandle.releasePointerCapture(e.pointerId); }catch(err){}
+});
+selDragHandle.addEventListener('pointercancel', endToolbarDrag);
 selToolbar.addEventListener('pointerdown', ()=> selToolbar.classList.add('touched'));
+
+/* دو انگلیوں سے پورا ٹول بار چھوٹا/بڑا (pinch zoom) — کہیں سے بھی ٹول بار پر */
+let tbPinchDist = 0, tbPinchStartScale = 1;
+selToolbar.addEventListener('touchstart', (e)=>{
+  if(e.touches.length===2){
+    tbPinchDist = touchDist(e.touches);
+    tbPinchStartScale = toolbarScale;
+    if(!toolbarDragged){
+      /* پنچ سے پہلے موجودہ پوزیشن کو فکس کر دیں تاکہ سکیل درست جگہ سے ہو */
+      const rect = selToolbar.getBoundingClientRect();
+      selToolbar.style.position = 'fixed';
+      selToolbar.style.top = rect.top + 'px';
+      selToolbar.style.left = (rect.left + rect.width/2) + 'px';
+      toolbarDragged = true;
+      toolbarPos = {top:rect.top, left:rect.left + rect.width/2};
+    }
+  }
+}, {passive:true});
+selToolbar.addEventListener('touchmove', (e)=>{
+  if(e.touches.length===2 && tbPinchDist>0){
+    e.preventDefault();
+    const d = touchDist(e.touches);
+    toolbarScale = Math.max(0.6, Math.min(2.2, tbPinchStartScale * (d/tbPinchDist)));
+    applyToolbarTransform();
+  }
+}, {passive:false});
+selToolbar.addEventListener('touchend', (e)=>{ if(e.touches.length<2) tbPinchDist = 0; });
 
 document.querySelectorAll('.selPunct').forEach(btn=>{
   btn.onmousedown = (e)=> e.preventDefault();
@@ -2382,12 +2432,21 @@ document.getElementById('historyClearAll').onclick = ()=>{
 
 /* auto-save silently a moment after any edit, so nothing is lost if the app is closed */
 let autoSaveTimer = null;
+function scheduleAutoSave(){
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(()=>{ if(typeof saveDraft === 'function') saveDraft(true); }, 900);
+}
+/* ہر قسم کی تبدیلی پکڑنے کے لیے (لکھائی، فونٹ، سٹائل، پوزیشن، رنگ، تھیم — سب) */
+new MutationObserver(scheduleAutoSave).observe(document.getElementById('canvasText'), {
+  childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:['style','class']
+});
+new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'), { attributes:true, attributeFilter:['class','style'] });
 /* ---------- keep the page always clear of the top bar, whatever its actual height is ---------- */
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0619PM) ---------- */
-const APP_BUILD_VERSION = "UF238Su0619PM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0627PM) ---------- */
+const APP_BUILD_VERSION = "UF238Su0627PM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
@@ -2439,9 +2498,14 @@ function adjustForKeyboard(){
     }
   }
 }
+let _kbRaf = null;
+function adjustForKeyboardThrottled(){
+  if(_kbRaf) return;
+  _kbRaf = requestAnimationFrame(()=>{ _kbRaf = null; adjustForKeyboard(); });
+}
 if(window.visualViewport){
-  window.visualViewport.addEventListener('resize', adjustForKeyboard);
-  window.visualViewport.addEventListener('scroll', adjustForKeyboard);
+  window.visualViewport.addEventListener('resize', adjustForKeyboardThrottled);
+  window.visualViewport.addEventListener('scroll', adjustForKeyboardThrottled);
 }
 
 const railEl2 = document.getElementById('rail');
