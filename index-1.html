@@ -1,0 +1,2988 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+<title>اردو فونٹ اسٹوڈیو</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a2647">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+  @font-face {
+    font-family: 'Jameel Noori Nastaleeq';
+    src: url('fonts/JameelNooriNastaleeq.ttf') format('truetype');
+    font-weight: 400 800;
+  }
+  @font-face {
+    font-family: 'Noto Nastaliq Urdu';
+    src: url('fonts/NotoNastaliqUrdu-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Noto Nastaliq Urdu Medium';
+    src: url('fonts/NotoNastaliqUrdu-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+  @font-face {
+    font-family: 'Noto Nastaliq Urdu Bold';
+    src: url('fonts/NotoNastaliqUrdu-Bold.ttf') format('truetype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'AT Pinko';
+    src: url('fonts/ATPinko-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'AT Pinko Bold';
+    src: url('fonts/ATPinko-Bold.ttf') format('truetype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'PDMS Multan';
+    src: url('fonts/PDMS_Multan.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Sameer Qamri';
+    src: url('fonts/Sameer_Qamri.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Al Fars Aban';
+    src: url('fonts/AlFars_Aban.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Syalbiyah';
+    src: url('fonts/Syalbiyah.ttf') format('truetype');
+    font-weight: 400;
+  }
+
+  @font-face {
+    font-family: 'Jameel Noori Nastaleeq New';
+    src: url('fonts/JameelNooriNastaleeqRegular-New.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Jameel Noori Nastaleeq Kasheeda';
+    src: url('fonts/JameelNooriNastaleeqKasheeda.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'AA Sameer Almas';
+    src: url('fonts/AASameerAlmas-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: '300 Regular';
+    src: url('fonts/300-Regular.ttf') format('truetype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Retro Floral';
+    src: url('fonts/Retro_Floral.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Qilka Bold';
+    src: url('fonts/Qilka-Bold.otf') format('opentype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Qobliyah';
+    src: url('fonts/Qobliyah.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Lutfey Arabic';
+    src: url('fonts/LutfeyArabic-Regular.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Lutfey Arabic Outline';
+    src: url('fonts/LutfeyArabic-Outline.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Tufuli Arabic';
+    src: url('fonts/TufuliArabic-Regular.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Tufuli Arabic Bold';
+    src: url('fonts/TufuliArabic-Bold.otf') format('opentype');
+    font-weight: 700;
+  }
+  @font-face {
+    font-family: 'Signatie';
+    src: url('fonts/Signatie.otf') format('opentype');
+    font-weight: 400;
+  }
+  @font-face {
+    font-family: 'Delik';
+    src: url('fonts/Delik.otf') format('opentype');
+    font-weight: 400;
+  }
+
+  :root{
+    --ink: #241a12;
+    --gold: #1e88e5;
+    --gold-soft: #2f6690;
+    --panel-bg: #eaf5ff;
+    --panel-bg-2: #d3ecff;
+    --canvas-bg: #f7f0e0;
+    --rail-w: 0px;
+    --border-1: #aed6f7;
+    --border-2: #7fc0f0;
+    --text-dark: #123a68;
+    --text-muted: #2f6690;
+    --text-muted2: #4a7aa8;
+    --on-accent: #062a4a;
+    --topbar-grad-1: #cfe6fb;
+    --topbar-grad-2: #dceeff;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: var(--panel-bg);
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    overflow: hidden;
+  }
+
+  /* ---------- Top bar ---------- */
+  #topbar{
+    position: fixed; top:0; right: var(--rail-w); left:0; min-height:52px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 8px 14px; gap:8px; flex-wrap:wrap;
+    background: linear-gradient(180deg, var(--panel-bg-2), var(--panel-bg));
+    border-bottom: 1px solid var(--border-1);
+    z-index: 30;
+  }
+  #topbar h1{
+    font-size: 14px; color: var(--gold-soft); margin:0; font-weight:600;
+    letter-spacing: 0.5px; white-space:nowrap;
+  }
+  #topbar .sub{ color:var(--text-muted2); font-size:10.5px; margin-inline-start:6px; }
+  #topTitleWrap{ display:flex; flex-direction:column; gap:3px; }
+  #statusRow{ display:flex; align-items:center; gap:6px; }
+  #onlineDot{ width:7px; height:7px; border-radius:50%; background:#2ecc71; display:inline-block; box-shadow:0 0 4px #2ecc71; }
+  #onlineDot.offline{ background:#e74c3c; box-shadow:0 0 4px #e74c3c; }
+  #onlineText{ font-size:10px; color:var(--text-muted); }
+  #verTag{
+    font-size:10px; color:#ffffff; background:var(--gold); border:1px solid var(--gold);
+    border-radius:8px; padding:2px 8px; font-weight:700; letter-spacing:.3px;
+    animation: verPulse 1.4s ease-out 1;
+  }
+  @keyframes verPulse{
+    0%{ box-shadow:0 0 0 0 rgba(30,136,229,.65); transform:scale(1.12); }
+    70%{ box-shadow:0 0 0 8px rgba(30,136,229,0); }
+    100%{ box-shadow:0 0 0 0 rgba(30,136,229,0); transform:scale(1); }
+  }
+  #btnRefresh{
+    background:none; border:none; font-size:12px; cursor:pointer; padding:0 2px;
+    color:var(--text-muted);
+  }
+  #topActions{ display:flex; gap:6px; flex-wrap:nowrap; justify-content:flex-end; }
+  #topActions .pill-btn{ padding:8px 11px; font-size:12px; border-radius:10px; font-weight:600; white-space:nowrap; }
+  #btnUndo, #btnRedo{ padding:8px 10px !important; font-size:15px !important; }
+  .pill-btn{
+    background: linear-gradient(180deg, #ffffff, #f0f8ff);
+    border: 1.5px solid var(--border-2); color: var(--gold-soft);
+    padding: 7px 15px; border-radius: 20px; font-size: 12.5px; cursor:pointer;
+    font-weight: 600;
+    transition: all .15s;
+    box-shadow: 0 2px 5px rgba(30,100,180,.18), inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  .pill-btn:hover{ background: var(--gold); color:var(--on-accent); border-color: var(--gold); }
+  .pill-btn:active{ transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0,0,0,.15); }
+  .pill-btn:active{ transform: scale(.96); }
+  .pill-btn.primary{ background: var(--gold); color:var(--on-accent); border-color:var(--gold); }
+  .pill-btn.primary:hover{ filter: brightness(1.08); }
+
+  /* ---------- Icon rail (now a horizontal strip, not a right-side column) ---------- */
+  #rail{
+    position: fixed; left:0; right:0; top:0;
+    height: 54px;
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--border-1);
+    display:flex; flex-direction:row; align-items:center;
+    padding: 0 8px; gap: 4px; z-index: 40;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .rail-btn{
+    width: 42px; height:42px; min-width:42px; border-radius: 12px;
+    border: 1.5px solid transparent;
+    background: #ffffffaa; color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 19px; transition: all .15s; position:relative;
+    box-shadow: 0 1px 3px rgba(30,100,180,.12);
+  }
+  .rail-btn:hover{ background: var(--panel-bg-2); color: var(--gold-soft); border-color:var(--border-2); }
+  .rail-btn:active{ transform: translateY(1px); }
+  .rail-btn.active{ background: var(--gold); color:var(--on-accent); }
+  .rail-btn .lbl{
+    position:absolute; top: 48px; left:50%; transform: translateX(-50%);
+    background:var(--topbar-grad-2); color:var(--gold-soft); font-size:11px; padding:5px 10px;
+    border-radius:6px; white-space:nowrap; opacity:0; pointer-events:none;
+    transition: opacity .12s; border:1px solid var(--border-1); z-index:45;
+  }
+  .rail-btn:hover .lbl{ opacity:1; }
+
+  /* ---------- Drawer (bottom sheet — page stays visible above it) ---------- */
+  #drawer{
+    position: fixed; left:0; right: var(--rail-w); bottom:0; top:auto;
+    height: 46vh; max-height: 480px; min-height: 300px;
+    background: var(--panel-bg); border-top: 2px solid var(--border-2); border-left:none;
+    transform: translateY(100%); transition: transform .22s ease;
+    z-index: 35; overflow-y:auto; padding: 14px 16px 30px;
+    border-radius: 18px 18px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,.45);
+  }
+  #drawer.open{ transform: translateY(0); }
+  #drawer::before{
+    content:''; position:sticky; top:-14px; display:block; width:44px; height:5px;
+    background:var(--border-2); border-radius:4px; margin: 0 auto 10px;
+  }
+  #drawer h2{
+    color: var(--gold); font-size: 13px; margin: 0 0 14px; font-weight:600;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  #drawer h2 button{
+    background:none; border:none; color:var(--text-muted2); font-size:16px; cursor:pointer;
+  }
+  .field-label{ color:var(--text-muted); font-size:11.5px; margin: 14px 0 6px; display:block; }
+  .font-option{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 10px 12px; border-radius: 10px; margin-bottom:6px;
+    background: var(--panel-bg-2); border: 1px solid transparent; cursor:pointer;
+    color: var(--text-dark); font-size: 15px;
+  }
+  .font-option:hover{ border-color: var(--border-2); }
+  .font-option.selected{ border-color: var(--gold); background:#cfe4fa; }
+  .font-option .sample{ font-size:19px; }
+  input[type=range]{ width:100%; accent-color: var(--gold); }
+  .row-between{ display:flex; align-items:center; justify-content:space-between; color:var(--text-muted); font-size:12px; }
+  .btn-grid4{ display:grid; grid-template-columns: repeat(4,1fr); gap:8px; margin-top:6px; }
+  .icon-toggle{
+    background: linear-gradient(180deg,#ffffff,var(--panel-bg-2)); border:1.5px solid var(--border-1); color:var(--text-muted);
+    border-radius:10px; padding:10px 0; cursor:pointer; font-size:16px;
+    box-shadow: 0 1px 3px rgba(30,100,180,.15);
+  }
+  .icon-toggle:active{ transform: translateY(1px); }
+  .icon-toggle.active{ background: var(--gold); color:var(--on-accent); border-color:var(--gold); }
+  .color-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  .swatch{
+    width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid var(--border-1);
+  }
+  .swatch.selected{ border-color: var(--gold); }
+  #punctGrid{ display:grid; grid-template-columns: repeat(4,1fr); gap:8px; }
+  .punct-btn{
+    background: var(--panel-bg-2); border:1px solid var(--border-1); color:var(--text-dark);
+    border-radius:9px; padding:10px 0; font-size:18px; cursor:pointer;
+  }
+  .punct-btn:hover{ border-color: var(--gold); }
+  #themeGrid{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
+  .theme-swatch{
+    height:46px; border-radius:9px; cursor:pointer; border:2px solid transparent;
+    position:relative;
+  }
+  .theme-swatch.selected{ border-color: var(--gold); }
+  .theme-swatch span{
+    position:absolute; inset:auto 0 -18px 0; font-size:9.5px; color:var(--text-muted); text-align:center;
+  }
+  .hint{ color:#3d6f97; font-size:11px; line-height:1.7; margin-top:16px; }
+
+  /* ---------- Stage / Canvas ---------- */
+  #stage{
+    position: fixed; top:52px; left:0; right: var(--rail-w); bottom:0;
+    overflow: auto; padding: 14px;
+  }
+  #stageInner{ transition: transform .15s ease; }
+
+  /* always-visible quick zoom slider bar on the main page */
+  #quickZoom{
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    right: auto; margin-inline-end: calc(var(--rail-w) / 2 * -1);
+    display:flex; align-items:center; gap:10px;
+    background: color-mix(in srgb, var(--topbar-grad-2) 93%, transparent); border:1px solid var(--gold); border-radius: 24px;
+    padding: 8px 16px; z-index: 60; box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    width: min(78vw, 360px);
+  }
+  #quickZoom span{ color:var(--text-muted); font-size:12px; min-width:40px; text-align:center; }
+  #quickZoom input[type=range]{ flex:1; accent-color: var(--gold); }
+  @media (max-width: 640px){
+    #quickZoom{ margin-inline-end: 0; bottom: 14px; }
+  }
+
+  #fontWheelBar{
+    position: fixed; left:0; right:0; top:0; z-index: 39;
+    display:flex; flex-direction:row; height: 40px;
+    background: var(--panel-bg-2); border-bottom:1px solid var(--border-1);
+    padding: 0 8px; gap: 22px; box-sizing:border-box;
+  }
+  .fw-half{
+    flex:1 1 50%; display:flex; align-items:center; gap:4px; padding:0 2px;
+    min-width:0;
+  }
+  #urduFontWheel{ border-inline-start: 1px solid var(--border-1); padding-left:16px !important; padding-inline-start:8px; }
+  #enFontWheel{ padding-right:16px !important; }
+  .fw-btn{
+    width:24px;height:24px;min-width:24px;border-radius:50%;border:1px solid var(--border-2);
+    background:var(--panel-bg); color:var(--text-dark); font-size:13px; cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .fw-scroll{
+    flex:1; min-width:0; height:38px; overflow-y:auto; overflow-x:hidden;
+    scroll-snap-type:y mandatory; display:flex; flex-direction:column; align-items:stretch;
+    padding: 7px 0; -webkit-overflow-scrolling:touch; touch-action:pan-y;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  }
+  .fw-item{
+    flex:0 0 auto; height:24px; display:flex; align-items:center; justify-content:center;
+    scroll-snap-align:center; font-family:'Arial Narrow',Arial,sans-serif;
+    font-size:10.5px; color:var(--text-muted); text-align:center;
+    padding:0 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .fw-item.center{ color:var(--gold); font-weight:700; font-size:12px; }
+
+  #paper{
+    width: 100%; min-height: 520px; max-width: 980px;
+    margin: 0 auto;
+    background: var(--canvas-bg);
+    border-radius: 22px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    padding: 60px 55px;
+    position: relative;
+  }
+  #canvasText{
+    outline: none; direction: rtl; text-align: right;
+    font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
+    font-size: 34px; line-height: 2.1; color: var(--ink);
+    min-height: 380px; position: relative;
+  }
+  #canvasText div{ min-height: 1.2em; }
+  #canvasText:empty:before{
+    content: attr(data-placeholder);
+    color: #b7a988; pointer-events:none;
+  }
+
+  /* poster theme variants */
+  #paper.theme-paper{ background: #f7f0e0; --ink: #241a12; }
+  #paper.theme-ink{ background: radial-gradient(circle at 30% 20%, #2e2620, #14100c); --ink:#e9dfc4; }
+  #paper.theme-gold{ background: #f7f0e0; border: 6px double #b8923f; --ink:#241a12; }
+  #paper.theme-night{ background: linear-gradient(160deg,#0e1a2b,#1b2c46); --ink:#eef2f8; }
+  #paper.theme-maroon{ background: radial-gradient(circle at 70% 20%, #6b2430, #3c1017); --ink:#f3e6d8; }
+  #paper.theme-emerald{ background: radial-gradient(160deg,#0f2e26,#173f34); --ink:#eaf5ee; }
+  #paper.theme-marble{ background: repeating-radial-gradient(circle at 20% 30%, #eee5d3 0 2px, #e4d8be 3px 40px); --ink:#241a12; }
+  #paper.theme-teal{ background: linear-gradient(160deg,#0b2e34,#124450); --ink:#e6f6f8; }
+  #paper.theme-desert{ background: linear-gradient(160deg,#e7c9a1,#cf9f6b); --ink:#3a2410; }
+  #paper.theme-charcoal{ background: #262626; --ink:#eeeeee; }
+  #paper.theme-rose{ background: linear-gradient(160deg,#f3dbe0,#e7b9c3); --ink:#4a1420; }
+  #paper.theme-indigo{ background: linear-gradient(160deg,#161233,#2b2160); --ink:#e9e6ff; }
+  #paper.theme-sand{ background: #efe4cc; border: 2px solid #c8ac6e; --ink:#3a2b12; }
+  #paper.theme-forest{ background: linear-gradient(160deg,#16241a,#233a26); --ink:#e6f0e6; }
+  #paper.theme-plum{ background: radial-gradient(circle at 30% 70%, #3a1f3d, #200f24); --ink:#f2e6f2; }
+  #paper.theme-ivory{ background:#fffaf0; border:1px solid #ddd2b6; --ink:#241a12; }
+
+  #canvasText{ color: var(--ink); }
+
+  /* floating selection toolbar */
+  #selToolbar{
+    position: absolute; display:none; z-index: 50;
+    background: #fff4e0; border:1.5px solid #e0a83e; border-radius: 10px;
+    padding: 6px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;
+    width: min(74vw, 260px); transform-origin: top right;
+  }
+  #selToolbar input[type=range]{ touch-action:pan-x; }
+  #selToolbar select, #selToolbar input[type=number]{
+    background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
+    font-size:12px; padding:4px 6px;
+  }
+  #selToolbar button{
+    background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
+    width:26px; height:26px; cursor:pointer; font-size:13px;
+  }
+  #selToolbar button.active{ background:#e0a83e; color:#3a2400; }
+  #selFontToggle{ width:auto !important; padding:0 8px; font-weight:700; }
+  .sel-fw-scroll{
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 75%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 75%, transparent 100%);
+  }
+  .sel-fw-scroll .fw-item{ color:#8a5a12; font-size:10.5px; }
+  .sel-fw-scroll .fw-item.center{ color:#3a2400; font-weight:700; font-size:12px; }
+  #selToolbarBody{ display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; }
+  #selToolbarBody.expanded{ display:flex; }
+  .free-pos-box{ display:inline-block; }
+  .free-pos-box.placed{ outline: none !important; }
+  .free-pos-box.placed .free-pos-done{ display:none; }
+  .free-pos-done{
+    position:absolute; top:-11px; left:-11px; width:22px; height:22px;
+    background:#2ecc71; color:#fff; border-radius:50%; border:2px solid #fff;
+    display:flex; align-items:center; justify-content:center; font-size:12px;
+    cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.4); z-index:6;
+  }
+  #selDragHandle{
+    position: absolute; top:-9px; left:-9px;
+    cursor: move; touch-action: none; user-select: none; -webkit-user-select: none;
+    color: #3a2400; font-size:14px; padding:0;
+    width:26px; height:26px; min-width:26px; border-radius:50%;
+    background: #e0a83e; display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.3); border:2px solid #fff; z-index:5;
+  }
+  #selCloseBtn{
+    position: absolute; top:-9px; right:-9px;
+    width:24px; height:24px; min-width:24px; border-radius:50%; border:2px solid #fff;
+    background:#c0392b; color:#fff; font-size:12px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 1px 4px rgba(0,0,0,.4); z-index: 5;
+  }
+  #selToolbar{ opacity:.6; transition: opacity .15s, top .16s ease, left .16s ease; position:absolute; touch-action:none; }
+  #selToolbarBody{ touch-action:none; }
+  #selToolbar.dragging-now{ transition: opacity .15s; }
+  #selToolbar.touched, #selToolbar:has(#selToolbarBody.expanded){ opacity:1; }
+  #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
+
+  ::selection{ background: rgba(30,136,229,.55); }
+  #canvasText ::selection{ background: rgba(30,136,229,.55); }
+
+  #toast{
+    position: fixed; bottom: 24px; left:50%; transform: translateX(-50%);
+    background:var(--topbar-grad-2); color:var(--text-dark); border:1px solid var(--gold);
+    padding: 10px 20px; border-radius: 20px; font-size:12.5px; z-index:100;
+    opacity:0; pointer-events:none; transition: opacity .2s;
+  }
+  #toast.show{ opacity:1; }
+
+  @media (max-width: 640px){
+    #paper{ padding: 34px 22px; }
+    #canvasText{ font-size: 26px; }
+    #drawer{ height: 52vh; }
+    #topbar .sub{ display:none; }
+    #topbar h1{ font-size:13px; }
+    #stage{ top: 96px; }
+  }
+
+  /* ---------- Full-screen modal (Handwriting + Book) ---------- */
+  .fs-modal{
+    position: fixed; inset:0; background: rgba(10,7,4,.92); z-index: 200;
+    display:none; flex-direction: column;
+  }
+  .fs-modal.open{ display:flex; }
+  .fs-modal .fs-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 16px; border-bottom:1px solid var(--border-1); background:var(--topbar-grad-2);
+  }
+  .fs-modal .fs-head h2{ color: var(--gold); font-size:14.5px; margin:0; }
+  .fs-modal .fs-head button{
+    background:var(--panel-bg-2); border:1px solid var(--border-2); color:var(--text-dark); border-radius:8px;
+    padding:6px 12px; font-size:13px; cursor:pointer;
+  }
+  .fs-body{ flex:1; overflow:auto; padding: 14px; }
+
+  /* ---------- PDF modal: preview on top, all controls in bottom grid ---------- */
+  .pdf-body{ display:flex; flex-direction:column; padding:10px 12px 0; overflow:hidden; }
+  .pdf-preview-area{ flex:1; min-height:0; display:flex; flex-direction:column; }
+  .pdf-panel-label{ color:#2f6690; font-size:12px; font-weight:600; margin-bottom:8px; }
+  .pdf-ctrl-panel{
+    max-height:0; overflow:hidden; flex-shrink:0;
+    transition: max-height .22s ease;
+    background:#eaf5ff; border-radius:12px 12px 0 0;
+  }
+  .pdf-ctrl-panel.open{ max-height:230px; overflow-y:auto; margin-top:8px; border:1px solid #aed6f7; border-bottom:none; }
+  .pdf-ctrl-panel-inner{ padding:12px 10px; }
+  .pdf-mini-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
+  @media (min-width:520px){ .pdf-mini-grid{ grid-template-columns:repeat(3,1fr); } }
+  .pdf-ctrl-grid{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:6px;
+    background:#d3ecff; border:1px solid #aed6f7; border-radius:12px;
+    padding:8px 6px; margin: 8px 0 12px; flex-shrink:0;
+  }
+  .pdf-ctrl-btn{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+    background:linear-gradient(180deg,#ffffff,#f0f8ff); border:1.5px solid #7fc0f0; color:#2f6690;
+    border-radius:11px; padding:9px 2px; cursor:pointer; font-size:10.5px; font-weight:700;
+    box-shadow:0 1px 3px rgba(30,100,180,.15);
+  }
+  .pdf-ctrl-btn .ic{ font-size:18px; line-height:1; }
+  .pdf-ctrl-btn.active{ background: var(--gold); color:#fff; border-color:var(--gold); }
+
+  /* handwriting split panes */
+  .hw-panes{ display:flex; gap:12px; height:100%; }
+  @media (max-width: 780px){
+    .hw-panes{ flex-direction:column; }
+    .hw-panes .hw-pane:first-child{ flex: 0 1 auto; max-height: 64vh; overflow-y:auto; }
+    .hw-panes .hw-pane:last-child{ flex: 1 1 auto; min-height:220px; }
+  }
+  .hw-pane{
+    flex:1; display:flex; flex-direction:column; min-height:280px;
+    background:var(--panel-bg); border:1px solid var(--border-1); border-radius:10px; overflow:hidden;
+  }
+  .hw-pane-head{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:8px 10px; border-bottom:1px solid var(--border-1); color:var(--text-muted); font-size:12px;
+  }
+  .hw-pane-head .zoom-ctl{ display:flex; align-items:center; gap:6px; }
+  .hw-pane-head button{
+    background:var(--panel-bg-2); border:1px solid var(--border-2); color:var(--text-dark); border-radius:6px;
+    width:26px; height:26px; cursor:pointer; font-size:14px;
+  }
+  .hw-pane-head input[type=range]{ width:90px; }
+  .hw-view{ flex:1 1 auto; flex-shrink:0; min-height:260px; overflow:auto; position:relative; background:#071a30; }
+  #hwImageWrap{ transform-origin: top center; width:100%; padding:0; box-sizing:border-box; position:relative; }
+  #hwImageWrap canvas{ display:block; width:100%; height:auto; }
+  #hwDrawCanvas{ position:absolute; inset:0; width:100%; height:100%; }
+  .hw-annot-bar{
+    display:flex; gap:5px; flex-wrap:wrap; padding:6px 8px; border-top:1px solid var(--border-1);
+    background:var(--panel-bg); align-items:center;
+  }
+  .hw-annot-bar button{
+    background:var(--panel-bg-2); border:1px solid var(--border-2); color:var(--text-dark); border-radius:7px;
+    padding:5px 8px; font-size:11px; cursor:pointer; white-space:nowrap;
+  }
+  .hw-annot-bar button.active{ background:var(--gold); color:var(--on-accent); border-color:var(--gold); }
+  .hw-annot-bar input[type=range]{ accent-color: var(--gold); }
+  #hwDrop{
+    height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px; color:var(--text-muted2); font-size:13px; text-align:center; padding:20px; cursor:pointer;
+    border:2px dashed var(--border-2); margin:10px; border-radius:10px;
+  }
+  #hwDrop .gallery-btn{
+    background: var(--gold); color:var(--on-accent); border:none; border-radius:20px;
+    padding:10px 20px; font-size:13px; font-weight:600; cursor:pointer;
+  }
+  #hwTextWrap{ flex:1; overflow:auto; background:#f7f0e0; }
+  #hwText{
+    transform-origin: top right; direction:rtl; text-align:right; outline:none;
+    font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif; font-size:30px;
+    line-height:2.1; color:var(--on-accent); padding:16px; min-height:100%;
+  }
+  .fs-foot{ display:flex; gap:10px; padding:12px 16px; border-top:1px solid var(--border-1); background:var(--topbar-grad-2); }
+
+  /* book */
+  #bookGrid{ display:grid; grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); gap:14px; }
+  .history-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--panel-bg-2); border:1px solid var(--border-1); border-radius:10px;
+    padding:10px 12px; margin-bottom:8px;
+  }
+  .history-item .meta{ flex:1; min-width:0; }
+  .history-item .meta .time{ color:var(--text-dark); font-size:13px; font-weight:600; }
+  .history-item .meta .snippet{ color:var(--text-muted); font-size:11.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
+  .book-page-card{
+    background:var(--panel-bg); border:1px solid var(--border-1); border-radius:10px; overflow:hidden; cursor:pointer; position:relative;
+  }
+  .book-page-card .thumb{
+    height:170px; background:#f7f0e0; padding:8px; overflow:hidden; position:relative;
+    font-family:'Jameel Noori Nastaleeq',serif; font-size:9px; direction:rtl; color:var(--on-accent);
+  }
+  .book-page-card .thumb .pg-frame{ position:absolute; inset:4px; border:2px solid #b8923f; border-radius:6px; }
+  .book-page-card .num{ text-align:center; color:var(--text-muted); font-size:11.5px; padding:6px; }
+  .book-page-card .del{
+    position:absolute; top:4px; left:4px; background:#4a1420; color:#f3e6d8; border:none;
+    border-radius:5px; width:20px; height:20px; font-size:11px; cursor:pointer; z-index:2;
+  }
+  #paper.book-frame{ border: 8px solid #b8923f; border-radius: 16px; position:relative; }
+  .pg-number{
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:13px; color:#7a6a4f; font-family:Tahoma,sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="topTitleWrap">
+    <h1>اردو فونٹ اسٹوڈیو <span class="sub">Urdu Font Studio</span></h1>
+    <div id="statusRow">
+      <span id="onlineDot"></span><span id="onlineText">آن لائن</span>
+      <span id="verTag">…</span>
+      <button id="btnRefresh" title="تازہ ترین ورژن لوڈ کریں">🔄</button>
+    </div>
+  </div>
+  <div id="topActions">
+    <button class="pill-btn" id="btnUndo" title="واپس لائیں">↶</button>
+    <button class="pill-btn" id="btnRedo" title="دوبارہ لائیں">↷</button>
+    <button class="pill-btn" id="btnClearAll" title="سب صاف کریں">🗑️</button>
+    <button class="pill-btn" id="btnSaveDraft">محفوظ</button>
+    <button class="pill-btn" id="btnDraftHistory" title="ڈرافٹ ریکارڈ">📜</button>
+    <button class="pill-btn" id="btnSharePage"><svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-2px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> شیئر</button>
+    <button class="pill-btn" id="btnSavePdf">📄 PDF</button>
+    <button class="pill-btn primary" id="btnExportImg">تصویر</button>
+  </div>
+</div>
+
+<div id="stage">
+  <div id="stageInner">
+    <div id="paper" class="theme-paper">
+      <div id="canvasText" contenteditable="true" data-placeholder="یہاں اپنی تحریر پیسٹ کریں یا لکھنا شروع کریں…"></div>
+    </div>
+  </div>
+</div>
+
+<div id="quickZoom">
+  <span>🔍</span>
+  <input type="range" id="qzSlider" min="50" max="400" value="100">
+  <span id="qzVal">100%</span>
+</div>
+
+<div id="fontWheelBar">
+  <div class="fw-half" id="urduFontWheel" dir="ltr">
+    <button class="fw-btn fw-minus" data-wheel="ur">–</button>
+    <div class="fw-scroll" id="urduWheelScroll" dir="ltr"></div>
+    <button class="fw-btn fw-plus" data-wheel="ur">+</button>
+  </div>
+  <div class="fw-half" id="enFontWheel" dir="ltr">
+    <button class="fw-btn fw-minus" data-wheel="en">–</button>
+    <div class="fw-scroll" id="enWheelScroll" dir="ltr"></div>
+    <button class="fw-btn fw-plus" data-wheel="en">+</button>
+  </div>
+</div>
+
+<div id="selToolbar" dir="ltr">
+  <span id="selDragHandle" title="پکڑ کر گھسیٹیں">✥</span>
+  <button id="selCloseBtn" title="بند کریں">✕</button>
+  <button id="selToggle">Aa ⌄</button>
+  <div id="selToolbarBody">
+  <button id="selFontToggle" title="فونٹ تبدیل کریں">🔤 فونٹ</button>
+  <div id="selFontWheelRow" style="display:none;width:100%;gap:8px;padding:6px 2px 2px;">
+    <div class="fw-half" style="flex:1;min-width:0;" dir="ltr">
+      <div class="fw-scroll sel-fw-scroll" id="selUrduWheelScroll" dir="ltr" style="height:70px;"></div>
+    </div>
+    <div class="fw-half" style="flex:1;min-width:0;border-inline-start:1px solid var(--border-1);" dir="ltr">
+      <div class="fw-scroll sel-fw-scroll" id="selEnWheelScroll" dir="ltr" style="height:70px;"></div>
+    </div>
+  </div>
+  <button id="selBold" title="بولڈ">B</button>
+  <button id="selSpace" title="لفظوں میں فاصلہ">☰</button>
+  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
+  <button class="icon-toggle" data-align="right" title="دائیں">◄</button>
+  <button class="icon-toggle" data-align="center" title="درمیان">◆</button>
+  <button class="icon-toggle" data-align="left" title="بائیں">►</button>
+  <button class="icon-toggle" data-align="justify" title="برابر">▤</button>
+  <button id="selLineSpaceMinus" title="سطروں کا فاصلہ کم کریں">↕−</button>
+  <button id="selLineSpacePlus" title="سطروں کا فاصلہ بڑھائیں">↕+</button>
+  <button id="selFromHereBtn" title="یہاں سے آخر تک منتخب کریں">⬇️منتخب</button>
+  <button id="selFitLine" title="ایک لائن میں فٹ کریں">↔️1</button>
+  <input type="range" id="selFitSlider" min="8" max="140" value="34" style="width:90px;">
+  <span id="selFitSliderVal" style="color:var(--text-muted);font-size:11px;min-width:26px;">34</span>
+  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
+  <button id="selColorBtn" title="لفظ کا رنگ">🎨</button>
+  <button id="selFreePos" title="پکڑ کر کہیں بھی رکھیں">📦</button>
+  <button id="btnReleaseAllBoxes" title="سب آزاد باکس واپس عام تحریر میں لائیں">🧲</button>
+  <button id="selBgBtn" title="لفظ کا بیک گراؤنڈ">🖍️</button>
+  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
+  <button class="selPunct" data-ch="،">،</button>
+  <button class="selPunct" data-ch="۔">۔</button>
+  <button class="selPunct" data-ch="؟">؟</button>
+  <button class="selPunct" data-ch="!">!</button>
+  <div id="selColorRow" style="display:none;width:100%;justify-content:center;gap:6px;padding-top:6px;"></div>
+  </div>
+</div>
+
+<div id="rail">
+  <button class="rail-btn" data-panel="font">Aa<span class="lbl">فونٹ</span></button>
+  <button class="rail-btn" data-panel="style">⇕<span class="lbl">سائز / انداز</span></button>
+  <button class="rail-btn" data-panel="align">☰<span class="lbl">ترتیب</span></button>
+  <button class="rail-btn" data-panel="theme">◐<span class="lbl">پس منظر</span></button>
+  <button class="rail-btn" data-panel="apptheme">🎨<span class="lbl">ایپ تھیم</span></button>
+  <button class="rail-btn" data-panel="punct">٫<span class="lbl">اوقاف</span></button>
+  <button class="rail-btn" data-panel="zoom">⤢<span class="lbl">زوم</span></button>
+  <button class="rail-btn" data-panel="export">⇩<span class="lbl">محفوظ / شیئر</span></button>
+  <button class="rail-btn" id="btnOpenHW">✍<span class="lbl">ہاتھ کی تحریر</span></button>
+  <button class="rail-btn" id="btnOpenBook">📖<span class="lbl">کتاب</span></button>
+  <button class="rail-btn" id="btnCollapseBlank">🧹<span class="lbl">اضافی خالی جگہ ہٹائیں</span></button>
+  <button class="rail-btn" data-panel="pageborder">🖼️<span class="lbl">صفحے کا بارڈر</span></button>
+</div>
+
+<div id="drawer">
+  <div id="panel-font">
+    <h2>فونٹ منتخب کریں <button data-close="1">✕</button></h2>
+    <div class="hint" style="margin-top:-8px;margin-bottom:12px;">پہلے تحریر میں سے کوئی لفظ یا سطر منتخب کریں، پھر فونٹ چنیں — صرف وہی حصہ تبدیل ہوگا۔ کچھ منتخب نہ ہو تو پورے صفحے پر لاگو ہوگا۔</div>
+    <div id="fontList"></div>
+  </div>
+
+  <div id="panel-style" style="display:none;">
+    <h2>سائز اور انداز <button data-close="1">✕</button></h2>
+    <span class="field-label">فونٹ سائز</span>
+    <input type="range" id="rngSize" min="14" max="90" value="34">
+    <div class="row-between"><span id="rngSizeVal">34px</span><span>حجم</span></div>
+
+    <span class="field-label">موٹائی (بولڈ / پتلا)</span>
+    <input type="range" id="rngWeight" min="200" max="800" step="100" value="400">
+    <div class="row-between"><span id="rngWeightVal">عام</span><span>موٹائی</span></div>
+
+    <span class="field-label">لفظوں کے درمیان فاصلہ</span>
+    <input type="range" id="rngWordSpace" min="0" max="30" value="0">
+
+    <span class="field-label">رنگ</span>
+    <div class="color-row" id="colorRow"></div>
+
+    <div class="hint">یہ تبدیلیاں بھی منتخب شدہ حصے پر لاگو ہوں گی — یا پورے صفحے پر اگر کچھ منتخب نہیں۔</div>
+  </div>
+
+  <div id="panel-align" style="display:none;">
+    <h2>ترتیب <button data-close="1">✕</button></h2>
+    <span class="field-label">صف بندی (منتخب سطر یا پورا صفحہ)</span>
+    <div class="btn-grid4">
+      <button class="icon-toggle" data-align="right">◄ دائیں</button>
+      <button class="icon-toggle" data-align="center">◆ درمیان</button>
+      <button class="icon-toggle" data-align="left">► بائیں</button>
+      <button class="icon-toggle" data-align="justify">▤ برابر</button>
+    </div>
+  </div>
+
+  <div id="panel-theme" style="display:none;">
+    <h2>پس منظر / پوسٹر تھیم <button data-close="1">✕</button></h2>
+    <div id="themeGrid" style="margin-top:20px;"></div>
+    <span class="field-label" style="margin-top:20px;">اس تھیم کا رنگ ہلکا / گہرا کریں</span>
+    <input type="range" id="rngPaperBrightness" min="55" max="145" value="100">
+    <div class="row-between"><span id="rngPaperBrightnessVal">100%</span><span>چمک</span></div>
+  </div>
+
+  <div id="panel-pageborder" style="display:none;">
+    <h2>صفحے کا بارڈر (فوری جھلک) <button data-close="1">✕</button></h2>
+    <span class="field-label">یہ فوری طور پر صفحے پر لگے گا تاکہ آپ دیکھ سکیں کیسا لگتا ہے</span>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+      <button class="pill-btn primary" data-pborder="none">بغیر بارڈر</button>
+      <button class="pill-btn" data-pborder="thin">پتلا</button>
+      <button class="pill-btn" data-pborder="thick">موٹا</button>
+      <button class="pill-btn" data-pborder="double">ڈبل لائن</button>
+      <button class="pill-btn" data-pborder="dotted">نقطے دار</button>
+      <button class="pill-btn" data-pborder="rounded-gold">گول سنہری</button>
+      <button class="pill-btn" data-pborder="shadow">سایہ دار</button>
+      <button class="pill-btn" data-pborder="ornate">شاہی ڈبل</button>
+    </div>
+    <div class="hint" style="margin-top:12px;">یہی بارڈر PDF بناتے وقت بھی منتخب کر سکتے ہیں (وہاں الگ سے چننا ہوگا) — یہ صرف اسکرین پر دیکھنے کے لیے ہے۔</div>
+  </div>
+
+  <div id="panel-apptheme" style="display:none;">
+    <h2>ایپ کا مجموعی تھیم <button data-close="1">✕</button></h2>
+    <span class="field-label">رنگ سکیم</span>
+    <div id="appThemeGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
+    <span class="field-label" style="margin-top:18px;">ایپ کا رنگ ہلکا / گہرا کریں</span>
+    <input type="range" id="rngAppLightness" min="72" max="97" value="92">
+    <div class="row-between"><span id="rngAppLightnessVal">92%</span><span>روشنی</span></div>
+    <div class="hint">یہ پورے ایپ (بار، پینل، بٹن) کے بیک گراؤنڈ پر لاگو ہوگا — لکھائی والا صفحہ الگ سے "پس منظر" میں سیٹ ہوتا ہے۔</div>
+  </div>
+
+  <div id="panel-punct" style="display:none;">
+    <h2>اوقاف اور علامات <button data-close="1">✕</button></h2>
+    <div class="hint" style="margin-top:-8px;margin-bottom:12px;">جہاں کرسر ہو وہاں علامت شامل ہو جائے گی۔</div>
+    <div id="punctGrid"></div>
+  </div>
+
+  <div id="panel-zoom" style="display:none;">
+    <h2>زوم <button data-close="1">✕</button></h2>
+    <span class="field-label">صفحہ بڑا / چھوٹا کریں</span>
+    <input type="range" id="rngZoom" min="50" max="400" value="100">
+    <div class="row-between"><span id="zoomVal">100%</span><span></span></div>
+  </div>
+
+  <div id="panel-export" style="display:none;">
+    <h2>محفوظ / شیئر کریں <button data-close="1">✕</button></h2>
+    <button class="pill-btn primary" style="width:100%;margin-bottom:10px;" id="btnExportImg2">📷 بطور تصویر محفوظ کریں</button>
+    <button class="pill-btn" style="width:100%;margin-bottom:10px;" id="btnShare"><svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;vertical-align:-2px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> شیئر کریں (واٹس ایپ وغیرہ)</button>
+    <button class="pill-btn" style="width:100%;margin-bottom:10px;" id="btnPrint">🖨️ پرنٹ / PDF</button>
+    <button class="pill-btn" style="width:100%;" id="btnSaveDraft2">💾 ڈرافٹ محفوظ کریں</button>
+    <div class="hint">ڈرافٹ اسی براؤزر میں محفوظ ہوتا ہے۔ اگلی بار یہ فائل کھولنے پر خودکار لوڈ ہونے کی کوشش کرے گا۔</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ===== ہاتھ کی تحریر ماڈیول ===== -->
+<div class="fs-modal" id="hwModal">
+  <div class="fs-head">
+    <h2>ہاتھ کی تحریر — دستی نقل (تصویر دیکھ کر ٹائپ کریں)</h2>
+    <button id="hwClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body">
+    <div class="hw-panes">
+      <div class="hw-pane">
+        <div class="hw-pane-head">
+          <span>تصویر</span>
+          <span class="zoom-ctl">
+            <button id="hwImgMinus">–</button>
+            <input type="range" id="hwImgZoom" min="50" max="400" value="100">
+            <button id="hwImgPlus">+</button>
+            <span id="hwImgZoomVal">100%</span>
+          </span>
+        </div>
+        <div class="hw-view" id="hwView">
+          <div id="hwDrop">
+            <span>ہاتھ کی تحریر والی تصویر یہاں دکھائی جائے گی</span>
+            <button type="button" class="gallery-btn" id="hwGalleryBtn">🖼️ گیلری سے تصویر منتخب کریں</button>
+            <span style="font-size:11px;">یا تصویر کاپی کر کے یہاں پیسٹ کریں (Ctrl+V)</span>
+            <input type="file" id="hwFile" accept="image/*" style="display:none">
+          </div>
+          <div id="hwImageWrap" style="display:none;">
+            <canvas id="hwBaseCanvas"></canvas>
+            <canvas id="hwDrawCanvas"></canvas>
+          </div>
+        </div>
+        <div class="hw-annot-bar">
+          <span style="color:#123a68;font-size:11.5px;">☀️ برائٹنس</span>
+          <input type="range" id="hwBright" min="50" max="200" value="100" style="width:70px;">
+          <span style="color:#123a68;font-size:11.5px;">◑ کنٹراسٹ</span>
+          <input type="range" id="hwContrast" min="50" max="200" value="100" style="width:70px;">
+          <button id="hwAutoEnhance">✨ خودکار صاف کریں</button>
+          <button id="hwResetEnhance">↺ اصل حالت</button>
+        </div>
+        <div class="hw-annot-bar">
+          <button id="hwToolView" class="active">✋ دیکھیں</button>
+          <button id="hwToolPen">🖊️ قلم (نشان)</button>
+          <button id="hwToolHi">🖍️ ہائی لائٹ</button>
+          <button id="hwToolEraser">🧽 مٹائیں</button>
+          <button id="hwClearMarks">🗑️ نشانات صاف</button>
+          <button id="hwShareMarked"><svg viewBox="0 0 24 24" fill="currentColor" style="width:12px;height:12px;vertical-align:-1px;"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg> نشان زدہ تصویر بھیجیں</button>
+        </div>
+        <div style="padding:8px 10px;border-top:1px solid #aed6f7;">
+          <button class="pill-btn" id="hwChangeImg" style="width:100%;">🖼️ گیلری سے دوسری تصویر منتخب کریں</button>
+        </div>
+      </div>
+      <div class="hw-pane">
+        <div class="hw-pane-head">
+          <span>نستعلیق میں لکھیں (تصویر دیکھ کر درست کریں)</span>
+          <span class="zoom-ctl">
+            <button id="hwTxtMinus">–</button>
+            <input type="range" id="hwTxtZoom" min="50" max="400" value="100">
+            <button id="hwTxtPlus">+</button>
+            <span id="hwTxtZoomVal">100%</span>
+          </span>
+        </div>
+        <div id="hwTextWrap">
+          <div id="hwText" contenteditable="true" data-placeholder="یہاں تصویر دیکھ کر ٹائپ کریں…"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fs-foot">
+    <button class="pill-btn primary" id="hwInsertPage" style="flex:1;">مرکزی صفحے میں شامل کریں</button>
+    <button class="pill-btn" id="hwSaveBookPage" style="flex:1;">کتاب کے نئے صفحے میں محفوظ کریں</button>
+  </div>
+</div>
+
+<!-- ===== کتاب ماڈیول ===== -->
+<div class="fs-modal" id="bookModal">
+  <div class="fs-head">
+    <h2>کتاب — صفحات</h2>
+    <button id="bookClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body">
+    <div id="bookGrid"></div>
+  </div>
+  <div class="fs-foot">
+    <button class="pill-btn primary" id="bookNewPage" style="flex:1;">نیا صفحہ شروع کریں</button>
+    <button class="pill-btn" id="bookSaveCurrent" style="flex:1;">موجودہ صفحہ کتاب میں محفوظ کریں</button>
+    <button class="pill-btn" id="bookExportPdf" style="flex:1;">📄 پوری کتاب PDF بنائیں</button>
+  </div>
+</div>
+
+<!-- ===== PDF ترتیب / پریویو ===== -->
+<div class="fs-modal" id="historyModal">
+  <div class="fs-head">
+    <h2>ڈرافٹ ریکارڈ — پچھلے محفوظ شدہ نسخے</h2>
+    <button id="historyClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body">
+    <div class="hint" style="margin-bottom:10px;">یہ اسی فون/براؤزر پر محفوظ ہوتے ہیں — GitHub لنک سے کھولیں تو ہمیشہ ملیں گے۔</div>
+    <button class="pill-btn" id="historyClearAll" style="width:100%;margin-bottom:10px;background:#c0392b;color:#fff;border-color:#c0392b;">🗑️ سارا ریکارڈ صاف کریں</button>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<div class="fs-modal" id="pdfModal">
+  <div class="fs-head">
+    <h2>PDF ترتیب — پورا A4 صفحہ <span id="pdfSummaryTag" style="font-size:10.5px;color:var(--gold-soft);background:var(--panel-bg-2);border:1px solid var(--border-2);border-radius:7px;padding:2px 6px;margin-inline-start:6px;">پورٹریٹ · بغیر بارڈر</span></h2>
+    <button id="pdfClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body pdf-body">
+    <div class="pdf-preview-area">
+      <div id="pdfPageCount" style="text-align:center;color:#123a68;font-size:12.5px;font-weight:600;margin-bottom:6px;">حساب لگایا جا رہا ہے…</div>
+      <div id="pdfPreviewWrap" style="overflow:auto;flex:1;min-height:0;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
+        <img id="pdfPreviewImg" style="max-width:none;transition:width .15s;" />
+      </div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px;">
+        <button id="pdfPrevPage" class="pill-btn">◄ پچھلا صفحہ</button>
+        <span id="pdfPreviewNavLabel" style="color:#123a68;font-size:13px;font-weight:600;">صفحہ 1 / 1</span>
+        <button id="pdfNextPage" class="pill-btn">اگلا صفحہ ►</button>
+      </div>
+    </div>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-align">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صف بندی</div>
+        <div class="btn-grid4">
+          <button class="icon-toggle" data-pdf-align="right">◄ دائیں</button>
+          <button class="icon-toggle" data-pdf-align="center">◆ درمیان</button>
+          <button class="icon-toggle" data-pdf-align="left">► بائیں</button>
+          <button class="icon-toggle" data-pdf-align="justify">▤ برابر</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-border">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صفحے کا بارڈر</div>
+        <div class="pdf-mini-grid">
+          <button class="pill-btn primary" data-border="none">بغیر بارڈر</button>
+          <button class="pill-btn" data-border="thin">پتلا</button>
+          <button class="pill-btn" data-border="thick">موٹا</button>
+          <button class="pill-btn" data-border="double">ڈبل لائن</button>
+          <button class="pill-btn" data-border="floral">پھولوں والا</button>
+          <button class="pill-btn" data-border="rounded-gold">گول سنہری</button>
+          <button class="pill-btn" data-border="dotted">نقطے دار</button>
+          <button class="pill-btn" data-border="corner">صرف کونے</button>
+          <button class="pill-btn" data-border="shadow">سایہ دار</button>
+          <button class="pill-btn" data-border="ornate">شاہی ڈبل</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-orient">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صفحے کا رخ</div>
+        <div style="display:flex;gap:10px;">
+          <button class="pill-btn primary" id="pdfPortrait" style="flex:1;">📄 پورٹریٹ</button>
+          <button class="pill-btn" id="pdfLandscape" style="flex:1;">📃 لینڈ اسکیپ</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-size">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">پرنٹ کے لیے لکھائی کا سائز (اصل تحریر تبدیل نہیں ہوگی)</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="color:#2f6690;font-size:12px;">A</span>
+          <input type="range" id="pdfFontSize" min="14" max="44" value="24" style="flex:1;">
+          <span style="color:#2f6690;font-size:16px;">A</span>
+          <span id="pdfFontSizeVal" style="color:#123a68;font-size:12px;min-width:34px;">24px</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-ctrl-panel" id="pdfPanel-zoom">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">صفحے کے پریویو کا زوم</div>
+        <div style="display:flex;align-items:center;gap:14px;justify-content:center;">
+          <button id="pdfPrevZoomMinus" style="width:32px;height:32px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;font-size:16px;">–</button>
+          <span id="pdfZoomLbl" style="color:#123a68;font-size:13px;font-weight:600;min-width:44px;text-align:center;">100%</span>
+          <button id="pdfPrevZoomPlus" style="width:32px;height:32px;border-radius:50%;border:1px solid #7fc0f0;background:#d3ecff;color:#123a68;font-size:16px;">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-ctrl-grid">
+      <button class="pdf-ctrl-btn" data-pdfpanel="align"><span class="ic">☰</span>صف بندی</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="border"><span class="ic">🖼️</span>بارڈر</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="orient"><span class="ic">⤢</span>رخ</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="size"><span class="ic">Aa</span>سائز</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="zoom"><span class="ic">🔍</span>زوم</button>
+    </div>
+  </div>
+  <div class="fs-foot">
+    <button class="pill-btn primary" id="pdfConfirmSave" style="flex:1;">✅ اسی ترتیب سے PDF محفوظ کریں</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+const FONTS = [
+  { id:'jameel', label:'جمیل نوری نستعلیق', family:"'Jameel Noori Nastaleeq'", sample:'آزاد' },
+  { id:'noto',   label:'Noto Nastaliq Urdu', family:"'Noto Nastaliq Urdu','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'noto-medium', label:'Noto Nastaliq Urdu (میڈیم)', family:"'Noto Nastaliq Urdu Medium','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'noto-bold', label:'Noto Nastaliq Urdu (بولڈ)', family:"'Noto Nastaliq Urdu Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'pdms-multan', label:'PDMS ملتان', family:"'PDMS Multan','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'sameer-qamri', label:'سمیر قمری', family:"'Sameer Qamri','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'alfars-aban', label:'الفارس ابان', family:"'Al Fars Aban','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'syalbiyah', label:'سیالبیہ', family:"'Syalbiyah','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'jameel-new', label:'جمیل نوری نستعلیق (نیا)', family:"'Jameel Noori Nastaleeq New','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'jameel-kasheeda', label:'جمیل نوری نستعلیق کشیدہ', family:"'Jameel Noori Nastaleeq Kasheeda','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'aa-sameer-almas', label:'اے اے سمیر الماس', family:"'AA Sameer Almas','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'font-300', label:'فونٹ 300', family:"'300 Regular','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'retro-floral', label:'ریٹرو فلورل', family:"'Retro Floral','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'qilka-bold', label:'قلقہ بولڈ', family:"'Qilka Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'qobliyah', label:'قبلیہ', family:"'Qobliyah','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'lutfey', label:'لطفی عربی', family:"'Lutfey Arabic','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'lutfey-outline', label:'لطفی آؤٹ لائن', family:"'Lutfey Arabic Outline','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'tufuli', label:'طفولی عربی', family:"'Tufuli Arabic','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'tufuli-bold', label:'طفولی بولڈ', family:"'Tufuli Arabic Bold','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'signatie', label:'سگنیشی', family:"'Signatie','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'delik', label:'ڈیلک', family:"'Delik','Jameel Noori Nastaleeq',serif", sample:'آزاد' },
+  { id:'atpinko', label:'AT Pinko', family:"'AT Pinko',sans-serif", sample:'Sample Aa' },
+  { id:'atpinko-bold', label:'AT Pinko بولڈ', family:"'AT Pinko Bold',sans-serif", sample:'Sample Aa' },
+  { id:'naskh',  label:'عام نسخ (سسٹم)', family:"'Traditional Arabic','Noto Naskh Arabic',serif", sample:'آزاد' },
+  { id:'sans',   label:'سادہ (Tahoma طرز)', family:"Tahoma,'Segoe UI',sans-serif", sample:'آزاد' },
+  { id:'en-arial', label:'Arial', family:"Arial,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-arialblack', label:'Arial Black', family:"'Arial Black',Arial,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-calibri', label:'Calibri', family:"Calibri,'Segoe UI',sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-georgia', label:'Georgia', family:"Georgia,serif", sample:'Sample Aa', group:'en' },
+  { id:'en-times', label:'Times New Roman', family:"'Times New Roman',Times,serif", sample:'Sample Aa', group:'en' },
+  { id:'en-verdana', label:'Verdana', family:"Verdana,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-trebuchet', label:'Trebuchet MS', family:"'Trebuchet MS',sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-impact', label:'Impact', family:"Impact,'Arial Black',sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-courier', label:'Courier New (موٹائی برابر)', family:"'Courier New',monospace", sample:'Sample Aa', group:'en' },
+  { id:'en-comic', label:'Comic Sans MS', family:"'Comic Sans MS',cursive,sans-serif", sample:'Sample Aa', group:'en' },
+  { id:'en-palatino', label:'Palatino', family:"Palatino,'Palatino Linotype',serif", sample:'Sample Aa', group:'en' },
+  { id:'en-garamond', label:'Garamond', family:"Garamond,serif", sample:'Sample Aa', group:'en' }
+];
+
+const APP_THEMES = [
+  {id:'blue',   label:'نیلا',     panelBg:'#eaf5ff', gold:'#1e88e5', goldSoft:'#2f6690'},
+  {id:'green',  label:'سبز',      panelBg:'#eafff2', gold:'#16a34a', goldSoft:'#1f7a4d'},
+  {id:'purple', label:'جامنی',    panelBg:'#f3ecff', gold:'#8b5cf6', goldSoft:'#6d3fc0'},
+  {id:'amber',  label:'گرم امبر', panelBg:'#fff6e6', gold:'#f59e0b', goldSoft:'#b8720a'},
+  {id:'rose',   label:'گلابی',    panelBg:'#fff0f4', gold:'#e11d75', goldSoft:'#b81361'},
+  {id:'slate',  label:'خاکستری',  panelBg:'#f1f5f9', gold:'#475569', goldSoft:'#334155'}
+];
+function hexToHsl(hex){
+  hex = hex.replace('#','');
+  let r=parseInt(hex.substr(0,2),16)/255, g=parseInt(hex.substr(2,2),16)/255, b=parseInt(hex.substr(4,2),16)/255;
+  let max=Math.max(r,g,b), min=Math.min(r,g,b), h,s,l=(max+min)/2;
+  if(max===min){ h=s=0; }
+  else{
+    const d=max-min;
+    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+    if(max===r) h=(g-b)/d+(g<b?6:0);
+    else if(max===g) h=(b-r)/d+2;
+    else h=(r-g)/d+4;
+    h/=6;
+  }
+  return [h*360, s*100, l*100];
+}
+function hslToHex(h,s,l){
+  h/=360; s/=100; l/=100;
+  let r,g,b;
+  if(s===0){ r=g=b=l; }
+  else{
+    const hue2rgb=(p,q,t)=>{
+      if(t<0)t+=1; if(t>1)t-=1;
+      if(t<1/6) return p+(q-p)*6*t;
+      if(t<1/2) return q;
+      if(t<2/3) return p+(q-p)*(2/3-t)*6;
+      return p;
+    };
+    const q = l<0.5 ? l*(1+s) : l+s-l*s;
+    const p = 2*l-q;
+    r=hue2rgb(p,q,h+1/3); g=hue2rgb(p,q,h); b=hue2rgb(p,q,h-1/3);
+  }
+  const toHex=x=>Math.round(Math.max(0,Math.min(1,x))*255).toString(16).padStart(2,'0');
+  return '#'+toHex(r)+toHex(g)+toHex(b);
+}
+let currentAppTheme = APP_THEMES[0];
+function applyAppTheme(theme, lightnessOverride){
+  currentAppTheme = theme;
+  const [h,s,l0] = hexToHsl(theme.panelBg);
+  const l = lightnessOverride!==undefined ? lightnessOverride : l0;
+  const bg = hslToHex(h, s, l);
+  const bg2 = hslToHex(h, s, Math.max(4, l - 8));
+  const border1 = hslToHex(h, Math.min(100, s+10), Math.max(10, l - 20));
+  const border2 = hslToHex(h, Math.min(100, s+15), Math.max(10, l - 32));
+  const textDark = hslToHex(h, Math.min(100, s+20), Math.max(8, Math.min(30, l - 60)));
+  const textMuted2 = hslToHex(h, Math.max(15, s-10), Math.max(15, Math.min(45, l - 45)));
+  const topbarGrad1 = hslToHex(h, s, Math.min(96, l + 4));
+  document.documentElement.style.setProperty('--panel-bg', bg);
+  document.documentElement.style.setProperty('--panel-bg-2', bg2);
+  document.documentElement.style.setProperty('--gold', theme.gold);
+  document.documentElement.style.setProperty('--gold-soft', theme.goldSoft);
+  document.documentElement.style.setProperty('--border-1', border1);
+  document.documentElement.style.setProperty('--border-2', border2);
+  document.documentElement.style.setProperty('--text-dark', textDark);
+  document.documentElement.style.setProperty('--text-muted', theme.goldSoft);
+  document.documentElement.style.setProperty('--text-muted2', textMuted2);
+  document.documentElement.style.setProperty('--topbar-grad-1', topbarGrad1);
+  document.documentElement.style.setProperty('--topbar-grad-2', bg2);
+  document.getElementById('rngAppLightness').value = Math.round(l);
+  document.getElementById('rngAppLightnessVal').textContent = Math.round(l)+'%';
+}
+
+const THEMES = [
+  {id:'paper', label:'کاغذی'}, {id:'ivory', label:'ہاتھی دانت'}, {id:'gold', label:'سنہری کنارہ'},
+  {id:'sand', label:'ریگستانی'}, {id:'marble', label:'سنگ مرمر'}, {id:'ink', label:'روشنائی'},
+  {id:'night', label:'رات'}, {id:'maroon', label:'شاہی سرخ'}, {id:'emerald', label:'زمرد'},
+  {id:'teal', label:'فیروزی'}, {id:'desert', label:'صحرا'}, {id:'charcoal', label:'سرمئی'},
+  {id:'rose', label:'گلابی'}, {id:'indigo', label:'نیلگوں'}, {id:'forest', label:'جنگل'}, {id:'plum', label:'بینگنی'}
+];
+
+const COLORS = ['#241a12','#ffffff','#6b1f2a','#0f2e26','#b8862f','#1b2c46','#4a1420','#241833'];
+
+const PUNCT = ['،','۔','؟','!',':','؛','-','–','—','"','\u0022','٪','٫','ء','ّ','ْ'];
+
+const canvasText = document.getElementById('canvasText');
+canvasText.setAttribute('spellcheck', 'false');
+canvasText.setAttribute('autocorrect', 'off');
+canvasText.setAttribute('autocapitalize', 'off');
+canvasText.addEventListener('paste', (e)=>{
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+  document.execCommand('insertText', false, text);
+});
+const paper = document.getElementById('paper');
+const drawer = document.getElementById('drawer');
+const rail = document.getElementById('rail');
+
+/* ---------- init font list ---------- */
+const fontListEl = document.getElementById('fontList');
+FONTS.forEach(f=>{
+  const div = document.createElement('div');
+  div.className = 'font-option';
+  div.dataset.font = f.family;
+  div.innerHTML = `<span>${f.label}</span><span class="sample" style="font-family:${f.family}">${f.sample||'آزاد'}</span>`;
+  div.onclick = ()=> applyFont(f.family, div);
+  fontListEl.appendChild(div);
+});
+
+/* موجودہ منتخب فونٹ یاد رکھنے کے لیے (پہلے select استعمال ہوتا تھا، اب ویل سسٹم استعمال ہوتا ہے) */
+let selFontValue = FONTS[0].family;
+
+/* ---------- init theme grid ---------- */
+const themeGrid = document.getElementById('themeGrid');
+const rngPaperBrightness = document.getElementById('rngPaperBrightness');
+THEMES.forEach(t=>{
+  const el = document.createElement('div');
+  el.className = 'theme-swatch theme-'+t.id;
+  el.style.marginBottom = '18px';
+  el.innerHTML = `<span>${t.label}</span>`;
+  el.onclick = ()=>{
+    document.querySelectorAll('.theme-swatch').forEach(s=>s.classList.remove('selected'));
+    el.classList.add('selected');
+    paper.className = 'theme-'+t.id;
+    rngPaperBrightness.value = 100;
+    document.getElementById('rngPaperBrightnessVal').textContent = '100%';
+    paper.style.filter = '';
+  };
+  if(t.id==='paper') el.classList.add('selected');
+  themeGrid.appendChild(el);
+});
+rngPaperBrightness.oninput = ()=>{
+  const v = rngPaperBrightness.value;
+  document.getElementById('rngPaperBrightnessVal').textContent = v+'%';
+  paper.style.filter = 'brightness(' + v + '%)';
+};
+
+/* ---------- init app-wide theme grid ---------- */
+const appThemeGrid = document.getElementById('appThemeGrid');
+APP_THEMES.forEach(t=>{
+  const btn = document.createElement('button');
+  btn.className = 'pill-btn';
+  btn.style.cssText = 'display:flex;align-items:center;gap:6px;justify-content:center;';
+  btn.innerHTML = `<span style="width:14px;height:14px;border-radius:50%;background:${t.gold};display:inline-block;border:1px solid rgba(0,0,0,.15);"></span>${t.label}`;
+  btn.onclick = ()=> applyAppTheme(t);
+  appThemeGrid.appendChild(btn);
+});
+document.getElementById('rngAppLightness').oninput = (e)=>{
+  applyAppTheme(currentAppTheme, +e.target.value);
+};
+
+/* ---------- live page border preview (screen only) ---------- */
+function applyPageBorderCSS(style){
+  paper.style.borderRadius = '4px';
+  paper.style.outline = 'none';
+  paper.style.boxShadow = '0 20px 60px rgba(0,0,0,.45)';
+  switch(style){
+    case 'none': paper.style.border = 'none'; break;
+    case 'thin': paper.style.border = '2px solid #b8923f'; break;
+    case 'thick': paper.style.border = '7px solid #b8923f'; break;
+    case 'double': paper.style.border = '5px double #b8923f'; break;
+    case 'dotted': paper.style.border = '3px dotted #b8923f'; break;
+    case 'rounded-gold': paper.style.border = '6px solid #b8923f'; paper.style.borderRadius = '26px'; break;
+    case 'shadow': paper.style.border = '2px solid #b8923f'; paper.style.boxShadow = '0 20px 60px rgba(0,0,0,.55), 0 0 0 10px rgba(184,146,63,.15)'; break;
+    case 'ornate': paper.style.border = '5px solid #b8923f'; paper.style.outline = '2px solid #b8923f'; paper.style.outlineOffset = '6px'; break;
+  }
+}
+document.querySelectorAll('[data-pborder]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-pborder]').forEach(b=> b.classList.remove('primary'));
+    btn.classList.add('primary');
+    applyPageBorderCSS(btn.dataset.pborder);
+    if(typeof pdfBorderStyle !== 'undefined'){
+      pdfBorderStyle = btn.dataset.pborder;
+      const pdfBtn = document.querySelector('[data-border="'+btn.dataset.pborder+'"]');
+      if(pdfBtn){
+        document.querySelectorAll('[data-border]').forEach(b=> b.classList.remove('primary'));
+        pdfBtn.classList.add('primary');
+      }
+    }
+  };
+});
+
+/* ---------- free-position draggable text ---------- */
+document.getElementById('selFreePos').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selFreePos').onclick = ()=>{
+  let sel = window.getSelection();
+  if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
+     savedRange && canvasText.contains(savedRange.startContainer)){
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+  if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
+    showToast('پہلے وہ لفظ/سطر منتخب کریں');
+    return;
+  }
+  if(typeof captureSnapshot === 'function') captureSnapshot();
+  const range = sel.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+  const paperRect = canvasText.getBoundingClientRect();
+  const box = document.createElement('div');
+  box.className = 'free-pos-box';
+  try{ range.surroundContents(box); }
+  catch(e){ const frag = range.extractContents(); box.appendChild(frag); range.insertNode(box); }
+  box.style.position = 'absolute';
+  box.style.left = ((rect.left - paperRect.left) / paperRect.width * 100) + '%';
+  box.style.top = ((rect.top - paperRect.top) / paperRect.height * 100) + '%';
+  box.style.cursor = 'move';
+  box.style.zIndex = 20;
+  box.style.touchAction = 'none';
+  box.style.outline = '1.5px dashed #1e88e5';
+  box.style.padding = '2px 4px';
+  const doneBtn = document.createElement('span');
+  doneBtn.textContent = '✓';
+  doneBtn.className = 'free-pos-done';
+  doneBtn.title = 'مکمل — یہاں سے باہر آئیں';
+  doneBtn.onmousedown = (e)=>{ e.preventDefault(); e.stopPropagation(); };
+  doneBtn.onclick = (e)=>{
+    e.preventDefault(); e.stopPropagation();
+    releaseFreeBox(box);
+    activeFreeBox = null;
+    canvasText.focus();
+    const r = document.createRange();
+    try{
+      r.setStartAfter(box);
+      r.collapse(true);
+    }catch(err){
+      r.selectNodeContents(box);
+      r.collapse(false);
+    }
+    const s = window.getSelection();
+    s.removeAllRanges(); s.addRange(r);
+    box.scrollIntoView({block:'nearest'});
+    showToast('مکمل — اب یہ عام تحریر کا حصہ ہے');
+  };
+  box.appendChild(doneBtn);
+  makeBoxDraggable(box);
+  activeFreeBox = box;
+  sel.removeAllRanges();
+  showToast('اب اسے پکڑ کر جہاں چاہیں لے جائیں، مکمل ہو تو ✓ دبائیں');
+};
+let activeFreeBox = null;
+function releaseFreeBox(box){
+  box.classList.add('placed');
+  box.style.position = '';
+  box.style.left = '';
+  box.style.top = '';
+  box.style.zIndex = '';
+  box.style.cursor = '';
+  box.style.touchAction = '';
+  box.style.outline = 'none';
+  box.style.padding = '';
+  const doneBtn = box.querySelector('.free-pos-done');
+  if(doneBtn) doneBtn.remove();
+}
+document.getElementById('btnReleaseAllBoxes').onmousedown = (e)=> e.preventDefault();
+document.getElementById('btnReleaseAllBoxes').onclick = ()=>{
+  const boxes = canvasText.querySelectorAll('.free-pos-box');
+  if(!boxes.length){ showToast('کوئی آزاد باکس موجود نہیں'); return; }
+  if(typeof captureSnapshot === 'function') captureSnapshot();
+  boxes.forEach(b=> releaseFreeBox(b));
+  activeFreeBox = null;
+  if(typeof captureSnapshot === 'function') captureSnapshot();
+  showToast(boxes.length + ' آزاد باکس واپس عام تحریر میں مل گئے — اب سلیکشن ٹھیک ہونی چاہیے');
+};
+function makeBoxDraggable(box){
+  let dragging = false, sx=0, sy=0, ol=0, ot=0;
+  box.addEventListener('pointerdown', (e)=>{
+    e.preventDefault();
+    activeFreeBox = box;
+    dragging = true;
+    sx = e.clientX; sy = e.clientY;
+    const paperRect = canvasText.getBoundingClientRect();
+    ol = parseFloat(box.style.left)/100 * paperRect.width || 0;
+    ot = parseFloat(box.style.top)/100 * paperRect.height || 0;
+    box.setPointerCapture(e.pointerId);
+  });
+  box.addEventListener('pointermove', (e)=>{
+    if(!dragging) return;
+    e.preventDefault();
+    const paperRect = canvasText.getBoundingClientRect();
+    let newLeft = ol + (e.clientX - sx);
+    let newTop = ot + (e.clientY - sy);
+    newLeft = Math.max(0, Math.min(Math.max(0,paperRect.width - box.offsetWidth), newLeft));
+    newTop = Math.max(0, Math.min(Math.max(0,paperRect.height - box.offsetHeight), newTop));
+    box.style.left = (newLeft / paperRect.width * 100) + '%';
+    box.style.top = (newTop / paperRect.height * 100) + '%';
+  });
+  function endDrag(e){
+    if(!dragging) return;
+    dragging = false;
+    try{ box.releasePointerCapture(e.pointerId); }catch(err){}
+    if(typeof captureSnapshot === 'function') captureSnapshot();
+    if(typeof scheduleAutoSave === 'function') scheduleAutoSave();
+  }
+  box.addEventListener('pointerup', endDrag);
+  box.addEventListener('pointercancel', endDrag);
+}
+
+/* ---------- init color row ---------- */
+const colorRow = document.getElementById('colorRow');
+COLORS.forEach(c=>{
+  const sw = document.createElement('div');
+  sw.className='swatch'; sw.style.background=c;
+  sw.onclick = ()=>{
+    document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('selected'));
+    sw.classList.add('selected');
+    styleSelection(st=> st.color = c, ()=> canvasText.style.color = c);
+  };
+  colorRow.appendChild(sw);
+});
+
+/* ---------- init punctuation grid ---------- */
+const punctGrid = document.getElementById('punctGrid');
+PUNCT.forEach(ch=>{
+  const b = document.createElement('button');
+  b.className='punct-btn'; b.textContent = ch;
+  b.onclick = ()=>{ canvasText.focus(); document.execCommand('insertText', false, ch); };
+  punctGrid.appendChild(b);
+});
+
+/* ---------- rail / drawer toggling ---------- */
+document.querySelectorAll('.rail-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    const panel = btn.dataset.panel;
+    const isOpen = drawer.classList.contains('open') && btn.classList.contains('active');
+    document.querySelectorAll('.rail-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('#drawer > div').forEach(p=>p.style.display='none');
+    if(isOpen){ drawer.classList.remove('open'); return; }
+    btn.classList.add('active');
+    document.getElementById('panel-'+panel).style.display='block';
+    drawer.classList.add('open');
+  };
+});
+document.querySelectorAll('[data-close]').forEach(b=> b.onclick = ()=>{
+  drawer.classList.remove('open');
+  document.querySelectorAll('.rail-btn').forEach(b=>b.classList.remove('active'));
+});
+
+/* remember the last real (non-collapsed) selection inside canvasText, since opening
+   the drawer/panels moves focus away and collapses the live browser selection */
+let savedRange = null;
+document.addEventListener('selectionchange', ()=>{
+  const s = window.getSelection();
+  if(s.rangeCount && !s.isCollapsed && canvasText.contains(s.anchorNode) && canvasText.contains(s.focusNode)){
+    savedRange = s.getRangeAt(0).cloneRange();
+    if(typeof fitLineSpan !== 'undefined' && fitLineSpan && !fitLineSpan.contains(s.anchorNode)){
+      fitLineSpan = null;
+    }
+  }
+});
+
+/* ---------- generic: wrap current selection in styled span, or apply globally ---------- */
+function styleSelection(applyToSpanStyle, applyGlobalFn){
+  let sel = window.getSelection();
+  if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
+     savedRange && canvasText.contains(savedRange.startContainer)){
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+  if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
+    applyGlobalFn();
+    return;
+  }
+  const range = sel.getRangeAt(0);
+
+  /* اگر منتخب حصہ عین ہمارے پہلے بنائے ہوئے کسی span کے برابر ہے تو نیا span بنا کر نیسٹ کرنے کے بجائے
+     اسی موجودہ span کو اپڈیٹ کریں — بار بار فونٹ/سائز بدلنے پر یہ مستحکم اور قابلِ بھروسہ رہتا ہے */
+  let existing = range.commonAncestorContainer;
+  if(existing.nodeType === 3) existing = existing.parentElement;
+  if(existing && existing.tagName === 'SPAN' && canvasText.contains(existing) && existing !== canvasText &&
+     range.toString().length > 0 && range.toString() === existing.textContent){
+    applyToSpanStyle(existing.style);
+    sel.removeAllRanges();
+    const nr0 = document.createRange();
+    nr0.selectNodeContents(existing);
+    sel.addRange(nr0);
+    savedRange = nr0.cloneRange();
+    return;
+  }
+
+  const span = document.createElement('span');
+  applyToSpanStyle(span.style);
+  try{
+    range.surroundContents(span);
+  }catch(e){
+    const frag = range.extractContents();
+    span.appendChild(frag);
+    range.insertNode(span);
+  }
+  sel.removeAllRanges();
+  const nr = document.createRange();
+  nr.selectNodeContents(span);
+  sel.addRange(nr);
+  savedRange = nr.cloneRange();
+}
+
+function applyFont(family, optionEl){
+  document.querySelectorAll('.font-option').forEach(o=>o.classList.remove('selected'));
+  if(optionEl) optionEl.classList.add('selected');
+  styleSelection(
+    st => st.fontFamily = family,
+    () => canvasText.style.fontFamily = family
+  );
+  selFontValue = family;
+  showToast('فونٹ لاگو ہو گیا');
+}
+
+/* ---------- style panel: size / weight / word spacing ---------- */
+const rngSize = document.getElementById('rngSize');
+const rngSizeVal = document.getElementById('rngSizeVal');
+rngSize.oninput = ()=>{
+  rngSizeVal.textContent = rngSize.value+'px';
+  styleSelection(st=> st.fontSize = rngSize.value+'px', ()=> canvasText.style.fontSize = rngSize.value+'px');
+};
+
+const rngWeight = document.getElementById('rngWeight');
+const rngWeightVal = document.getElementById('rngWeightVal');
+const weightNames = {200:'پتلا',300:'پتلا',400:'عام',500:'عام',600:'گہرا',700:'بولڈ',800:'بہت بولڈ'};
+rngWeight.oninput = ()=>{
+  rngWeightVal.textContent = weightNames[rngWeight.value] || rngWeight.value;
+  styleSelection(st=> st.fontWeight = rngWeight.value, ()=> canvasText.style.fontWeight = rngWeight.value);
+};
+
+const rngWordSpace = document.getElementById('rngWordSpace');
+rngWordSpace.oninput = ()=>{
+  styleSelection(st=> st.wordSpacing = rngWordSpace.value+'px', ()=> canvasText.style.wordSpacing = rngWordSpace.value+'px');
+};
+
+/* ---------- align ---------- */
+document.querySelectorAll('[data-align]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-align]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const val = btn.dataset.align;
+    const sel = window.getSelection();
+    if(sel.rangeCount && !sel.isCollapsed && canvasText.contains(sel.anchorNode)){
+      let node = sel.anchorNode;
+      while(node && node !== canvasText && node.parentElement !== canvasText) node = node.parentElement;
+      if(node && node !== canvasText) node.style.textAlign = val;
+      else canvasText.style.textAlign = val;
+    } else {
+      canvasText.style.textAlign = val;
+    }
+  };
+});
+
+/* ---------- line spacing: direct +/- (can decrease to close up gaps) ---------- */
+let curLineSpace = parseFloat(canvasText.style.lineHeight) || 2.1;
+document.getElementById('selLineSpaceMinus').onclick = ()=>{
+  curLineSpace = Math.max(1.0, Math.round((curLineSpace - 0.1)*10)/10);
+  canvasText.style.lineHeight = curLineSpace;
+  showToast('سطروں کا فاصلہ: ' + curLineSpace);
+};
+document.getElementById('selLineSpacePlus').onclick = ()=>{
+  curLineSpace = Math.min(4.0, Math.round((curLineSpace + 0.1)*10)/10);
+  canvasText.style.lineHeight = curLineSpace;
+  showToast('سطروں کا فاصلہ: ' + curLineSpace);
+};
+
+/* ---------- select from the current cursor position to the end (not before it) ---------- */
+document.getElementById('selFromHereBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selFromHereBtn').onclick = ()=>{
+  const sel = window.getSelection();
+  let startNode, startOffset;
+  if(sel.rangeCount && canvasText.contains(sel.anchorNode)){
+    const r0 = sel.getRangeAt(0);
+    startNode = r0.startContainer;
+    startOffset = r0.startOffset;
+  } else if(typeof savedRange !== 'undefined' && savedRange && canvasText.contains(savedRange.startContainer)){
+    startNode = savedRange.startContainer;
+    startOffset = savedRange.startOffset;
+  } else {
+    showToast('پہلے وہ جگہ منتخب کریں جہاں سے آگے سب لینا ہے');
+    return;
+  }
+  const r = document.createRange();
+  r.setStart(startNode, startOffset);
+  r.setEndAfter(canvasText.lastChild || canvasText);
+  sel.removeAllRanges();
+  sel.addRange(r);
+  savedRange = r.cloneRange();
+  showToast('یہاں سے آخر تک سب منتخب ہو گیا — پیچھے والا کچھ متاثر نہیں ہوگا');
+};
+
+/* ---------- fit a selected heading/word into a single line by shrinking its size ---------- */
+let fitLineSpan = null;
+function fitToOneLine(){
+  let sel = window.getSelection();
+  if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
+     savedRange && canvasText.contains(savedRange.startContainer)){
+    sel.removeAllRanges();
+    sel.addRange(savedRange);
+  }
+  if(!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)){
+    showToast('پہلے وہ عنوان یا سطر منتخب کریں');
+    return;
+  }
+  if(typeof captureSnapshot === 'function') captureSnapshot();
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  try{ range.surroundContents(span); }
+  catch(e){ const frag = range.extractContents(); span.appendChild(frag); range.insertNode(span); }
+  const containerWidth = canvasText.clientWidth - 20;
+  let size = parseInt(getComputedStyle(span).fontSize) || 34;
+  let guard = 0;
+  span.style.whiteSpace = 'nowrap';
+  while(span.getBoundingClientRect().width > containerWidth && size > 8 && guard < 100){
+    size -= 1;
+    span.style.fontSize = size + 'px';
+    guard++;
+  }
+  span.style.whiteSpace = '';
+  sel.removeAllRanges();
+  const nr = document.createRange();
+  nr.selectNodeContents(span);
+  sel.addRange(nr);
+  fitLineSpan = span;
+  const slider = document.getElementById('selFitSlider');
+  const sliderVal = document.getElementById('selFitSliderVal');
+  slider.style.display = 'inline-block';
+  sliderVal.style.display = 'inline-block';
+  slider.value = size;
+  sliderVal.textContent = size;
+  showToast('ایک لائن میں فٹ کر دیا (سائز ' + size + 'px) — سلائیڈر سے مزید بڑا/چھوٹا کریں');
+}
+document.getElementById('selFitLine').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selFitLine').onclick = fitToOneLine;
+
+document.getElementById('selFitSlider').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selFitSlider').oninput = (e)=>{
+  let size = +e.target.value;
+  document.getElementById('selFitSliderVal').textContent = size;
+  if(fitLineSpan && canvasText.contains(fitLineSpan)){
+    const containerWidth = canvasText.clientWidth - 20;
+    fitLineSpan.style.whiteSpace = 'nowrap';
+    fitLineSpan.style.fontSize = size + 'px';
+    let guard = 0;
+    while(fitLineSpan.getBoundingClientRect().width > containerWidth && size > 8 && guard < 100){
+      size -= 1;
+      fitLineSpan.style.fontSize = size + 'px';
+      guard++;
+    }
+    fitLineSpan.style.whiteSpace = '';
+    document.getElementById('selFitSliderVal').textContent = size;
+    if(size !== +e.target.value) e.target.value = size;
+    return;
+  }
+  styleSelection(st=> st.fontSize = size+'px', ()=> canvasText.style.fontSize = size+'px');
+};
+
+/* ---------- zoom (adjusts TEXT SIZE only — the page/paper stays put) ---------- */
+const rngZoom = document.getElementById('rngZoom');
+const zoomVal = document.getElementById('zoomVal');
+const stageInner = document.getElementById('stageInner');
+const BASE_FONT_PX = 34;
+let curZoomPct = 100;
+function applyZoom(pct){
+  curZoomPct = Math.max(50, Math.min(400, Math.round(pct)));
+  rngZoom.value = curZoomPct;
+  zoomVal.textContent = curZoomPct+'%';
+  document.getElementById('qzVal').textContent = curZoomPct+'%';
+  document.getElementById('qzSlider').value = curZoomPct;
+  const px = Math.round(BASE_FONT_PX * (curZoomPct/100));
+  canvasText.style.fontSize = px+'px';
+  rngSize.value = Math.min(90, Math.max(14, px));
+  rngSizeVal.textContent = px+'px';
+}
+rngZoom.oninput = ()=> applyZoom(+rngZoom.value);
+document.getElementById('qzSlider').oninput = (e)=> applyZoom(+e.target.value);
+
+/* two-finger pinch: resizes the current SELECTION if one is active, otherwise zooms the whole page */
+let pinchStartDist = 0, pinchStartPct = 100;
+let pinchMode = 'page';
+let pinchSpan = null;
+let pinchSpanStartSize = 34;
+function touchDist(t){
+  const dx = t[0].clientX - t[1].clientX, dy = t[0].clientY - t[1].clientY;
+  return Math.hypot(dx, dy);
+}
+const stageEl2 = document.getElementById('stage');
+stageEl2.addEventListener('touchstart', (e)=>{
+  if(e.touches.length===2){
+    pinchStartDist = touchDist(e.touches);
+    let sel = window.getSelection();
+    if((!sel.rangeCount || sel.isCollapsed || !canvasText.contains(sel.anchorNode)) &&
+       typeof savedRange !== 'undefined' && savedRange && canvasText.contains(savedRange.startContainer)){
+      sel.removeAllRanges();
+      sel.addRange(savedRange);
+    }
+    if(sel.rangeCount && !sel.isCollapsed && canvasText.contains(sel.anchorNode)){
+      pinchMode = 'selection';
+      if(typeof captureSnapshot === 'function') captureSnapshot();
+      const range = sel.getRangeAt(0);
+      const span = document.createElement('span');
+      try{ range.surroundContents(span); }
+      catch(err){ const frag = range.extractContents(); span.appendChild(frag); range.insertNode(span); }
+      pinchSpan = span;
+      pinchSpanStartSize = parseInt(getComputedStyle(span).fontSize) || 34;
+      const r2 = document.createRange();
+      r2.selectNodeContents(span);
+      sel.removeAllRanges(); sel.addRange(r2);
+    } else {
+      pinchMode = 'page';
+      pinchStartPct = curZoomPct;
+    }
+  }
+}, {passive:true});
+stageEl2.addEventListener('touchmove', (e)=>{
+  if(e.touches.length===2 && pinchStartDist>0){
+    e.preventDefault();
+    const d = touchDist(e.touches);
+    const ratio = d / pinchStartDist;
+    if(pinchMode === 'selection' && pinchSpan){
+      let size = Math.max(8, Math.min(160, Math.round(pinchSpanStartSize * ratio)));
+      pinchSpan.style.fontSize = size + 'px';
+      const slider = document.getElementById('selFitSlider');
+      if(slider){ slider.value = size; document.getElementById('selFitSliderVal').textContent = size; }
+    } else {
+      applyZoom(pinchStartPct * ratio);
+    }
+  }
+}, {passive:false});
+stageEl2.addEventListener('touchend', (e)=>{
+  if(e.touches.length<2){
+    pinchStartDist = 0;
+    pinchMode = 'page';
+    pinchSpan = null;
+  }
+});
+
+/* ---------- floating selection toolbar (stays visible throughout editing) ---------- */
+const selToolbar = document.getElementById('selToolbar');
+let toolbarDragged = false;
+let toolbarPos = null;
+function showSelToolbarPinned(){
+  if(typeof toolbarManuallyClosed !== 'undefined' && toolbarManuallyClosed) return;
+  if(toolbarDragged && toolbarPos){
+    selToolbar.style.position = 'fixed';
+    selToolbar.style.top = toolbarPos.top + 'px';
+    selToolbar.style.left = toolbarPos.left + 'px';
+    selToolbar.style.display = 'flex';
+    if(typeof applyToolbarTransform === 'function') applyToolbarTransform(); else selToolbar.style.transform = 'none';
+    if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
+    return;
+  }
+  selToolbar.style.position = 'fixed';
+  selToolbar.style.top = '58px';
+  selToolbar.style.left = '50%';
+  selToolbar.style.display = 'flex';
+  if(typeof applyToolbarTransform === 'function') applyToolbarTransform(); else selToolbar.style.transform = 'translateX(-50%)';
+  if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
+}
+document.addEventListener('selectionchange', ()=>{
+  if(dragging) return; /* ڈریگ کے دوران پوزیشن ری سیٹ نہ ہو */
+  if(document.activeElement !== canvasText) return;
+  if(selToolbar.style.display === 'flex') return; /* پہلے سے نظر آ رہا ہو تو بار بار جھٹکا نہ لگے */
+  showSelToolbarPinned();
+});
+let toolbarManuallyClosed = false;
+canvasText.addEventListener('focus', ()=>{
+  toolbarManuallyClosed = false;
+  showSelToolbarPinned();
+  setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 320);
+});
+canvasText.addEventListener('blur', ()=>{
+  /* intentionally does not auto-hide the toolbar anymore — only the ✕ button closes it */
+});
+document.getElementById('selCloseBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selCloseBtn').onclick = ()=>{
+  toolbarManuallyClosed = true;
+  selToolbar.style.display = 'none';
+};
+document.getElementById('selToggle').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selToggle').onclick = ()=>{
+  const body = document.getElementById('selToolbarBody');
+  const expanded = body.classList.toggle('expanded');
+  document.getElementById('selToggle').textContent = 'Aa ' + (expanded ? '⌃' : '⌄');
+};
+/* ---------- ٹول بار: ہر پوائنٹ سے ڈریگ + دو انگلیوں سے زوم — کبھی خودکار غائب نہ ہو ---------- */
+const selDragHandle = document.getElementById('selDragHandle');
+let dragging = false, dragStartX=0, dragStartY=0, dragOrigTop=0, dragOrigLeft=0;
+let toolbarScale = 1;
+function applyToolbarTransform(){
+  selToolbar.style.transform = toolbarDragged ? ('scale('+toolbarScale+')') : ('translateX(-50%) scale('+toolbarScale+')');
+}
+function beginToolbarDrag(clientX, clientY){
+  dragging = true;
+  selToolbar.classList.add('touched');
+  selToolbar.classList.add('dragging-now');
+  const rect = selToolbar.getBoundingClientRect();
+  dragOrigTop = rect.top; dragOrigLeft = rect.left;
+  dragStartX = clientX; dragStartY = clientY;
+  selToolbar.style.position = 'fixed';
+  selToolbar.style.top = dragOrigTop + 'px';
+  selToolbar.style.left = dragOrigLeft + 'px';
+  applyToolbarTransform();
+}
+function moveToolbarDrag(clientX, clientY){
+  if(!dragging) return;
+  let newTop = dragOrigTop + (clientY - dragStartY);
+  let newLeft = dragOrigLeft + (clientX - dragStartX);
+  const kh = (typeof getKeyboardHeight === 'function') ? getKeyboardHeight() : 0;
+  const tw = (selToolbar.offsetWidth || 60) * toolbarScale;
+  const th = (selToolbar.offsetHeight || 40) * toolbarScale;
+  const safeMaxTop = window.innerHeight - kh - th - 4;
+  newTop = Math.max(4, Math.min(Math.max(4, safeMaxTop), newTop));
+  newLeft = Math.max(4, Math.min(Math.max(4, window.innerWidth - tw - 4), newLeft));
+  selToolbar.style.top = newTop + 'px';
+  selToolbar.style.left = newLeft + 'px';
+  toolbarDragged = true;
+  toolbarPos = {top:newTop, left:newLeft};
+}
+function endToolbarDrag(){
+  if(!dragging) return;
+  dragging = false;
+  selToolbar.classList.remove('dragging-now');
+  setTimeout(()=> selToolbar.classList.remove('touched'), 800);
+}
+function isDragBlockedTarget(el){
+  return !!(el && el.closest && el.closest('button, input, select, .fw-scroll, .free-pos-box, #selColorRow, #selFontWheelRow'));
+}
+/* ٹول بار کے کسی بھی حصے سے ڈریگ — ہینڈل ہو، خالی جگہ ہو — سوائے اصل بٹنوں/سلائیڈر/ویل کے */
+let toolbarPointerId = null;
+selToolbar.addEventListener('pointerdown', (e)=>{
+  if(isDragBlockedTarget(e.target) && e.target !== selDragHandle) return;
+  e.preventDefault();
+  toolbarPointerId = e.pointerId;
+  beginToolbarDrag(e.clientX, e.clientY);
+  try{ selToolbar.setPointerCapture(e.pointerId); }catch(err){}
+});
+selToolbar.addEventListener('pointermove', (e)=>{
+  if(!dragging || e.pointerId !== toolbarPointerId) return;
+  e.preventDefault();
+  moveToolbarDrag(e.clientX, e.clientY);
+});
+function releaseToolbarDrag(e){
+  if(e && e.pointerId !== toolbarPointerId) return;
+  endToolbarDrag();
+  try{ selToolbar.releasePointerCapture(toolbarPointerId); }catch(err){}
+  toolbarPointerId = null;
+}
+selToolbar.addEventListener('pointerup', releaseToolbarDrag);
+selToolbar.addEventListener('pointercancel', releaseToolbarDrag);
+
+/* دو انگلیوں سے پورا ٹول بار چھوٹا/بڑا (pinch zoom) — کہیں سے بھی ٹول بار پر */
+let tbPinchDist = 0, tbPinchStartScale = 1;
+selToolbar.addEventListener('touchstart', (e)=>{
+  if(e.touches.length===2){
+    tbPinchDist = touchDist(e.touches);
+    tbPinchStartScale = toolbarScale;
+    if(!toolbarDragged){
+      /* پنچ سے پہلے موجودہ پوزیشن کو فکس کر دیں تاکہ سکیل درست جگہ سے ہو */
+      const rect = selToolbar.getBoundingClientRect();
+      selToolbar.style.position = 'fixed';
+      selToolbar.style.top = rect.top + 'px';
+      selToolbar.style.left = (rect.left + rect.width/2) + 'px';
+      toolbarDragged = true;
+      toolbarPos = {top:rect.top, left:rect.left + rect.width/2};
+    }
+  }
+}, {passive:true});
+selToolbar.addEventListener('touchmove', (e)=>{
+  if(e.touches.length===2 && tbPinchDist>0){
+    e.preventDefault();
+    const d = touchDist(e.touches);
+    toolbarScale = Math.max(0.6, Math.min(2.2, tbPinchStartScale * (d/tbPinchDist)));
+    applyToolbarTransform();
+  }
+}, {passive:false});
+selToolbar.addEventListener('touchend', (e)=>{ if(e.touches.length<2) tbPinchDist = 0; });
+
+document.querySelectorAll('.selPunct').forEach(btn=>{
+  btn.onmousedown = (e)=> e.preventDefault();
+  btn.onclick = ()=>{ canvasText.focus(); document.execCommand('insertText', false, btn.dataset.ch); };
+});
+
+/* quick text-color / background-color popover in the pinned toolbar */
+const selColorRow = document.getElementById('selColorRow');
+let selColorMode = 'text';
+function buildSelColorSwatches(){
+  selColorRow.innerHTML = '';
+  COLORS.forEach(c=>{
+    const sw = document.createElement('div');
+    sw.style.cssText = 'width:22px;height:22px;border-radius:50%;border:1px solid #7fc0f0;cursor:pointer;background:'+c;
+    sw.onmousedown = (e)=> e.preventDefault();
+    sw.onclick = ()=>{
+      if(typeof activeFreeBox !== 'undefined' && activeFreeBox){
+        if(selColorMode === 'text'){ activeFreeBox.style.color = c; }
+        else{ activeFreeBox.style.backgroundColor = c; }
+        return;
+      }
+      if(selColorMode === 'text'){
+        styleSelection(st=> st.color = c, ()=> canvasText.style.color = c);
+      } else {
+        styleSelection(st=> st.backgroundColor = c, ()=> canvasText.style.backgroundColor = c);
+      }
+    };
+    selColorRow.appendChild(sw);
+  });
+  const clearSw = document.createElement('div');
+  clearSw.textContent = '✕';
+  clearSw.style.cssText = 'width:22px;height:22px;border-radius:50%;border:1px solid #7fc0f0;cursor:pointer;background:#ffffff;color:#123a68;font-size:11px;display:flex;align-items:center;justify-content:center;';
+  clearSw.onmousedown = (e)=> e.preventDefault();
+  clearSw.onclick = ()=>{
+    if(selColorMode === 'text'){ styleSelection(st=> st.color = '', ()=> canvasText.style.color = ''); }
+    else{ styleSelection(st=> st.backgroundColor = '', ()=> canvasText.style.backgroundColor = ''); }
+  };
+  selColorRow.appendChild(clearSw);
+}
+buildSelColorSwatches();
+document.getElementById('selColorBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selColorBtn').onclick = ()=>{
+  selColorMode = 'text';
+  selColorRow.style.display = (selColorRow.style.display === 'flex') ? 'none' : 'flex';
+};
+document.getElementById('selBgBtn').onmousedown = (e)=> e.preventDefault();
+document.getElementById('selBgBtn').onclick = ()=>{
+  selColorMode = 'background';
+  selColorRow.style.display = (selColorRow.style.display === 'flex') ? 'none' : 'flex';
+};
+
+let curSelSize = 34;
+
+/* ---------- corner font wheels (replace the long font list) ---------- */
+const urduFonts = FONTS.filter(f=> f.group !== 'en');
+const enFonts = FONTS.filter(f=> f.group === 'en');
+function buildWheel(scrollEl, list){
+  list.forEach((f,i)=>{
+    const div = document.createElement('div');
+    div.className = 'fw-item';
+    div.textContent = (i+1) + '. ' + f.label;
+    div.dataset.family = f.family;
+    scrollEl.appendChild(div);
+  });
+}
+const urduScroll = document.getElementById('urduWheelScroll');
+const enScroll = document.getElementById('enWheelScroll');
+buildWheel(urduScroll, urduFonts);
+buildWheel(enScroll, enFonts);
+
+function wireWheel(scrollEl, list){
+  let timer = null;
+  scrollEl.addEventListener('scroll', ()=>{
+    clearTimeout(timer);
+    timer = setTimeout(()=>{
+      const containerRect = scrollEl.getBoundingClientRect();
+      const containerCenter = containerRect.top + containerRect.height/2;
+      let bestIdx = 0, bestDist = Infinity;
+      Array.from(scrollEl.children).forEach((el,i)=>{
+        const r = el.getBoundingClientRect();
+        const d = Math.abs((r.top + r.height/2) - containerCenter);
+        if(d < bestDist){ bestDist = d; bestIdx = i; }
+      });
+      Array.from(scrollEl.children).forEach((el,i)=> el.classList.toggle('center', i===bestIdx));
+      const fam = list[bestIdx].family;
+      if(typeof activeFreeBox !== 'undefined' && activeFreeBox){
+        activeFreeBox.style.fontFamily = fam;
+      } else {
+        styleSelection(st=> st.fontFamily = fam, ()=> canvasText.style.fontFamily = fam);
+      }
+    }, 240);
+  });
+}
+wireWheel(urduScroll, urduFonts);
+wireWheel(enScroll, enFonts);
+if(urduFonts.length) urduScroll.children[0].classList.add('center');
+if(enFonts.length) enScroll.children[0].classList.add('center');
+
+/* ---------- ڈریگ ٹول بار کے اندر فونٹ ویل (سلیکٹ شدہ حصے کا فونٹ فوری بدلنے کے لیے) ---------- */
+const selUrduScroll = document.getElementById('selUrduWheelScroll');
+const selEnScroll = document.getElementById('selEnWheelScroll');
+if(selUrduScroll && selEnScroll){
+  buildWheel(selUrduScroll, urduFonts);
+  buildWheel(selEnScroll, enFonts);
+  wireWheel(selUrduScroll, urduFonts);
+  wireWheel(selEnScroll, enFonts);
+  if(urduFonts.length) selUrduScroll.children[0].classList.add('center');
+  if(enFonts.length) selEnScroll.children[0].classList.add('center');
+  const selFontToggle = document.getElementById('selFontToggle');
+  const selFontWheelRow = document.getElementById('selFontWheelRow');
+  selFontToggle.onmousedown = (e)=> e.preventDefault();
+  selFontToggle.onclick = ()=>{
+    const showing = selFontWheelRow.style.display === 'flex';
+    selFontWheelRow.style.display = showing ? 'none' : 'flex';
+    selFontToggle.classList.toggle('active', !showing);
+  };
+}
+
+document.querySelectorAll('.fw-minus').forEach(btn=> btn.onclick = ()=>{
+  curSelSize = Math.max(10, curSelSize-2);
+  if(typeof activeFreeBox !== 'undefined' && activeFreeBox){ activeFreeBox.style.fontSize = curSelSize+'px'; }
+  else{ styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{}); }
+});
+document.querySelectorAll('.fw-plus').forEach(btn=> btn.onclick = ()=>{
+  curSelSize = curSelSize+2;
+  if(typeof activeFreeBox !== 'undefined' && activeFreeBox){ activeFreeBox.style.fontSize = curSelSize+'px'; }
+  else{ styleSelection(st=> st.fontSize = curSelSize+'px', ()=>{}); }
+});
+document.getElementById('selBold').onclick = (e)=>{
+  e.target.classList.toggle('active');
+  const w = e.target.classList.contains('active') ? '700' : '400';
+  styleSelection(st=> st.fontWeight = w, ()=>{});
+};
+document.getElementById('selSpace').onclick = ()=>{
+  styleSelection(st=> st.wordSpacing = '10px', ()=>{});
+};
+
+/* ---------- export as image ---------- */
+/* ---------- robust capture: clone the paper, strip editing/placeholder artifacts, guard against empty pages ---------- */
+async function captureCleanPaper(bg){
+  if(!canvasText.innerText || !canvasText.innerText.trim()){
+    showToast('یہ صفحہ خالی ہے — پہلے کچھ لکھیں');
+    return null;
+  }
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+  const clone = paper.cloneNode(true);
+  const cloneText = clone.querySelector('#canvasText');
+  if(cloneText){
+    cloneText.removeAttribute('contenteditable');
+    cloneText.removeAttribute('data-placeholder');
+  }
+  clone.style.position = 'fixed';
+  clone.style.left = '-99999px';
+  clone.style.top = '0';
+  clone.style.transform = 'none';
+  document.body.appendChild(clone);
+  await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
+  const canvas = await html2canvas(clone, {backgroundColor: bg, scale: 2});
+  document.body.removeChild(clone);
+  return canvas;
+}
+
+/* slice a tall canvas into proper A4-proportioned pages instead of one unreadable strip */
+function buildPaginatedPDF(canvas){
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit:'pt', format:'a4' });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const scale = pageW / canvas.width;
+  const sliceHeightPx = Math.max(50, Math.floor(pageH / scale));
+  let y = 0, first = true;
+  while(y < canvas.height){
+    const sliceH = Math.min(sliceHeightPx, canvas.height - y);
+    const sliceCanvas = document.createElement('canvas');
+    sliceCanvas.width = canvas.width;
+    sliceCanvas.height = sliceH;
+    const sctx = sliceCanvas.getContext('2d');
+    sctx.fillStyle = '#ffffff';
+    sctx.fillRect(0,0,sliceCanvas.width, sliceCanvas.height);
+    sctx.drawImage(canvas, 0, y, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+    const imgData = sliceCanvas.toDataURL('image/jpeg', 0.95);
+    if(!first) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', 0, 0, pageW, sliceH*scale);
+    first = false;
+    y += sliceH;
+  }
+  return pdf;
+}
+
+async function exportImage(cb){
+  showToast('تصویر تیار ہو رہی ہے…');
+  const canvas = await captureCleanPaper(null);
+  if(!canvas) return;
+  canvas.toBlob(blob=>{ if(cb) cb(blob, canvas); });
+}
+function downloadBlob(blob, filename){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+document.getElementById('btnExportImg').onclick = ()=> exportImage(b=> downloadBlob(b,'urdu-design.png'));
+document.getElementById('btnExportImg2').onclick = ()=> exportImage(b=> downloadBlob(b,'urdu-design.png'));
+
+/* ---------- share: short pages share as a clean image; long pages auto-share as a proper multi-page PDF ---------- */
+function shareCurrentPage(){
+  exportImage(async (blob, canvas)=>{
+    const tooTall = canvas.height > canvas.width * 2.2;
+    if(tooTall){
+      const pages = await buildPaginatedPages(22, 'portrait', 2, 'none');
+      const pdf = buildPdfFromPages(pages, 'portrait');
+      const pdfBlob = pdf.output('blob');
+      const file = new File([pdfBlob], 'urdu-tehreer.pdf', {type:'application/pdf'});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        try{ await navigator.share({files:[file], title:'اردو تحریر'}); return; }catch(e){}
+      }
+      downloadBlob(pdfBlob, 'urdu-tehreer.pdf');
+      showToast('تحریر لمبی تھی، اس لیے صاف A4 صفحات کی PDF بنائی');
+      return;
+    }
+    const file = new File([blob], 'urdu-design.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({files:[file], title:'اردو ڈیزائن'});
+        return;
+      }catch(e){}
+    }
+    downloadBlob(blob, 'urdu-design.png');
+    showToast('تصویر ڈاؤن لوڈ ہو گئی — اب اسے واٹس ایپ میں اٹیچ کر دیں');
+  });
+}
+document.getElementById('btnShare').onclick = shareCurrentPage;
+document.getElementById('btnSharePage').onclick = shareCurrentPage;
+
+/* ---------- PDF: fixed full-A4 pages, independent of on-screen editing zoom ---------- */
+const A4_PT = {portrait:{w:595,h:842}, landscape:{w:842,h:595}};
+const PX_PER_PT = 1.5;   // resolution for measuring/preview
+let pdfOrientation = 'portrait';
+let pdfBorderStyle = 'none';
+
+function roundRectPath(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function drawPageBorder(ctx, w, h, style){
+  if(!style || style==='none') return;
+  const margin = w*0.025;
+  ctx.save();
+  ctx.strokeStyle = '#b8923f';
+  if(style==='thin'){
+    ctx.lineWidth = w*0.004;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+  } else if(style==='thick'){
+    ctx.lineWidth = w*0.012;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+  } else if(style==='double'){
+    ctx.lineWidth = w*0.004;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    const m2 = margin + w*0.014;
+    ctx.strokeRect(m2, m2, w-m2*2, h-m2*2);
+  } else if(style==='floral'){
+    ctx.lineWidth = w*0.005;
+    ctx.setLineDash([w*0.014, w*0.009]);
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    ctx.setLineDash([]);
+    ctx.font = (w*0.028)+'px serif';
+    ctx.fillStyle = '#b8923f';
+    ctx.textAlign = 'center';
+    ctx.fillText('❖', margin+w*0.01, margin+w*0.03);
+    ctx.fillText('❖', w-margin-w*0.01, margin+w*0.03);
+    ctx.fillText('❖', margin+w*0.01, h-margin-w*0.01);
+    ctx.fillText('❖', w-margin-w*0.01, h-margin-w*0.01);
+  } else if(style==='rounded-gold'){
+    ctx.lineWidth = w*0.01;
+    roundRectPath(ctx, margin, margin, w-margin*2, h-margin*2, w*0.02);
+    ctx.stroke();
+  } else if(style==='dotted'){
+    ctx.lineWidth = w*0.007;
+    ctx.lineCap = 'round';
+    ctx.setLineDash([1, w*0.012]);
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    ctx.setLineDash([]);
+  } else if(style==='corner'){
+    const L = w*0.09;
+    ctx.lineWidth = w*0.008;
+    const corners = [[margin,margin,1,1],[w-margin,margin,-1,1],[margin,h-margin,1,-1],[w-margin,h-margin,-1,-1]];
+    corners.forEach(([x,y,dx,dy])=>{
+      ctx.beginPath();
+      ctx.moveTo(x, y+L*dy); ctx.lineTo(x,y); ctx.lineTo(x+L*dx, y);
+      ctx.stroke();
+    });
+  } else if(style==='shadow'){
+    ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = w*0.02; ctx.shadowOffsetY = w*0.01;
+    ctx.lineWidth = w*0.008;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+  } else if(style==='ornate'){
+    ctx.lineWidth = w*0.014;
+    ctx.strokeRect(margin, margin, w-margin*2, h-margin*2);
+    const m2 = margin + w*0.02;
+    ctx.lineWidth = w*0.003;
+    ctx.strokeRect(m2, m2, w-m2*2, h-m2*2);
+  }
+  ctx.restore();
+}
+
+const PAGE_MARGIN_PT = 40; /* reserved margin so border never touches text */
+
+function clusterLineBands(rects, refTop){
+  const items = Array.from(rects).map(r=> ({top:r.top-refTop, bottom:r.bottom-refTop})).filter(r=> r.bottom>r.top);
+  items.sort((a,b)=> a.top-b.top);
+  const bands = [];
+  for(const r of items){
+    const last = bands[bands.length-1];
+    if(last && r.top < last.bottom - 2){
+      last.bottom = Math.max(last.bottom, r.bottom);
+      last.top = Math.min(last.top, r.top);
+    } else {
+      bands.push({top:r.top, bottom:r.bottom});
+    }
+  }
+  return bands;
+}
+
+/* Builds all pages for the given content, breaking only between lines (never mid-line),
+   with the border drawn safely outside the text margin. Returns an array of finished,
+   bordered, numbered page canvases. */
+async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderStyle, htmlOverride, startPageNum){
+  const dims = A4_PT[orientation];
+  const pageWpx = dims.w * PX_PER_PT;
+  const pageHpx = dims.h * PX_PER_PT;
+  const marginPx = PAGE_MARGIN_PT * PX_PER_PT;
+  const contentWpx = pageWpx - marginPx*2;
+  const maxContentHpx = pageHpx - marginPx*2;
+
+  const div = document.createElement('div');
+  div.style.position = 'fixed'; div.style.left = '-99999px'; div.style.top = '0';
+  div.style.width = contentWpx + 'px';
+  div.style.background = '#ffffff';
+  div.style.direction = 'rtl'; div.style.textAlign = canvasText.style.textAlign || 'right';
+  div.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
+  div.style.fontSize = fontSizePx + 'px';
+  div.style.lineHeight = canvasText.style.lineHeight || '2.1';
+  const liveTopNodes = Array.from(canvasText.children);
+  div.innerHTML = (htmlOverride !== undefined && htmlOverride !== null) ? htmlOverride : canvasText.innerHTML;
+  div.querySelectorAll('span[style*="text-align"]').forEach(sp=>{
+    sp.style.display = 'block';
+  });
+  if(htmlOverride === undefined || htmlOverride === null){
+    const clonedTopNodes = Array.from(div.children);
+    liveTopNodes.forEach((liveEl, i)=>{
+      const cloneEl = clonedTopNodes[i];
+      if(!cloneEl) return;
+      const cs = getComputedStyle(liveEl);
+      cloneEl.style.textAlign = cs.textAlign;
+      cloneEl.style.direction = 'rtl';
+    });
+  }
+  document.body.appendChild(div);
+  await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+
+  const fullCanvas = await html2canvas(div, {backgroundColor:'#ffffff', scale: renderScale});
+  document.body.removeChild(div);
+
+  const pages = [];
+  let y = 0;
+  const sliceHpxAtScale = maxContentHpx * renderScale;
+  while(y < fullCanvas.height){
+    const sliceH = Math.min(sliceHpxAtScale, fullCanvas.height - y);
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = pageWpx * renderScale;
+    pageCanvas.height = pageHpx * renderScale;
+    const pctx = pageCanvas.getContext('2d');
+    pctx.fillStyle = '#ffffff';
+    pctx.fillRect(0,0,pageCanvas.width,pageCanvas.height);
+    const destX = marginPx*renderScale, destY = marginPx*renderScale;
+    pctx.drawImage(fullCanvas, 0, y, fullCanvas.width, sliceH, destX, destY, fullCanvas.width, sliceH);
+    drawPageBorder(pctx, pageCanvas.width, pageCanvas.height, borderStyle);
+    pctx.fillStyle = '#7a6a4f';
+    pctx.font = (22*renderScale*PX_PER_PT/2.2)+'px Tahoma, sans-serif';
+    pctx.textAlign = 'center';
+    pctx.fillText(String((startPageNum||1) + pages.length), pageCanvas.width/2, pageCanvas.height - (16*renderScale*PX_PER_PT/2.2));
+    pages.push(pageCanvas);
+    y += sliceH;
+  }
+  if(!pages.length){
+    const blank = document.createElement('canvas');
+    blank.width = pageWpx*renderScale; blank.height = pageHpx*renderScale;
+    const bctx = blank.getContext('2d'); bctx.fillStyle='#ffffff'; bctx.fillRect(0,0,blank.width,blank.height);
+    pages.push(blank);
+  }
+  return pages;
+}
+
+async function buildPrintCanvas(fontSizePx, orientation, renderScale){
+  const dims = A4_PT[orientation];
+  const containerWpx = dims.w * PX_PER_PT;
+  const div = document.createElement('div');
+  div.style.position = 'fixed'; div.style.left = '-99999px'; div.style.top = '0';
+  div.style.width = containerWpx + 'px';
+  div.style.boxSizing = 'border-box';
+  div.style.padding = '38px 42px';
+  div.style.background = '#ffffff';
+  div.style.direction = 'rtl'; div.style.textAlign = canvasText.style.textAlign || 'right';
+  div.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
+  div.style.fontSize = fontSizePx + 'px';
+  div.style.lineHeight = canvasText.style.lineHeight || '2.1';
+  div.innerHTML = canvasText.innerHTML;
+  document.body.appendChild(div);
+  await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
+  if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
+  const canvas = await html2canvas(div, {backgroundColor:'#ffffff', scale: renderScale});
+  document.body.removeChild(div);
+  return canvas;
+}
+
+function buildPdfFromPages(pages, orientation){
+  const dims = A4_PT[orientation];
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({unit:'pt', format:'a4', orientation: orientation==='landscape' ? 'l':'p'});
+  pages.forEach((canvas, i)=>{
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    if(i>0) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', 0, 0, dims.w, dims.h);
+  });
+  return pdf;
+}
+
+const pdfModal = document.getElementById('pdfModal');
+const pdfFontSizeInput = document.getElementById('pdfFontSize');
+const pdfPageCountEl = document.getElementById('pdfPageCount');
+const pdfPreviewImg = document.getElementById('pdfPreviewImg');
+let pdfPreviewZoom = 100;
+let pdfUpdateTimer = null;
+
+let pdfPreviewPages = [];
+let pdfTotalPages = 1, pdfCurrentPreviewPage = 0;
+async function updatePdfPreview(){
+  if(!canvasText.innerText || !canvasText.innerText.trim()){
+    pdfPageCountEl.textContent = 'یہ صفحہ خالی ہے';
+    return;
+  }
+  pdfPageCountEl.textContent = 'حساب لگایا جا رہا ہے…';
+  const fontPx = +pdfFontSizeInput.value;
+  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 1, pdfBorderStyle);
+  pdfPreviewPages = pages;
+  pdfTotalPages = pages.length;
+  pdfCurrentPreviewPage = 0;
+  pdfPageCountEl.textContent = 'اس ترتیب میں ' + pdfTotalPages + ' صفحات بنیں گی (A4، ' + (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ')';
+  renderPdfPreviewPage(0);
+}
+function renderPdfPreviewPage(idx){
+  if(!pdfPreviewPages.length) return;
+  idx = Math.max(0, Math.min(pdfTotalPages-1, idx));
+  pdfCurrentPreviewPage = idx;
+  pdfPreviewImg.src = pdfPreviewPages[idx].toDataURL('image/jpeg', 0.92);
+  pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
+  const nav = document.getElementById('pdfPreviewNavLabel');
+  if(nav) nav.textContent = 'صفحہ ' + (idx+1) + ' / ' + pdfTotalPages;
+}
+function queuePdfPreviewUpdate(){
+  clearTimeout(pdfUpdateTimer);
+  pdfUpdateTimer = setTimeout(updatePdfPreview, 350);
+}
+
+const BORDER_LABELS = {none:'بغیر بارڈر',thin:'پتلا',thick:'موٹا',double:'ڈبل لائن',floral:'پھولوں والا','rounded-gold':'گول سنہری',dotted:'نقطے دار',corner:'صرف کونے',shadow:'سایہ دار',ornate:'شاہی ڈبل'};
+const pdfSummaryTag = document.getElementById('pdfSummaryTag');
+function updatePdfSummaryTag(){
+  pdfSummaryTag.textContent = (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ' · ' + (BORDER_LABELS[pdfBorderStyle]||'بغیر بارڈر');
+}
+
+document.querySelectorAll('[data-border]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-border]').forEach(b=> b.classList.remove('primary'));
+    btn.classList.add('primary');
+    pdfBorderStyle = btn.dataset.border;
+    updatePdfSummaryTag();
+    queuePdfPreviewUpdate();
+  };
+});
+document.querySelectorAll('[data-pdf-align]').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('[data-pdf-align]').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    canvasText.style.textAlign = btn.dataset.pdfAlign;
+    document.querySelectorAll('[data-align]').forEach(b=>{
+      b.classList.toggle('active', b.dataset.align === btn.dataset.pdfAlign);
+    });
+    queuePdfPreviewUpdate();
+  };
+});
+
+document.getElementById('pdfPortrait').onclick = function(){
+  pdfOrientation = 'portrait';
+  this.classList.add('primary');
+  document.getElementById('pdfLandscape').classList.remove('primary');
+  updatePdfSummaryTag();
+  queuePdfPreviewUpdate();
+};
+document.getElementById('pdfLandscape').onclick = function(){
+  pdfOrientation = 'landscape';
+  this.classList.add('primary');
+  document.getElementById('pdfPortrait').classList.remove('primary');
+  updatePdfSummaryTag();
+  queuePdfPreviewUpdate();
+};
+pdfFontSizeInput.oninput = ()=>{
+  document.getElementById('pdfFontSizeVal').textContent = pdfFontSizeInput.value+'px';
+  queuePdfPreviewUpdate();
+};
+const pdfZoomLbl = document.getElementById('pdfZoomLbl');
+function setPdfPreviewZoom(v){
+  pdfPreviewZoom = Math.max(50, Math.min(300, v));
+  pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
+  if(pdfZoomLbl) pdfZoomLbl.textContent = pdfPreviewZoom + '%';
+}
+document.getElementById('pdfPrevZoomMinus').onclick = ()=> setPdfPreviewZoom(pdfPreviewZoom-15);
+document.getElementById('pdfPrevZoomPlus').onclick = ()=> setPdfPreviewZoom(pdfPreviewZoom+15);
+document.getElementById('pdfPrevPage').onclick = ()=> renderPdfPreviewPage(pdfCurrentPreviewPage - 1);
+document.getElementById('pdfNextPage').onclick = ()=> renderPdfPreviewPage(pdfCurrentPreviewPage + 1);
+document.getElementById('pdfClose').onclick = ()=> pdfModal.classList.remove('open');
+
+/* ---------- bottom control grid: toggles one options panel at a time, page preview stays fully visible above ---------- */
+document.querySelectorAll('.pdf-ctrl-btn').forEach(btn=>{
+  btn.onclick = ()=>{
+    const key = btn.dataset.pdfpanel;
+    const panel = document.getElementById('pdfPanel-'+key);
+    const isOpen = panel.classList.contains('open');
+    document.querySelectorAll('.pdf-ctrl-panel').forEach(p=> p.classList.remove('open'));
+    document.querySelectorAll('.pdf-ctrl-btn').forEach(b=> b.classList.remove('active'));
+    if(!isOpen){
+      panel.classList.add('open');
+      btn.classList.add('active');
+    }
+  };
+});
+
+document.getElementById('btnSavePdf').onclick = ()=>{
+  if(!canvasText.innerText || !canvasText.innerText.trim()){
+    showToast('یہ صفحہ خالی ہے — پہلے کچھ لکھیں');
+    return;
+  }
+  pdfModal.classList.add('open');
+  document.querySelectorAll('.pdf-ctrl-panel').forEach(p=> p.classList.remove('open'));
+  document.querySelectorAll('.pdf-ctrl-btn').forEach(b=> b.classList.remove('active'));
+  setPdfPreviewZoom(100);
+  updatePdfSummaryTag();
+  updatePdfPreview();
+};
+
+document.getElementById('pdfConfirmSave').onclick = async ()=>{
+  showToast('PDF تیار ہو رہی ہے…');
+  const fontPx = +pdfFontSizeInput.value;
+  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 2, pdfBorderStyle);
+  const pdf = buildPdfFromPages(pages, pdfOrientation);
+  pdf.save('urdu-page.pdf');
+  pdfModal.classList.remove('open');
+  showToast('PDF محفوظ ہو گئی — پورے A4 صفحات پر مشتمل، لائن کہیں کٹی نہیں');
+};
+
+/* ---------- print ---------- */
+document.getElementById('btnPrint').onclick = ()=> window.print();
+
+/* ---------- save / load draft ---------- */
+let lastHistoryPush = 0;
+function pushDraftHistory(){
+  const now = Date.now();
+  if(now - lastHistoryPush < 60000) return; /* at most once a minute */
+  if(!canvasText.innerText || !canvasText.innerText.trim()) return;
+  lastHistoryPush = now;
+  try{
+    let hist = [];
+    try{ hist = JSON.parse(localStorage.getItem('urdu_studio_draft_history') || '[]'); }catch(e){ hist = []; }
+    hist.unshift({ html: canvasText.innerHTML, theme: paper.className, ts: now });
+    if(hist.length > 20) hist = hist.slice(0, 20);
+    localStorage.setItem('urdu_studio_draft_history', JSON.stringify(hist));
+  }catch(e){}
+}
+function saveDraft(silent){
+  try{
+    localStorage.setItem('urdu_studio_draft', JSON.stringify({
+      html: canvasText.innerHTML,
+      theme: paper.className,
+      fontSize: canvasText.style.fontSize || '',
+      lineHeight: canvasText.style.lineHeight || '',
+      textAlign: canvasText.style.textAlign || ''
+    }));
+    pushDraftHistory();
+    if(!silent) showToast('ڈرافٹ محفوظ ہو گیا');
+  }catch(e){
+    if(!silent) showToast('یہ براؤزر ڈرافٹ محفوظ کرنے کی اجازت نہیں دے رہا');
+  }
+}
+document.getElementById('btnSaveDraft').onclick = ()=> saveDraft(false);
+document.getElementById('btnSaveDraft2').onclick = ()=> saveDraft(false);
+
+const historyModal = document.getElementById('historyModal');
+function fmtTime(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString('ur-PK') + ' — ' + d.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
+}
+function renderHistoryList(){
+  const list = document.getElementById('historyList');
+  list.innerHTML = '';
+  let hist = [];
+  try{ hist = JSON.parse(localStorage.getItem('urdu_studio_draft_history') || '[]'); }catch(e){ hist = []; }
+  if(!hist.length){
+    list.innerHTML = '<div class="hint">ابھی کوئی ریکارڈ محفوظ نہیں — ٹائپ کرتے رہیں، خودکار ہر منٹ ایک نسخہ محفوظ ہوگا۔</div>';
+    return;
+  }
+  hist.forEach((h, i)=>{
+    const row = document.createElement('div');
+    row.className = 'history-item';
+    const tmp = document.createElement('div'); tmp.innerHTML = h.html;
+    const snippet = (tmp.innerText || '').replace(/\s+/g,' ').trim().slice(0, 60);
+    row.innerHTML = `
+      <div class="meta">
+        <div class="time">${fmtTime(h.ts)}</div>
+        <div class="snippet">${snippet || '—'}</div>
+      </div>
+      <button class="pill-btn primary" data-idx="${i}">بحال کریں</button>
+      <button class="pill-btn" data-del="${i}" style="background:#c0392b;color:#fff;border-color:#c0392b;">🗑️</button>`;
+    row.querySelector('[data-del]').onclick = (e)=>{
+      e.stopPropagation();
+      let h2 = [];
+      try{ h2 = JSON.parse(localStorage.getItem('urdu_studio_draft_history') || '[]'); }catch(err){ h2 = []; }
+      h2.splice(i, 1);
+      localStorage.setItem('urdu_studio_draft_history', JSON.stringify(h2));
+      renderHistoryList();
+    };
+    row.querySelector('[data-idx]').onclick = ()=>{
+      if(confirm('موجودہ صفحہ بدل کر یہ پرانا نسخہ واپس لایا جائے؟')){
+        captureSnapshot();
+        canvasText.innerHTML = h.html;
+        if(h.theme) paper.className = h.theme;
+        captureSnapshot();
+        historyModal.classList.remove('open');
+        showToast('پرانا نسخہ بحال کر دیا گیا');
+      }
+    };
+    list.appendChild(row);
+  });
+}
+document.getElementById('btnDraftHistory').onclick = ()=>{
+  renderHistoryList();
+  historyModal.classList.add('open');
+};
+document.getElementById('historyClose').onclick = ()=> historyModal.classList.remove('open');
+document.getElementById('historyClearAll').onclick = ()=>{
+  if(confirm('سارا پرانا ریکارڈ صاف کر دیں؟ یہ واپس نہیں آئے گا۔')){
+    localStorage.setItem('urdu_studio_draft_history', '[]');
+    renderHistoryList();
+    showToast('ریکارڈ صاف کر دیا گیا');
+  }
+};
+
+/* auto-save silently a moment after any edit, so nothing is lost if the app is closed */
+let autoSaveTimer = null;
+function scheduleAutoSave(){
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(()=>{ if(typeof saveDraft === 'function') saveDraft(true); }, 900);
+}
+/* ہر قسم کی تبدیلی پکڑنے کے لیے (لکھائی، فونٹ، سٹائل، پوزیشن، رنگ، تھیم — سب) */
+new MutationObserver(scheduleAutoSave).observe(document.getElementById('canvasText'), {
+  childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:['style','class']
+});
+new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'), { attributes:true, attributeFilter:['class','style'] });
+/* ---------- keep the page always clear of the top bar, whatever its actual height is ---------- */
+const topbarEl = document.getElementById('topbar');
+const stageEl3 = document.getElementById('stage');
+/* ---------- online/offline status + refresh ---------- */
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0808PM) ---------- */
+const APP_BUILD_VERSION = "UF238Su0808PM";
+function computeLiveVersionTag(){
+  const d = new Date();
+  const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let h = d.getHours();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12; if(h === 0) h = 12;
+  const hh = String(h).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  return 'UF' + d.getDate() + (d.getMonth()+1) + dayNames[d.getDay()] + hh + mm + ampm;
+}
+(function initVersionTag(){
+  const vEl = document.getElementById('verTag');
+  if(vEl) vEl.textContent = APP_BUILD_VERSION;
+  vEl.title = 'یہ ایپ کا تازہ ترین بلڈ ورژن ہے — ہر اپڈیٹ پر یہ بدل جاتا ہے';
+})();
+
+function updateOnlineStatus(){
+  const dot = document.getElementById('onlineDot');
+  const txt = document.getElementById('onlineText');
+  if(navigator.onLine){
+    dot.classList.remove('offline'); txt.textContent = 'آن لائن';
+  } else {
+    dot.classList.add('offline'); txt.textContent = 'آف لائن';
+  }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+updateOnlineStatus();
+document.getElementById('btnRefresh').onclick = ()=>{
+  showToast('تازہ ترین ورژن لوڈ ہو رہی ہے…');
+  setTimeout(()=> location.reload(true), 400);
+};
+
+/* ---------- keep drawer + toolbar above the on-screen keyboard ---------- */
+function getKeyboardHeight(){
+  if(!window.visualViewport) return 0;
+  return Math.max(0, window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop);
+}
+function adjustForKeyboard(){
+  const kh = getKeyboardHeight();
+  drawer.style.bottom = kh + 'px';
+  if(selToolbar.style.display === 'flex'){
+    const isAbsolute = selToolbar.style.position === 'absolute';
+    const safeMaxTop = window.innerHeight - kh - selToolbar.offsetHeight - 10;
+    const maxTop = safeMaxTop + (isAbsolute ? window.scrollY : 0);
+    if(parseFloat(selToolbar.style.top) > maxTop){
+      selToolbar.style.top = maxTop + 'px';
+      if(toolbarDragged && toolbarPos) toolbarPos.top = maxTop;
+    }
+  }
+}
+let _kbRaf = null;
+function adjustForKeyboardThrottled(){
+  if(_kbRaf) return;
+  _kbRaf = requestAnimationFrame(()=>{ _kbRaf = null; adjustForKeyboard(); });
+}
+if(window.visualViewport){
+  window.visualViewport.addEventListener('resize', adjustForKeyboardThrottled);
+  window.visualViewport.addEventListener('scroll', adjustForKeyboardThrottled);
+}
+
+const railEl2 = document.getElementById('rail');
+const fontWheelBarEl = document.getElementById('fontWheelBar');
+function syncStageTop(){
+  const topbarH = topbarEl.offsetHeight;
+  railEl2.style.top = topbarH + 'px';
+  const railH = railEl2.offsetHeight;
+  fontWheelBarEl.style.top = (topbarH + railH) + 'px';
+  const wheelH = fontWheelBarEl.offsetHeight;
+  stageEl3.style.top = (topbarH + railH + wheelH + 10) + 'px';
+}
+window.addEventListener('load', syncStageTop);
+window.addEventListener('resize', syncStageTop);
+new ResizeObserver(syncStageTop).observe(topbarEl);
+new ResizeObserver(syncStageTop).observe(railEl2);
+new ResizeObserver(syncStageTop).observe(fontWheelBarEl);
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(syncStageTop).catch(()=>{}); }
+setTimeout(syncStageTop, 300);
+setTimeout(syncStageTop, 1200);
+syncStageTop();
+
+/* ---------- undo / redo (protects against accidental deletion) ---------- */
+let lastSnapshot = canvasText.innerHTML;
+let undoStack = [];
+let redoStack = [];
+let snapshotTimer = null;
+function captureSnapshot(){
+  const current = canvasText.innerHTML;
+  if(current !== lastSnapshot){
+    undoStack.push(lastSnapshot);
+    if(undoStack.length > 80) undoStack.shift();
+    redoStack = [];
+    lastSnapshot = current;
+  }
+}
+function doUndo(){
+  captureSnapshot();
+  if(!undoStack.length){ showToast('کوئی مزید واپس لانے کو نہیں'); return; }
+  redoStack.push(canvasText.innerHTML);
+  const prev = undoStack.pop();
+  canvasText.innerHTML = prev;
+  lastSnapshot = prev;
+  showToast('واپس لے آیا');
+}
+function doRedo(){
+  if(!redoStack.length){ showToast('کوئی مزید دوبارہ لانے کو نہیں'); return; }
+  undoStack.push(canvasText.innerHTML);
+  const next = redoStack.pop();
+  canvasText.innerHTML = next;
+  lastSnapshot = next;
+  showToast('دوبارہ لے آیا');
+}
+document.getElementById('btnUndo').onclick = doUndo;
+document.getElementById('btnRedo').onclick = doRedo;
+document.getElementById('btnClearAll').onclick = ()=>{
+  if(!canvasText.innerText.trim()){ showToast('صفحہ پہلے ہی خالی ہے'); return; }
+  if(confirm('کیا پورا صفحہ صاف کر دیں؟ (بعد میں ↶ سے واپس لایا جا سکتا ہے)')){
+    captureSnapshot();
+    canvasText.innerHTML = '';
+    captureSnapshot();
+    showToast('صفحہ صاف کر دیا — واپس لانے کے لیے ↶ دبائیں');
+  }
+};
+document.getElementById('btnCollapseBlank').onclick = ()=>{
+  captureSnapshot();
+  let html = canvasText.innerHTML;
+  html = html.replace(/(<div><br\s*\/?><\/div>\s*){2,}/gi, '<div><br></div>');
+  html = html.replace(/(<div>\s*<\/div>\s*){2,}/gi, '<div><br></div>');
+  html = html.replace(/(<br\s*\/?>\s*){3,}/gi, '<br><br>');
+  canvasText.innerHTML = html;
+  captureSnapshot();
+  showToast('اضافی خالی جگہ ہٹا دی');
+};
+canvasText.addEventListener('beforeinput', (e)=>{
+  if(e.inputType && e.inputType.indexOf('delete') === 0){
+    clearTimeout(snapshotTimer);
+    captureSnapshot();
+  }
+});
+document.addEventListener('keydown', (e)=>{
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='z' && !e.shiftKey){ e.preventDefault(); doUndo(); }
+  if((e.ctrlKey || e.metaKey) && (e.key.toLowerCase()==='y' || (e.key.toLowerCase()==='z' && e.shiftKey))){ e.preventDefault(); doRedo(); }
+});
+
+canvasText.addEventListener('input', ()=>{
+  clearTimeout(snapshotTimer);
+  snapshotTimer = setTimeout(captureSnapshot, 500);
+});
+window.addEventListener('beforeunload', ()=> saveDraft(true));
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveDraft(true); });
+window.addEventListener('pagehide', ()=> saveDraft(true));
+
+window.addEventListener('load', ()=>{
+  try{
+    const raw = localStorage.getItem('urdu_studio_draft');
+    if(raw){
+      const d = JSON.parse(raw);
+      if(d.html && d.html.trim()){
+        canvasText.innerHTML = d.html;
+        if(d.theme) paper.className = d.theme;
+        if(d.fontSize) canvasText.style.fontSize = d.fontSize;
+        if(d.lineHeight) canvasText.style.lineHeight = d.lineHeight;
+        if(d.textAlign) canvasText.style.textAlign = d.textAlign;
+      }
+    }
+  }catch(e){}
+});
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h = setTimeout(()=> t.classList.remove('show'), 1800);
+}
+
+/* ================== ہاتھ کی تحریر (دستی نقل) ================== */
+const hwModal = document.getElementById('hwModal');
+const hwDrop = document.getElementById('hwDrop');
+const hwFile = document.getElementById('hwFile');
+const hwImageWrap = document.getElementById('hwImageWrap');
+const hwBaseCanvas = document.getElementById('hwBaseCanvas');
+const hwDrawCanvas = document.getElementById('hwDrawCanvas');
+const hwBaseCtx = hwBaseCanvas.getContext('2d');
+const hwDrawCtx = hwDrawCanvas.getContext('2d');
+const hwText = document.getElementById('hwText');
+let hwImgZoomPct = 100, hwTxtZoomPct = 100;
+
+document.getElementById('btnOpenHW').onclick = ()=>{ hwModal.classList.add('open'); };
+document.getElementById('hwClose').onclick = ()=>{ hwModal.classList.remove('open'); };
+
+document.getElementById('hwGalleryBtn').onclick = ()=> hwFile.click();
+document.getElementById('hwChangeImg').onclick = ()=> hwFile.click();
+hwFile.onchange = ()=>{ if(hwFile.files[0]) loadHwImage(hwFile.files[0]); };
+
+hwModal.addEventListener('paste', (e)=>{
+  const items = e.clipboardData && e.clipboardData.items;
+  if(!items) return;
+  for(const it of items){
+    if(it.type && it.type.indexOf('image')===0){
+      const blob = it.getAsFile();
+      if(blob){ loadHwImage(blob); e.preventDefault(); return; }
+    }
+  }
+});
+
+let hwOrigImg = null;
+function loadHwImage(file){
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = ()=>{
+    hwOrigImg = img;
+    hwBaseCanvas.width = hwDrawCanvas.width = img.naturalWidth;
+    hwBaseCanvas.height = hwDrawCanvas.height = img.naturalHeight;
+    hwBaseCtx.filter = 'none';
+    hwBaseCtx.drawImage(img, 0, 0);
+    hwDrawCtx.clearRect(0,0,hwDrawCanvas.width,hwDrawCanvas.height);
+    document.getElementById('hwBright').value = 100;
+    document.getElementById('hwContrast').value = 100;
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+  hwDrop.style.display = 'none';
+  hwImageWrap.style.display = 'block';
+  hwImgZoomPct = 100;
+  document.getElementById('hwImgZoom').value = 100;
+  document.getElementById('hwImgZoomVal').textContent = '100%';
+  hwImageWrap.style.transform = 'scale(1)';
+}
+
+/* ---- brightness / contrast enhancement (non-destructive, re-drawn from original) ---- */
+function hwApplyEnhance(){
+  if(!hwOrigImg) return;
+  const b = document.getElementById('hwBright').value;
+  const c = document.getElementById('hwContrast').value;
+  hwBaseCtx.clearRect(0,0,hwBaseCanvas.width,hwBaseCanvas.height);
+  hwBaseCtx.filter = `brightness(${b}%) contrast(${c}%)`;
+  hwBaseCtx.drawImage(hwOrigImg, 0, 0);
+  hwBaseCtx.filter = 'none';
+}
+document.getElementById('hwBright').oninput = hwApplyEnhance;
+document.getElementById('hwContrast').oninput = hwApplyEnhance;
+document.getElementById('hwAutoEnhance').onclick = ()=>{
+  document.getElementById('hwBright').value = 128;
+  document.getElementById('hwContrast').value = 140;
+  hwApplyEnhance();
+  showToast('تصویر صاف ستھری کر دی');
+};
+document.getElementById('hwResetEnhance').onclick = ()=>{
+  document.getElementById('hwBright').value = 100;
+  document.getElementById('hwContrast').value = 100;
+  hwApplyEnhance();
+};
+
+/* ---- annotation tools: pen / highlighter / eraser / view(pan) ---- */
+let hwTool = 'view';
+const hwToolBtns = {
+  view: document.getElementById('hwToolView'),
+  pen: document.getElementById('hwToolPen'),
+  hi: document.getElementById('hwToolHi'),
+  eraser: document.getElementById('hwToolEraser')
+};
+function setHwTool(t){
+  hwTool = t;
+  Object.keys(hwToolBtns).forEach(k=> hwToolBtns[k].classList.toggle('active', k===t));
+  if(t === 'view'){
+    hwDrawCanvas.style.pointerEvents = 'none';
+  } else {
+    hwDrawCanvas.style.pointerEvents = 'auto';
+    hwDrawCanvas.style.touchAction = 'none';
+  }
+}
+hwToolBtns.view.onclick = ()=> setHwTool('view');
+hwToolBtns.pen.onclick = ()=> setHwTool('pen');
+hwToolBtns.hi.onclick = ()=> setHwTool('hi');
+hwToolBtns.eraser.onclick = ()=> setHwTool('eraser');
+setHwTool('view');
+
+let hwDrawing = false, hwLastX = 0, hwLastY = 0;
+function hwCanvasPoint(e){
+  const rect = hwDrawCanvas.getBoundingClientRect();
+  const scaleX = hwDrawCanvas.width / rect.width;
+  const scaleY = hwDrawCanvas.height / rect.height;
+  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+}
+function hwStrokeStyle(){
+  if(hwTool==='pen'){ hwDrawCtx.globalCompositeOperation='source-over'; hwDrawCtx.globalAlpha=1; hwDrawCtx.strokeStyle='#ff2d2d'; hwDrawCtx.lineWidth = Math.max(3, hwDrawCanvas.width*0.004); }
+  else if(hwTool==='hi'){ hwDrawCtx.globalCompositeOperation='source-over'; hwDrawCtx.globalAlpha=0.35; hwDrawCtx.strokeStyle='#ffe600'; hwDrawCtx.lineWidth = Math.max(18, hwDrawCanvas.width*0.03); }
+  else if(hwTool==='eraser'){ hwDrawCtx.globalCompositeOperation='destination-out'; hwDrawCtx.globalAlpha=1; hwDrawCtx.lineWidth = Math.max(24, hwDrawCanvas.width*0.04); }
+  hwDrawCtx.lineCap='round'; hwDrawCtx.lineJoin='round';
+}
+hwDrawCanvas.addEventListener('pointerdown', (e)=>{
+  if(hwTool==='view') return;
+  hwDrawing = true;
+  hwStrokeStyle();
+  const p = hwCanvasPoint(e);
+  hwLastX=p.x; hwLastY=p.y;
+  hwDrawCtx.beginPath(); hwDrawCtx.moveTo(p.x,p.y); hwDrawCtx.lineTo(p.x+0.1,p.y+0.1); hwDrawCtx.stroke();
+});
+hwDrawCanvas.addEventListener('pointermove', (e)=>{
+  if(!hwDrawing) return;
+  const p = hwCanvasPoint(e);
+  hwDrawCtx.beginPath(); hwDrawCtx.moveTo(hwLastX,hwLastY); hwDrawCtx.lineTo(p.x,p.y); hwDrawCtx.stroke();
+  hwLastX=p.x; hwLastY=p.y;
+});
+window.addEventListener('pointerup', ()=> hwDrawing=false);
+
+document.getElementById('hwClearMarks').onclick = ()=>{
+  hwDrawCtx.clearRect(0,0,hwDrawCanvas.width,hwDrawCanvas.height);
+  showToast('نشانات صاف کر دیے');
+};
+
+document.getElementById('hwShareMarked').onclick = async ()=>{
+  if(!hwBaseCanvas.width){ showToast('پہلے تصویر منتخب کریں'); return; }
+  const out = document.createElement('canvas');
+  out.width = hwBaseCanvas.width; out.height = hwBaseCanvas.height;
+  const octx = out.getContext('2d');
+  octx.drawImage(hwBaseCanvas, 0, 0);
+  octx.drawImage(hwDrawCanvas, 0, 0);
+  out.toBlob(async (blob)=>{
+    const file = new File([blob], 'nishaan-zada-tasveer.png', {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file], title:'نشان زدہ تصویر — یہ لفظ بتائیں'}); return; }catch(e){}
+    }
+    downloadBlob(blob, 'nishaan-zada-tasveer.png');
+    showToast('تصویر ڈاؤن لوڈ ہو گئی — اب واٹس ایپ میں بھیج دیں');
+  });
+};
+
+function setHwImgZoom(val){
+  hwImgZoomPct = Math.max(50, Math.min(400, val));
+  document.getElementById('hwImgZoom').value = hwImgZoomPct;
+  document.getElementById('hwImgZoomVal').textContent = hwImgZoomPct + '%';
+  hwImageWrap.style.transform = 'scale(' + (hwImgZoomPct/100) + ')';
+}
+document.getElementById('hwImgZoom').oninput = (e)=> setHwImgZoom(+e.target.value);
+document.getElementById('hwImgMinus').onclick = ()=> setHwImgZoom(hwImgZoomPct-10);
+document.getElementById('hwImgPlus').onclick = ()=> setHwImgZoom(hwImgZoomPct+10);
+
+function setHwTxtZoom(val){
+  hwTxtZoomPct = Math.max(50, Math.min(400, val));
+  document.getElementById('hwTxtZoom').value = hwTxtZoomPct;
+  document.getElementById('hwTxtZoomVal').textContent = hwTxtZoomPct + '%';
+  hwText.style.transform = 'scale(' + (hwTxtZoomPct/100) + ')';
+  hwText.style.width = (10000/hwTxtZoomPct) + '%';
+}
+document.getElementById('hwTxtZoom').oninput = (e)=> setHwTxtZoom(+e.target.value);
+document.getElementById('hwTxtMinus').onclick = ()=> setHwTxtZoom(hwTxtZoomPct-10);
+document.getElementById('hwTxtPlus').onclick = ()=> setHwTxtZoom(hwTxtZoomPct+10);
+
+document.getElementById('hwInsertPage').onclick = ()=>{
+  if(!hwText.innerHTML.trim()){ showToast('پہلے کچھ لکھیں'); return; }
+  canvasText.innerHTML += (canvasText.innerHTML.trim()?'<div><br></div>':'') + hwText.innerHTML;
+  hwModal.classList.remove('open');
+  showToast('مرکزی صفحے میں شامل ہو گیا');
+};
+document.getElementById('hwSaveBookPage').onclick = ()=>{
+  if(!hwText.innerHTML.trim()){ showToast('پہلے کچھ لکھیں'); return; }
+  bookAddPage(hwText.innerHTML, paper.className);
+  hwText.innerHTML = '';
+  hwModal.classList.remove('open');
+  showToast('کتاب کے نئے صفحے میں محفوظ ہو گیا');
+};
+
+/* ================== کتاب (Book) ================== */
+const bookModal = document.getElementById('bookModal');
+const bookGrid = document.getElementById('bookGrid');
+let bookPages = [];
+let bookEditingIndex = -1;
+
+function loadBook(){
+  try{
+    const raw = localStorage.getItem('urdu_studio_book');
+    bookPages = raw ? JSON.parse(raw) : [];
+  }catch(e){ bookPages = []; }
+}
+function saveBook(){
+  try{ localStorage.setItem('urdu_studio_book', JSON.stringify(bookPages)); }
+  catch(e){ showToast('کتاب محفوظ کرنے میں مسئلہ ہوا'); }
+}
+function bookAddPage(html, theme){
+  bookPages.push({ html: html, theme: theme || 'theme-paper' });
+  saveBook();
+  renderBookGrid();
+}
+function renderBookGrid(){
+  bookGrid.innerHTML = '';
+  bookPages.forEach((p, i)=>{
+    const card = document.createElement('div');
+    card.className = 'book-page-card';
+    card.innerHTML = `
+      <button class="del" data-i="${i}">✕</button>
+      <div class="thumb"><div class="pg-frame"></div>${p.html}</div>
+      <div class="num">صفحہ ${i+1}</div>`;
+    card.querySelector('.thumb').onclick = ()=> bookEditPage(i);
+    card.querySelector('.num').onclick = ()=> bookEditPage(i);
+    card.querySelector('.del').onclick = (e)=>{
+      e.stopPropagation();
+      if(confirm('یہ صفحہ حذف کریں؟')){ bookPages.splice(i,1); saveBook(); renderBookGrid(); }
+    };
+    bookGrid.appendChild(card);
+  });
+}
+function bookEditPage(i){
+  bookEditingIndex = i;
+  canvasText.innerHTML = bookPages[i].html;
+  paper.className = bookPages[i].theme || 'theme-paper';
+  bookModal.classList.remove('open');
+  showToast('صفحہ ' + (i+1) + ' ترمیم کے لیے کھل گیا — تبدیلی کے بعد "موجودہ صفحہ کتاب میں محفوظ کریں" دبائیں');
+}
+
+document.getElementById('btnOpenBook').onclick = ()=>{ loadBook(); renderBookGrid(); bookModal.classList.add('open'); };
+document.getElementById('bookClose').onclick = ()=>{ bookModal.classList.remove('open'); };
+document.getElementById('bookNewPage').onclick = ()=>{
+  canvasText.innerHTML = '';
+  bookEditingIndex = -1;
+  bookModal.classList.remove('open');
+  showToast('نیا صفحہ — لکھیں پھر کتاب میں محفوظ کریں');
+};
+document.getElementById('bookSaveCurrent').onclick = ()=>{
+  loadBook();
+  if(!canvasText.innerHTML.trim()){ showToast('صفحہ خالی ہے'); return; }
+  if(bookEditingIndex >= 0 && bookEditingIndex < bookPages.length){
+    bookPages[bookEditingIndex] = { html: canvasText.innerHTML, theme: paper.className };
+  } else {
+    bookPages.push({ html: canvasText.innerHTML, theme: paper.className });
+    bookEditingIndex = bookPages.length - 1;
+  }
+  saveBook();
+  renderBookGrid();
+  showToast('کتاب میں محفوظ ہو گیا (صفحہ ' + (bookEditingIndex+1) + ')');
+};
+
+document.getElementById('bookExportPdf').onclick = async ()=>{
+  loadBook();
+  if(!bookPages.length){ showToast('کتاب میں ابھی کوئی صفحہ نہیں'); return; }
+  let bookTitle = prompt('اس کتاب / کتابچے کا عنوان لکھیں:', '');
+  if(bookTitle === null) return;
+  if(!bookTitle.trim()) bookTitle = 'میری تحریر';
+  showToast('PDF تیار ہو رہی ہے، براہ کرم انتظار کریں…');
+  const esc = (s)=> s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  const stageEl = document.createElement('div');
+  stageEl.style.position = 'fixed';
+  stageEl.style.left = '-99999px';
+  stageEl.style.top = '0';
+  stageEl.style.width = '760px';
+  stageEl.style.background = '#ffffff';
+  document.body.appendChild(stageEl);
+
+  const coverHtml = `
+    <div style="width:760px;min-height:1000px;background:#fdfaf3;border:10px double #b8923f;border-radius:22px;padding:26px;box-sizing:border-box;">
+      <div style="border:2px solid #b8923f;border-radius:14px;height:948px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;box-sizing:border-box;">
+        <div style="font-size:26px;color:#b8923f;letter-spacing:10px;">❖ ❖ ❖</div>
+        <div style="direction:rtl;font-family:'Jameel Noori Nastaleeq',serif;font-size:46px;color:#241a12;line-height:1.7;margin:34px 0;">${esc(bookTitle)}</div>
+        <div style="font-size:26px;color:#b8923f;letter-spacing:10px;">❖ ❖ ❖</div>
+      </div>
+    </div>`;
+  const closingHtml = `
+    <div style="width:760px;min-height:1000px;background:#fdfaf3;border:8px solid #b8923f;border-radius:16px;"></div>`;
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ unit:'pt', format:'a4' });
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  let firstImage = true;
+
+  async function addFlatPage(html){
+    stageEl.innerHTML = html;
+    await new Promise(r=>setTimeout(r,60));
+    const canvas = await html2canvas(stageEl.firstElementChild, {backgroundColor:'#ffffff', scale:2});
+    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+    const ratio = Math.min(pageW/canvas.width, pageH/canvas.height);
+    const w = canvas.width*ratio, h = canvas.height*ratio;
+    if(!firstImage) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', (pageW-w)/2, (pageH-h)/2, w, h);
+    firstImage = false;
+  }
+
+  await addFlatPage(coverHtml);
+
+  let pageNum = 1;
+  for(let i=0;i<bookPages.length;i++){
+    const canvases = await buildPaginatedPages(30, 'portrait', 2, 'thin', bookPages[i].html, pageNum);
+    canvases.forEach(c=>{
+      const imgData = c.toDataURL('image/jpeg', 0.95);
+      if(!firstImage) pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 0, 0, pageW, pageH);
+      firstImage = false;
+      pageNum++;
+    });
+  }
+
+  await addFlatPage(closingHtml);
+  document.body.removeChild(stageEl);
+  pdf.save('urdu-book.pdf');
+  showToast('کتاب PDF بن گئی — کوئی سطر کہیں کٹی نہیں، جتنے صفحات ضرورت ہوئی بن گئے');
+};
+
+loadBook();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
