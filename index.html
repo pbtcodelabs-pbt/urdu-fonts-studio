@@ -389,33 +389,7 @@
 
   #canvasText{ color: var(--ink); }
 
-  /* floating selection toolbar */
-  #selToolbar{
-    position: absolute; display:none; z-index: 50;
-    background: #fff4e0; border:1.5px solid #e0a83e; border-radius: 10px;
-    padding: 6px 8px; box-shadow: 0 8px 24px rgba(0,0,0,.4);
-    align-items:center; gap:6px; flex-wrap:wrap; justify-content:center;
-    width: min(74vw, 260px); transform-origin: top right;
-  }
-  #selToolbar input[type=range]{ touch-action:pan-x; }
-  #selToolbar select, #selToolbar input[type=number]{
-    background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
-    font-size:12px; padding:4px 6px;
-  }
-  #selToolbar button{
-    background:#ffe6b8; color:#5a3d0a; border:1px solid #e0a83e; border-radius:6px;
-    width:26px; height:26px; cursor:pointer; font-size:13px;
-  }
-  #selToolbar button.active{ background:#e0a83e; color:#3a2400; }
-  #selFontToggle{ width:auto !important; padding:0 8px; font-weight:700; }
-  .sel-fw-scroll{
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 75%, transparent 100%);
-    mask-image: linear-gradient(180deg, transparent 0%, #000 25%, #000 75%, transparent 100%);
-  }
-  .sel-fw-scroll .fw-item{ color:#8a5a12; font-size:10.5px; }
-  .sel-fw-scroll .fw-item.center{ color:#3a2400; font-weight:700; font-size:12px; }
-  #selToolbarBody{ display:none; align-items:center; gap:6px; flex-wrap:wrap; justify-content:center; }
-  #selToolbarBody.expanded{ display:flex; }
+  /* آزاد باکس (📦) — منتخب حصہ نقطہ دار بارڈر کے ساتھ آزادانہ حرکت کے لیے */
   .free-pos-box{ display:inline-block; }
   .free-pos-box.placed{ outline: none !important; }
   .free-pos-box.placed .free-pos-done{ display:none; }
@@ -425,26 +399,9 @@
     display:flex; align-items:center; justify-content:center; font-size:12px;
     cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,.4); z-index:6;
   }
-  #selDragHandle{
-    position: absolute; top:-9px; left:-9px;
-    cursor: move; touch-action: none; user-select: none; -webkit-user-select: none;
-    color: #3a2400; font-size:14px; padding:0;
-    width:26px; height:26px; min-width:26px; border-radius:50%;
-    background: #e0a83e; display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 1px 4px rgba(0,0,0,.3); border:2px solid #fff; z-index:5;
-  }
-  #selCloseBtn{
-    position: absolute; top:-9px; right:-9px;
-    width:24px; height:24px; min-width:24px; border-radius:50%; border:2px solid #fff;
-    background:#c0392b; color:#fff; font-size:12px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow: 0 1px 4px rgba(0,0,0,.4); z-index: 5;
-  }
-  #selToolbar{ opacity:.6; transition: opacity .15s, top .16s ease, left .16s ease; position:absolute; touch-action:none; }
-  #selToolbarBody{ touch-action:none; }
-  #selToolbar.dragging-now{ transition: opacity .15s; }
-  #selToolbar.touched, #selToolbar:has(#selToolbarBody.expanded){ opacity:1; }
-  #selToggle{ width:auto !important; padding:0 10px; font-weight:600; }
+  #panel-special .icon-toggle{ font-size:13px; }
+  #selColorRow{ display:none; }
+  #selColorRow.show{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
 
   ::selection{ background: rgba(30,136,229,.55); }
   #canvasText ::selection{ background: rgba(30,136,229,.55); }
@@ -642,50 +599,10 @@
   </div>
 </div>
 
-<div id="selToolbar" dir="ltr">
-  <span id="selDragHandle" title="پکڑ کر گھسیٹیں">✥</span>
-  <button id="selCloseBtn" title="بند کریں">✕</button>
-  <button id="selToggle">Aa ⌄</button>
-  <div id="selToolbarBody">
-  <button id="selFontToggle" title="فونٹ تبدیل کریں">🔤 فونٹ</button>
-  <div id="selFontWheelRow" style="display:none;width:100%;gap:8px;padding:6px 2px 2px;">
-    <div class="fw-half" style="flex:1;min-width:0;" dir="ltr">
-      <div class="fw-scroll sel-fw-scroll" id="selUrduWheelScroll" dir="ltr" style="height:70px;"></div>
-    </div>
-    <div class="fw-half" style="flex:1;min-width:0;border-inline-start:1px solid var(--border-1);" dir="ltr">
-      <div class="fw-scroll sel-fw-scroll" id="selEnWheelScroll" dir="ltr" style="height:70px;"></div>
-    </div>
-  </div>
-  <button id="selBold" title="بولڈ">B</button>
-  <button id="selSpace" title="لفظوں میں فاصلہ">☰</button>
-  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
-  <button class="icon-toggle" data-align="right" title="دائیں">◄</button>
-  <button class="icon-toggle" data-align="center" title="درمیان">◆</button>
-  <button class="icon-toggle" data-align="left" title="بائیں">►</button>
-  <button class="icon-toggle" data-align="justify" title="برابر">▤</button>
-  <button id="selLineSpaceMinus" title="سطروں کا فاصلہ کم کریں">↕−</button>
-  <button id="selLineSpacePlus" title="سطروں کا فاصلہ بڑھائیں">↕+</button>
-  <button id="selFromHereBtn" title="یہاں سے آخر تک منتخب کریں">⬇️منتخب</button>
-  <button id="selFitLine" title="ایک لائن میں فٹ کریں">↔️1</button>
-  <input type="range" id="selFitSlider" min="8" max="140" value="34" style="width:90px;">
-  <span id="selFitSliderVal" style="color:var(--text-muted);font-size:11px;min-width:26px;">34</span>
-  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
-  <button id="selColorBtn" title="لفظ کا رنگ">🎨</button>
-  <button id="selFreePos" title="پکڑ کر کہیں بھی رکھیں">📦</button>
-  <button id="btnReleaseAllBoxes" title="سب آزاد باکس واپس عام تحریر میں لائیں">🧲</button>
-  <button id="selBgBtn" title="لفظ کا بیک گراؤنڈ">🖍️</button>
-  <span style="width:1px;height:20px;background:#7fc0f0;margin:0 2px;"></span>
-  <button class="selPunct" data-ch="،">،</button>
-  <button class="selPunct" data-ch="۔">۔</button>
-  <button class="selPunct" data-ch="؟">؟</button>
-  <button class="selPunct" data-ch="!">!</button>
-  <div id="selColorRow" style="display:none;width:100%;justify-content:center;gap:6px;padding-top:6px;"></div>
-  </div>
-</div>
-
 <div id="rail">
   <button class="rail-btn" data-panel="font">Aa<span class="lbl">فونٹ</span></button>
   <button class="rail-btn" data-panel="style">⇕<span class="lbl">سائز / انداز</span></button>
+  <button class="rail-btn" data-panel="special">🎯<span class="lbl">خاص حصہ</span></button>
   <button class="rail-btn" data-panel="align">☰<span class="lbl">ترتیب</span></button>
   <button class="rail-btn" data-panel="theme">◐<span class="lbl">پس منظر</span></button>
   <button class="rail-btn" data-panel="apptheme">🎨<span class="lbl">ایپ تھیم</span></button>
@@ -722,6 +639,43 @@
     <div class="color-row" id="colorRow"></div>
 
     <div class="hint">یہ تبدیلیاں بھی منتخب شدہ حصے پر لاگو ہوں گی — یا پورے صفحے پر اگر کچھ منتخب نہیں۔</div>
+  </div>
+
+  <div id="panel-special" style="display:none;">
+    <h2>خاص حصہ — پہلے منتخب کریں <button data-close="1">✕</button></h2>
+    <div class="hint" style="margin-top:-8px;margin-bottom:12px;">تحریر میں سے لفظ/سطر منتخب کریں، پھر یہاں سے بولڈ، فاصلہ، رنگ یا آزاد پوزیشن لگائیں۔</div>
+
+    <span class="field-label">بولڈ / فاصلہ</span>
+    <div class="btn-grid4">
+      <button id="selBold" class="icon-toggle" title="بولڈ">B بولڈ</button>
+      <button id="selSpace" class="icon-toggle" title="لفظوں میں فاصلہ">☰ فاصلہ</button>
+      <button id="selLineSpaceMinus" class="icon-toggle" title="سطروں کا فاصلہ کم کریں">↕− کم</button>
+      <button id="selLineSpacePlus" class="icon-toggle" title="سطروں کا فاصلہ بڑھائیں">↕+ زیادہ</button>
+    </div>
+
+    <span class="field-label">مزید سلیکشن</span>
+    <div class="btn-grid4">
+      <button id="selFromHereBtn" class="icon-toggle" title="یہاں سے آخر تک منتخب کریں">⬇️ یہاں سے آخر تک</button>
+      <button id="selFitLine" class="icon-toggle" title="ایک لائن میں فٹ کریں">↔️ ایک لائن میں فٹ</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+      <input type="range" id="selFitSlider" min="8" max="140" value="34" style="flex:1;">
+      <span id="selFitSliderVal" style="color:var(--text-muted);font-size:12px;min-width:30px;">34</span>
+    </div>
+
+    <span class="field-label">آزاد پوزیشن — جہاں دل کرے وہاں رکھیں</span>
+    <div class="btn-grid4">
+      <button id="selFreePos" class="icon-toggle" title="پکڑ کر کہیں بھی رکھیں">📦 آزاد پوزیشن</button>
+      <button id="btnReleaseAllBoxes" class="icon-toggle" title="سب آزاد باکس واپس لائیں">🧲 واپس لائیں</button>
+    </div>
+    <div class="hint" style="margin-top:8px;">📦 دبانے کے بعد منتخب حصے کے گرد نقطہ دار بارڈر بن جائے گا — اسے انگلی سے پکڑ کر صفحے میں کہیں بھی لے جائیں۔</div>
+
+    <span class="field-label">رنگ</span>
+    <div class="btn-grid4">
+      <button id="selColorBtn" class="icon-toggle" title="لفظ کا رنگ">🎨 لکھائی کا رنگ</button>
+      <button id="selBgBtn" class="icon-toggle" title="لفظ کا بیک گراؤنڈ">🖍️ بیک گراؤنڈ</button>
+    </div>
+    <div id="selColorRow" style="display:none;width:100%;justify-content:center;gap:6px;padding-top:8px;flex-wrap:wrap;"></div>
   </div>
 
   <div id="panel-align" style="display:none;">
@@ -1393,6 +1347,22 @@ function styleSelection(applyToSpanStyle, applyGlobalFn){
     return;
   }
   const range = sel.getRangeAt(0);
+
+  /* اگر منتخب حصہ عین ہمارے پہلے بنائے ہوئے کسی span کے برابر ہے تو نیا span بنا کر نیسٹ کرنے کے بجائے
+     اسی موجودہ span کو اپڈیٹ کریں — بار بار فونٹ/سائز بدلنے پر یہ مستحکم اور قابلِ بھروسہ رہتا ہے */
+  let existing = range.commonAncestorContainer;
+  if(existing.nodeType === 3) existing = existing.parentElement;
+  if(existing && existing.tagName === 'SPAN' && canvasText.contains(existing) && existing !== canvasText &&
+     range.toString().length > 0 && range.toString() === existing.textContent){
+    applyToSpanStyle(existing.style);
+    sel.removeAllRanges();
+    const nr0 = document.createRange();
+    nr0.selectNodeContents(existing);
+    sel.addRange(nr0);
+    savedRange = nr0.cloneRange();
+    return;
+  }
+
   const span = document.createElement('span');
   applyToSpanStyle(span.style);
   try{
@@ -1406,6 +1376,7 @@ function styleSelection(applyToSpanStyle, applyGlobalFn){
   const nr = document.createRange();
   nr.selectNodeContents(span);
   sel.addRange(nr);
+  savedRange = nr.cloneRange();
 }
 
 function applyFont(family, optionEl){
@@ -1642,147 +1613,6 @@ stageEl2.addEventListener('touchend', (e)=>{
   }
 });
 
-/* ---------- floating selection toolbar (stays visible throughout editing) ---------- */
-const selToolbar = document.getElementById('selToolbar');
-let toolbarDragged = false;
-let toolbarPos = null;
-function showSelToolbarPinned(){
-  if(typeof toolbarManuallyClosed !== 'undefined' && toolbarManuallyClosed) return;
-  if(toolbarDragged && toolbarPos){
-    selToolbar.style.position = 'fixed';
-    selToolbar.style.top = toolbarPos.top + 'px';
-    selToolbar.style.left = toolbarPos.left + 'px';
-    selToolbar.style.display = 'flex';
-    if(typeof applyToolbarTransform === 'function') applyToolbarTransform(); else selToolbar.style.transform = 'none';
-    if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
-    return;
-  }
-  selToolbar.style.position = 'fixed';
-  selToolbar.style.top = '58px';
-  selToolbar.style.left = '50%';
-  selToolbar.style.display = 'flex';
-  if(typeof applyToolbarTransform === 'function') applyToolbarTransform(); else selToolbar.style.transform = 'translateX(-50%)';
-  if(typeof adjustForKeyboard === 'function') adjustForKeyboard();
-}
-document.addEventListener('selectionchange', ()=>{
-  if(dragging) return; /* ڈریگ کے دوران پوزیشن ری سیٹ نہ ہو */
-  if(document.activeElement !== canvasText) return;
-  if(selToolbar.style.display === 'flex') return; /* پہلے سے نظر آ رہا ہو تو بار بار جھٹکا نہ لگے */
-  showSelToolbarPinned();
-});
-let toolbarManuallyClosed = false;
-canvasText.addEventListener('focus', ()=>{
-  toolbarManuallyClosed = false;
-  showSelToolbarPinned();
-  setTimeout(()=>{ if(typeof adjustForKeyboard === 'function') adjustForKeyboard(); }, 320);
-});
-canvasText.addEventListener('blur', ()=>{
-  /* intentionally does not auto-hide the toolbar anymore — only the ✕ button closes it */
-});
-document.getElementById('selCloseBtn').onmousedown = (e)=> e.preventDefault();
-document.getElementById('selCloseBtn').onclick = ()=>{
-  toolbarManuallyClosed = true;
-  selToolbar.style.display = 'none';
-};
-document.getElementById('selToggle').onmousedown = (e)=> e.preventDefault();
-document.getElementById('selToggle').onclick = ()=>{
-  const body = document.getElementById('selToolbarBody');
-  const expanded = body.classList.toggle('expanded');
-  document.getElementById('selToggle').textContent = 'Aa ' + (expanded ? '⌃' : '⌄');
-};
-/* ---------- ٹول بار: ہر پوائنٹ سے ڈریگ + دو انگلیوں سے زوم — کبھی خودکار غائب نہ ہو ---------- */
-const selDragHandle = document.getElementById('selDragHandle');
-let dragging = false, dragStartX=0, dragStartY=0, dragOrigTop=0, dragOrigLeft=0;
-let toolbarScale = 1;
-function applyToolbarTransform(){
-  selToolbar.style.transform = toolbarDragged ? ('scale('+toolbarScale+')') : ('translateX(-50%) scale('+toolbarScale+')');
-}
-function beginToolbarDrag(clientX, clientY){
-  dragging = true;
-  selToolbar.classList.add('touched');
-  selToolbar.classList.add('dragging-now');
-  const rect = selToolbar.getBoundingClientRect();
-  dragOrigTop = rect.top; dragOrigLeft = rect.left;
-  dragStartX = clientX; dragStartY = clientY;
-  selToolbar.style.position = 'fixed';
-  selToolbar.style.top = dragOrigTop + 'px';
-  selToolbar.style.left = dragOrigLeft + 'px';
-  applyToolbarTransform();
-}
-function moveToolbarDrag(clientX, clientY){
-  if(!dragging) return;
-  let newTop = dragOrigTop + (clientY - dragStartY);
-  let newLeft = dragOrigLeft + (clientX - dragStartX);
-  const kh = (typeof getKeyboardHeight === 'function') ? getKeyboardHeight() : 0;
-  const tw = (selToolbar.offsetWidth || 60) * toolbarScale;
-  const th = (selToolbar.offsetHeight || 40) * toolbarScale;
-  const safeMaxTop = window.innerHeight - kh - th - 4;
-  newTop = Math.max(4, Math.min(Math.max(4, safeMaxTop), newTop));
-  newLeft = Math.max(4, Math.min(Math.max(4, window.innerWidth - tw - 4), newLeft));
-  selToolbar.style.top = newTop + 'px';
-  selToolbar.style.left = newLeft + 'px';
-  toolbarDragged = true;
-  toolbarPos = {top:newTop, left:newLeft};
-}
-function endToolbarDrag(){
-  if(!dragging) return;
-  dragging = false;
-  selToolbar.classList.remove('dragging-now');
-  setTimeout(()=> selToolbar.classList.remove('touched'), 800);
-}
-function isDragBlockedTarget(el){
-  return !!(el && el.closest && el.closest('button, input, select, .fw-scroll, .free-pos-box, #selColorRow, #selFontWheelRow'));
-}
-/* ٹول بار کے کسی بھی حصے سے ڈریگ — ہینڈل ہو، خالی جگہ ہو — سوائے اصل بٹنوں/سلائیڈر/ویل کے */
-let toolbarPointerId = null;
-selToolbar.addEventListener('pointerdown', (e)=>{
-  if(isDragBlockedTarget(e.target) && e.target !== selDragHandle) return;
-  e.preventDefault();
-  toolbarPointerId = e.pointerId;
-  beginToolbarDrag(e.clientX, e.clientY);
-  try{ selToolbar.setPointerCapture(e.pointerId); }catch(err){}
-});
-selToolbar.addEventListener('pointermove', (e)=>{
-  if(!dragging || e.pointerId !== toolbarPointerId) return;
-  e.preventDefault();
-  moveToolbarDrag(e.clientX, e.clientY);
-});
-function releaseToolbarDrag(e){
-  if(e && e.pointerId !== toolbarPointerId) return;
-  endToolbarDrag();
-  try{ selToolbar.releasePointerCapture(toolbarPointerId); }catch(err){}
-  toolbarPointerId = null;
-}
-selToolbar.addEventListener('pointerup', releaseToolbarDrag);
-selToolbar.addEventListener('pointercancel', releaseToolbarDrag);
-
-/* دو انگلیوں سے پورا ٹول بار چھوٹا/بڑا (pinch zoom) — کہیں سے بھی ٹول بار پر */
-let tbPinchDist = 0, tbPinchStartScale = 1;
-selToolbar.addEventListener('touchstart', (e)=>{
-  if(e.touches.length===2){
-    tbPinchDist = touchDist(e.touches);
-    tbPinchStartScale = toolbarScale;
-    if(!toolbarDragged){
-      /* پنچ سے پہلے موجودہ پوزیشن کو فکس کر دیں تاکہ سکیل درست جگہ سے ہو */
-      const rect = selToolbar.getBoundingClientRect();
-      selToolbar.style.position = 'fixed';
-      selToolbar.style.top = rect.top + 'px';
-      selToolbar.style.left = (rect.left + rect.width/2) + 'px';
-      toolbarDragged = true;
-      toolbarPos = {top:rect.top, left:rect.left + rect.width/2};
-    }
-  }
-}, {passive:true});
-selToolbar.addEventListener('touchmove', (e)=>{
-  if(e.touches.length===2 && tbPinchDist>0){
-    e.preventDefault();
-    const d = touchDist(e.touches);
-    toolbarScale = Math.max(0.6, Math.min(2.2, tbPinchStartScale * (d/tbPinchDist)));
-    applyToolbarTransform();
-  }
-}, {passive:false});
-selToolbar.addEventListener('touchend', (e)=>{ if(e.touches.length<2) tbPinchDist = 0; });
-
 document.querySelectorAll('.selPunct').forEach(btn=>{
   btn.onmousedown = (e)=> e.preventDefault();
   btn.onclick = ()=>{ canvasText.focus(); document.execCommand('insertText', false, btn.dataset.ch); };
@@ -1872,33 +1702,13 @@ function wireWheel(scrollEl, list){
       } else {
         styleSelection(st=> st.fontFamily = fam, ()=> canvasText.style.fontFamily = fam);
       }
-    }, 160);
+    }, 240);
   });
 }
 wireWheel(urduScroll, urduFonts);
 wireWheel(enScroll, enFonts);
 if(urduFonts.length) urduScroll.children[0].classList.add('center');
 if(enFonts.length) enScroll.children[0].classList.add('center');
-
-/* ---------- ڈریگ ٹول بار کے اندر فونٹ ویل (سلیکٹ شدہ حصے کا فونٹ فوری بدلنے کے لیے) ---------- */
-const selUrduScroll = document.getElementById('selUrduWheelScroll');
-const selEnScroll = document.getElementById('selEnWheelScroll');
-if(selUrduScroll && selEnScroll){
-  buildWheel(selUrduScroll, urduFonts);
-  buildWheel(selEnScroll, enFonts);
-  wireWheel(selUrduScroll, urduFonts);
-  wireWheel(selEnScroll, enFonts);
-  if(urduFonts.length) selUrduScroll.children[0].classList.add('center');
-  if(enFonts.length) selEnScroll.children[0].classList.add('center');
-  const selFontToggle = document.getElementById('selFontToggle');
-  const selFontWheelRow = document.getElementById('selFontWheelRow');
-  selFontToggle.onmousedown = (e)=> e.preventDefault();
-  selFontToggle.onclick = ()=>{
-    const showing = selFontWheelRow.style.display === 'flex';
-    selFontWheelRow.style.display = showing ? 'none' : 'flex';
-    selFontToggle.classList.toggle('active', !showing);
-  };
-}
 
 document.querySelectorAll('.fw-minus').forEach(btn=> btn.onclick = ()=>{
   curSelSize = Math.max(10, curSelSize-2);
@@ -2458,8 +2268,8 @@ new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'),
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0652PM) ---------- */
-const APP_BUILD_VERSION = "UF238Su0652PM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0824PM) ---------- */
+const APP_BUILD_VERSION = "UF238Su0824PM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
@@ -2501,15 +2311,6 @@ function getKeyboardHeight(){
 function adjustForKeyboard(){
   const kh = getKeyboardHeight();
   drawer.style.bottom = kh + 'px';
-  if(selToolbar.style.display === 'flex'){
-    const isAbsolute = selToolbar.style.position === 'absolute';
-    const safeMaxTop = window.innerHeight - kh - selToolbar.offsetHeight - 10;
-    const maxTop = safeMaxTop + (isAbsolute ? window.scrollY : 0);
-    if(parseFloat(selToolbar.style.top) > maxTop){
-      selToolbar.style.top = maxTop + 'px';
-      if(toolbarDragged && toolbarPos) toolbarPos.top = maxTop;
-    }
-  }
 }
 let _kbRaf = null;
 function adjustForKeyboardThrottled(){
