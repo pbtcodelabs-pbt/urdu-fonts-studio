@@ -1958,14 +1958,30 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
   await new Promise(r=> requestAnimationFrame(()=> requestAnimationFrame(r)));
   if(document.fonts && document.fonts.ready){ try{ await document.fonts.ready; }catch(e){} }
 
+  /* ہر لائن کی حقیقی حدود ناپیں تاکہ صفحہ بدلتے وقت کوئی لائن درمیان سے نہ کٹے */
+  const measureRange = document.createRange();
+  measureRange.selectNodeContents(div);
+  const divTopForMeasure = div.getBoundingClientRect().top;
+  const lineBands = clusterLineBands(measureRange.getClientRects(), divTopForMeasure);
+  const lineBottomsCss = lineBands.map(b=> b.bottom).sort((a,b)=> a-b);
+
   const fullCanvas = await html2canvas(div, {backgroundColor:'#ffffff', scale: renderScale});
   document.body.removeChild(div);
+
+  const lineBottomsPx = lineBottomsCss.map(v=> v * renderScale);
 
   const pages = [];
   let y = 0;
   const sliceHpxAtScale = maxContentHpx * renderScale;
   while(y < fullCanvas.height){
-    const sliceH = Math.min(sliceHpxAtScale, fullCanvas.height - y);
+    let targetEnd = Math.min(y + sliceHpxAtScale, fullCanvas.height);
+    let cut = targetEnd;
+    if(targetEnd < fullCanvas.height - 1){
+      /* اسی حد کے اندر موجود آخری مکمل لائن کے بعد کاٹیں */
+      const candidates = lineBottomsPx.filter(v=> v > y + (10*renderScale) && v <= targetEnd);
+      if(candidates.length) cut = candidates[candidates.length - 1];
+    }
+    const sliceH = Math.max(1, cut - y);
     const pageCanvas = document.createElement('canvas');
     pageCanvas.width = pageWpx * renderScale;
     pageCanvas.height = pageHpx * renderScale;
@@ -1980,7 +1996,7 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
     pctx.textAlign = 'center';
     pctx.fillText(String((startPageNum||1) + pages.length), pageCanvas.width/2, pageCanvas.height - (16*renderScale*PX_PER_PT/2.2));
     pages.push(pageCanvas);
-    y += sliceH;
+    y = y + sliceH;
   }
   if(!pages.length){
     const blank = document.createElement('canvas');
@@ -2268,8 +2284,8 @@ new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'),
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF238Su0824PM) ---------- */
-const APP_BUILD_VERSION = "UF238Su0824PM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF248Mo0922AM) ---------- */
+const APP_BUILD_VERSION = "UF248Mo0922AM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
