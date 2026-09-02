@@ -454,7 +454,7 @@
   .pdf-mini-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px; }
   @media (min-width:520px){ .pdf-mini-grid{ grid-template-columns:repeat(3,1fr); } }
   .pdf-ctrl-grid{
-    display:grid; grid-template-columns:repeat(5,1fr); gap:6px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:6px;
     background:#d3ecff; border:1px solid #aed6f7; border-radius:12px;
     padding:8px 6px; margin: 8px 0 12px; flex-shrink:0;
   }
@@ -634,6 +634,10 @@
 
     <span class="field-label">لفظوں کے درمیان فاصلہ</span>
     <input type="range" id="rngWordSpace" min="0" max="30" value="0">
+
+    <span class="field-label">سطروں کا درمیانی فاصلہ (لائن سپیسنگ)</span>
+    <input type="range" id="rngLineHeight" min="10" max="40" value="21">
+    <div class="row-between"><span id="rngLineHeightVal">2.1</span><span>فاصلہ</span></div>
 
     <span class="field-label">رنگ</span>
     <div class="color-row" id="colorRow"></div>
@@ -919,6 +923,18 @@
       </div>
     </div>
 
+    <div class="pdf-ctrl-panel" id="pdfPanel-linespace">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">سطروں کا درمیانی فاصلہ (PDF کے لیے)</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="color:#2f6690;font-size:12px;">↕−</span>
+          <input type="range" id="pdfLineHeight" min="10" max="35" value="21" style="flex:1;">
+          <span style="color:#2f6690;font-size:14px;">↕+</span>
+          <span id="pdfLineHeightVal" style="color:#123a68;font-size:12px;min-width:30px;">2.1</span>
+        </div>
+      </div>
+    </div>
+
     <div class="pdf-ctrl-panel" id="pdfPanel-zoom">
       <div class="pdf-ctrl-panel-inner">
         <div class="pdf-panel-label">صفحے کے پریویو کا زوم</div>
@@ -930,12 +946,27 @@
       </div>
     </div>
 
+    <div class="pdf-ctrl-panel" id="pdfPanel-fit">
+      <div class="pdf-ctrl-panel-inner">
+        <div class="pdf-panel-label">خودکار مکمل فٹ — سائز خود کم/زیادہ کر کے مطلوبہ صفحات میں فٹ کرے</div>
+        <div class="pdf-mini-grid">
+          <button class="pill-btn" id="pdfFit1">1 صفحہ میں فٹ</button>
+          <button class="pill-btn" id="pdfFit2">2 صفحات میں فٹ</button>
+          <button class="pill-btn" id="pdfFit3">3 صفحات میں فٹ</button>
+          <button class="pill-btn" id="pdfFit4">4 صفحات میں فٹ</button>
+        </div>
+        <div id="pdfFitStatus" class="hint" style="margin-top:8px;"></div>
+      </div>
+    </div>
+
     <div class="pdf-ctrl-grid">
       <button class="pdf-ctrl-btn" data-pdfpanel="align"><span class="ic">☰</span>صف بندی</button>
       <button class="pdf-ctrl-btn" data-pdfpanel="border"><span class="ic">🖼️</span>بارڈر</button>
       <button class="pdf-ctrl-btn" data-pdfpanel="orient"><span class="ic">⤢</span>رخ</button>
       <button class="pdf-ctrl-btn" data-pdfpanel="size"><span class="ic">Aa</span>سائز</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="linespace"><span class="ic">↕</span>فاصلہ</button>
       <button class="pdf-ctrl-btn" data-pdfpanel="zoom"><span class="ic">🔍</span>زوم</button>
+      <button class="pdf-ctrl-btn" data-pdfpanel="fit"><span class="ic">🗜️</span>فٹ پیج</button>
     </div>
   </div>
   <div class="fs-foot">
@@ -1411,6 +1442,15 @@ rngWordSpace.oninput = ()=>{
   styleSelection(st=> st.wordSpacing = rngWordSpace.value+'px', ()=> canvasText.style.wordSpacing = rngWordSpace.value+'px');
 };
 
+const rngLineHeight = document.getElementById('rngLineHeight');
+const rngLineHeightVal = document.getElementById('rngLineHeightVal');
+rngLineHeight.oninput = ()=>{
+  const v = (+rngLineHeight.value / 10).toFixed(1);
+  rngLineHeightVal.textContent = v;
+  canvasText.style.lineHeight = v;
+  if(typeof curLineSpace !== 'undefined') curLineSpace = +v;
+};
+
 /* ---------- align ---------- */
 document.querySelectorAll('[data-align]').forEach(btn=>{
   btn.onclick = ()=>{
@@ -1831,6 +1871,7 @@ const A4_PT = {portrait:{w:595,h:842}, landscape:{w:842,h:595}};
 const PX_PER_PT = 1.5;   // resolution for measuring/preview
 let pdfOrientation = 'portrait';
 let pdfBorderStyle = 'none';
+let pdfLineHeight = 2.1;
 
 function roundRectPath(ctx,x,y,w,h,r){
   ctx.beginPath();
@@ -1923,7 +1964,7 @@ function clusterLineBands(rects, refTop){
 /* Builds all pages for the given content, breaking only between lines (never mid-line),
    with the border drawn safely outside the text margin. Returns an array of finished,
    bordered, numbered page canvases. */
-async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderStyle, htmlOverride, startPageNum){
+async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderStyle, htmlOverride, startPageNum, lineHeightOverride){
   const dims = A4_PT[orientation];
   const pageWpx = dims.w * PX_PER_PT;
   const pageHpx = dims.h * PX_PER_PT;
@@ -1938,7 +1979,7 @@ async function buildPaginatedPages(fontSizePx, orientation, renderScale, borderS
   div.style.direction = 'rtl'; div.style.textAlign = canvasText.style.textAlign || 'right';
   div.style.fontFamily = "'Jameel Noori Nastaleeq',serif";
   div.style.fontSize = fontSizePx + 'px';
-  div.style.lineHeight = canvasText.style.lineHeight || '2.1';
+  div.style.lineHeight = (lineHeightOverride !== undefined && lineHeightOverride !== null) ? lineHeightOverride : (canvasText.style.lineHeight || '2.1');
   const liveTopNodes = Array.from(canvasText.children);
   div.innerHTML = (htmlOverride !== undefined && htmlOverride !== null) ? htmlOverride : canvasText.innerHTML;
   div.querySelectorAll('span[style*="text-align"]').forEach(sp=>{
@@ -2057,7 +2098,7 @@ async function updatePdfPreview(){
   }
   pdfPageCountEl.textContent = 'حساب لگایا جا رہا ہے…';
   const fontPx = +pdfFontSizeInput.value;
-  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 1, pdfBorderStyle);
+  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 1, pdfBorderStyle, undefined, undefined, pdfLineHeight);
   pdfPreviewPages = pages;
   pdfTotalPages = pages.length;
   pdfCurrentPreviewPage = 0;
@@ -2123,6 +2164,35 @@ pdfFontSizeInput.oninput = ()=>{
   document.getElementById('pdfFontSizeVal').textContent = pdfFontSizeInput.value+'px';
   queuePdfPreviewUpdate();
 };
+const pdfLineHeightInput = document.getElementById('pdfLineHeight');
+const pdfLineHeightVal = document.getElementById('pdfLineHeightVal');
+pdfLineHeightInput.oninput = ()=>{
+  pdfLineHeight = (+pdfLineHeightInput.value / 10).toFixed(1);
+  pdfLineHeightVal.textContent = pdfLineHeight;
+  queuePdfPreviewUpdate();
+};
+
+/* خودکار: فونٹ سائز کم/زیادہ کر کے مطلوبہ تعداد صفحات میں فٹ کریں */
+async function pdfFitToPageCount(n){
+  if(!canvasText.innerText || !canvasText.innerText.trim()){ showToast('یہ صفحہ خالی ہے'); return; }
+  const statusEl = document.getElementById('pdfFitStatus');
+  statusEl.textContent = 'حساب لگایا جا رہا ہے…';
+  let size = 44, minSize = 10, found = null;
+  while(size >= minSize){
+    const pages = await buildPaginatedPages(size, pdfOrientation, 1, pdfBorderStyle, undefined, undefined, pdfLineHeight);
+    if(pages.length <= n){ found = size; break; }
+    size -= 1;
+  }
+  if(found === null) found = minSize;
+  pdfFontSizeInput.value = found;
+  document.getElementById('pdfFontSizeVal').textContent = found+'px';
+  statusEl.textContent = 'سائز ' + found + 'px پر ' + n + ' صفحہ/صفحات میں فٹ ہو گیا';
+  updatePdfPreview();
+}
+document.getElementById('pdfFit1').onclick = ()=> pdfFitToPageCount(1);
+document.getElementById('pdfFit2').onclick = ()=> pdfFitToPageCount(2);
+document.getElementById('pdfFit3').onclick = ()=> pdfFitToPageCount(3);
+document.getElementById('pdfFit4').onclick = ()=> pdfFitToPageCount(4);
 const pdfZoomLbl = document.getElementById('pdfZoomLbl');
 function setPdfPreviewZoom(v){
   pdfPreviewZoom = Math.max(50, Math.min(300, v));
@@ -2166,7 +2236,7 @@ document.getElementById('btnSavePdf').onclick = ()=>{
 document.getElementById('pdfConfirmSave').onclick = async ()=>{
   showToast('PDF تیار ہو رہی ہے…');
   const fontPx = +pdfFontSizeInput.value;
-  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 2, pdfBorderStyle);
+  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 2, pdfBorderStyle, undefined, undefined, pdfLineHeight);
   const pdf = buildPdfFromPages(pages, pdfOrientation);
   pdf.save('urdu-page.pdf');
   pdfModal.classList.remove('open');
@@ -2284,8 +2354,8 @@ new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'),
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF248Mo0922AM) ---------- */
-const APP_BUILD_VERSION = "UF248Mo0922AM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF29We0944AM) ---------- */
+const APP_BUILD_VERSION = "UF29We0944AM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
