@@ -831,12 +831,29 @@
     <button id="bookClose">بند کریں ✕</button>
   </div>
   <div class="fs-body">
+    <div id="bookMergeBar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <button class="pill-btn" id="bookSelectModeBtn">☑️ صفحات منتخب کریں</button>
+      <button class="pill-btn" id="bookMergeBtn" style="display:none;">🔗 منتخب صفحات ملائیں (ایک صفحہ بنائیں)</button>
+      <button class="pill-btn" id="bookViewTogetherBtn" style="display:none;">👁️ منتخب صفحات اکٹھے دیکھیں</button>
+    </div>
+    <div class="hint" id="bookSelectHint" style="display:none;margin-bottom:10px;">صفحات پر ✓ لگائیں — پھر اوپر سے "ملائیں" یا "اکٹھے دیکھیں" دبائیں۔ ▲▼ سے صفحے کی ترتیب بدلیں۔</div>
     <div id="bookGrid"></div>
   </div>
   <div class="fs-foot">
     <button class="pill-btn primary" id="bookNewPage" style="flex:1;">نیا صفحہ شروع کریں</button>
     <button class="pill-btn" id="bookSaveCurrent" style="flex:1;">موجودہ صفحہ کتاب میں محفوظ کریں</button>
     <button class="pill-btn" id="bookExportPdf" style="flex:1;">📄 پوری کتاب PDF بنائیں</button>
+  </div>
+</div>
+
+<!-- ===== منتخب صفحات اکٹھے دیکھنا ===== -->
+<div class="fs-modal" id="bookTogetherModal">
+  <div class="fs-head">
+    <h2>منتخب صفحات — اکٹھا منظر</h2>
+    <button id="bookTogetherClose">بند کریں ✕</button>
+  </div>
+  <div class="fs-body">
+    <div id="bookTogetherGrid" style="display:flex;flex-direction:column;gap:16px;"></div>
   </div>
 </div>
 
@@ -860,13 +877,17 @@
   </div>
   <div class="fs-body pdf-body">
     <div class="pdf-preview-area">
-      <div id="pdfPageCount" style="text-align:center;color:#123a68;font-size:12.5px;font-weight:600;margin-bottom:6px;">حساب لگایا جا رہا ہے…</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+        <div id="pdfPageCount" style="flex:1;text-align:center;color:#123a68;font-size:12.5px;font-weight:600;">حساب لگایا جا رہا ہے…</div>
+        <button id="pdfToggleAllView" class="pill-btn" style="white-space:nowrap;font-size:11.5px;padding:6px 10px;">📑 سب صفحات</button>
+      </div>
       <div id="pdfPreviewWrap" style="overflow:auto;flex:1;min-height:0;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;text-align:center;padding:10px;">
         <img id="pdfPreviewImg" style="max-width:none;transition:width .15s;" />
       </div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px;">
+      <div id="pdfAllPagesWrap" style="display:none;overflow:auto;flex:1;min-height:0;background:#f4f9ff;border:1px solid #aed6f7;border-radius:10px;padding:10px;text-align:center;"></div>
+      <div id="pdfPreviewNavRow" style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:8px;">
         <button id="pdfPrevPage" class="pill-btn">◄ پچھلا صفحہ</button>
-        <span id="pdfPreviewNavLabel" style="color:#123a68;font-size:13px;font-weight:600;">صفحہ 1 / 1</span>
+        <span id="pdfPreviewNavLabel" style="color:#123a68;font-size:13px;font-weight:600;">1 / 1</span>
         <button id="pdfNextPage" class="pill-btn">اگلا صفحہ ►</button>
       </div>
     </div>
@@ -970,7 +991,8 @@
     </div>
   </div>
   <div class="fs-foot">
-    <button class="pill-btn primary" id="pdfConfirmSave" style="flex:1;">✅ اسی ترتیب سے PDF محفوظ کریں</button>
+    <button class="pill-btn primary" id="pdfConfirmSave" style="flex:1;">✅ محفوظ کریں</button>
+    <button class="pill-btn" id="pdfShareWhatsapp" style="flex:1;background:#25D366;color:#fff;border-color:#25D366;">📲 واٹس ایپ پر شیئر</button>
   </div>
 </div>
 
@@ -2104,6 +2126,7 @@ async function updatePdfPreview(){
   pdfCurrentPreviewPage = 0;
   pdfPageCountEl.textContent = 'اس ترتیب میں ' + pdfTotalPages + ' صفحات بنیں گی (A4، ' + (pdfOrientation==='portrait'?'پورٹریٹ':'لینڈ اسکیپ') + ')';
   renderPdfPreviewPage(0);
+  if(typeof pdfShowingAll !== 'undefined' && pdfShowingAll) renderAllPagesView();
 }
 function renderPdfPreviewPage(idx){
   if(!pdfPreviewPages.length) return;
@@ -2112,12 +2135,43 @@ function renderPdfPreviewPage(idx){
   pdfPreviewImg.src = pdfPreviewPages[idx].toDataURL('image/jpeg', 0.92);
   pdfPreviewImg.style.width = (pdfPreviewZoom*2.4) + 'px';
   const nav = document.getElementById('pdfPreviewNavLabel');
-  if(nav) nav.textContent = 'صفحہ ' + (idx+1) + ' / ' + pdfTotalPages;
+  if(nav) nav.textContent = (idx+1) + ' / ' + pdfTotalPages;
+  const prevBtn = document.getElementById('pdfPrevPage');
+  const nextBtn = document.getElementById('pdfNextPage');
+  if(prevBtn){ prevBtn.disabled = (idx <= 0); prevBtn.style.opacity = prevBtn.disabled ? '.4' : '1'; }
+  if(nextBtn){ nextBtn.disabled = (idx >= pdfTotalPages-1); nextBtn.style.opacity = nextBtn.disabled ? '.4' : '1'; }
 }
 function queuePdfPreviewUpdate(){
   clearTimeout(pdfUpdateTimer);
   pdfUpdateTimer = setTimeout(updatePdfPreview, 350);
 }
+
+/* سب صفحات ایک ساتھ دیکھنے کا ٹوگل — تاکہ Fit-to-N کے بعد سب صفحات کیسے بنے دیکھ سکیں */
+let pdfShowingAll = false;
+function renderAllPagesView(){
+  const wrap = document.getElementById('pdfAllPagesWrap');
+  wrap.innerHTML = '';
+  pdfPreviewPages.forEach((canvas, i)=>{
+    const box = document.createElement('div');
+    box.style.cssText = 'margin-bottom:14px;';
+    const label = document.createElement('div');
+    label.style.cssText = 'color:#123a68;font-size:11.5px;font-weight:600;margin-bottom:4px;';
+    label.textContent = 'صفحہ ' + (i+1) + ' / ' + pdfPreviewPages.length;
+    const img = document.createElement('img');
+    img.src = canvas.toDataURL('image/jpeg', 0.9);
+    img.style.cssText = 'width:100%;max-width:360px;border:1px solid #aed6f7;border-radius:6px;';
+    box.appendChild(label); box.appendChild(img);
+    wrap.appendChild(box);
+  });
+}
+document.getElementById('pdfToggleAllView').onclick = function(){
+  pdfShowingAll = !pdfShowingAll;
+  document.getElementById('pdfPreviewWrap').style.display = pdfShowingAll ? 'none' : 'block';
+  document.getElementById('pdfAllPagesWrap').style.display = pdfShowingAll ? 'block' : 'none';
+  document.getElementById('pdfPreviewNavRow').style.display = pdfShowingAll ? 'none' : 'flex';
+  this.textContent = pdfShowingAll ? '🔎 ایک صفحہ' : '📑 سب صفحات';
+  if(pdfShowingAll) renderAllPagesView();
+};
 
 const BORDER_LABELS = {none:'بغیر بارڈر',thin:'پتلا',thick:'موٹا',double:'ڈبل لائن',floral:'پھولوں والا','rounded-gold':'گول سنہری',dotted:'نقطے دار',corner:'صرف کونے',shadow:'سایہ دار',ornate:'شاہی ڈبل'};
 const pdfSummaryTag = document.getElementById('pdfSummaryTag');
@@ -2228,7 +2282,12 @@ document.getElementById('btnSavePdf').onclick = ()=>{
   pdfModal.classList.add('open');
   document.querySelectorAll('.pdf-ctrl-panel').forEach(p=> p.classList.remove('open'));
   document.querySelectorAll('.pdf-ctrl-btn').forEach(b=> b.classList.remove('active'));
-  setPdfPreviewZoom(100);
+  pdfShowingAll = false;
+  document.getElementById('pdfPreviewWrap').style.display = 'block';
+  document.getElementById('pdfAllPagesWrap').style.display = 'none';
+  document.getElementById('pdfPreviewNavRow').style.display = 'flex';
+  document.getElementById('pdfToggleAllView').textContent = '📑 سب صفحات';
+  setPdfPreviewZoom(150);
   updatePdfSummaryTag();
   updatePdfPreview();
 };
@@ -2241,6 +2300,24 @@ document.getElementById('pdfConfirmSave').onclick = async ()=>{
   pdf.save('urdu-page.pdf');
   pdfModal.classList.remove('open');
   showToast('PDF محفوظ ہو گئی — پورے A4 صفحات پر مشتمل، لائن کہیں کٹی نہیں');
+};
+
+document.getElementById('pdfShareWhatsapp').onclick = async ()=>{
+  showToast('PDF تیار ہو رہی ہے، شیئر کے لیے…');
+  const fontPx = +pdfFontSizeInput.value;
+  const pages = await buildPaginatedPages(fontPx, pdfOrientation, 2, pdfBorderStyle, undefined, undefined, pdfLineHeight);
+  const pdf = buildPdfFromPages(pages, pdfOrientation);
+  const blob = pdf.output('blob');
+  const file = new File([blob], 'urdu-tehreer.pdf', {type:'application/pdf'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{
+      await navigator.share({files:[file], title:'اردو تحریر'});
+      showToast('شیئر کر دیا گیا');
+      return;
+    }catch(e){ /* user cancelled یا ناکام — نیچے ڈاؤن لوڈ سے مدد لیں */ }
+  }
+  downloadBlob(blob, 'urdu-tehreer.pdf');
+  showToast('یہ فون شیئر شیٹ سپورٹ نہیں کرتا — PDF ڈاؤن لوڈ ہو گئی، اب واٹس ایپ میں دستی طور پر اٹیچ کر دیں');
 };
 
 /* ---------- print ---------- */
@@ -2354,8 +2431,8 @@ new MutationObserver(scheduleAutoSave).observe(document.getElementById('paper'),
 const topbarEl = document.getElementById('topbar');
 const stageEl3 = document.getElementById('stage');
 /* ---------- online/offline status + refresh ---------- */
-/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF29We0944AM) ---------- */
-const APP_BUILD_VERSION = "UF29We0944AM";
+/* ---------- خودکار ورژن ٹیگ: UF + دن + مہینہ + دن کا مختصر نام + وقت (مثلاً UF44Fr0633PM) ---------- */
+const APP_BUILD_VERSION = "UF44Fr0633PM";
 function computeLiveVersionTag(){
   const d = new Date();
   const dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
@@ -2732,24 +2809,103 @@ function bookAddPage(html, theme){
   saveBook();
   renderBookGrid();
 }
+
+/* ---------- سلیکشن موڈ: صفحات منتخب کر کے ملانا یا اکٹھے دیکھنا ---------- */
+let bookSelectMode = false;
+let bookSelectedSet = new Set();
+function updateBookMergeBarVisibility(){
+  document.getElementById('bookMergeBtn').style.display = (bookSelectMode && bookSelectedSet.size >= 2) ? 'inline-block' : 'none';
+  document.getElementById('bookViewTogetherBtn').style.display = (bookSelectMode && bookSelectedSet.size >= 2) ? 'inline-block' : 'none';
+}
+document.getElementById('bookSelectModeBtn').onclick = function(){
+  bookSelectMode = !bookSelectMode;
+  bookSelectedSet.clear();
+  this.textContent = bookSelectMode ? '✖️ منتخب کرنا بند کریں' : '☑️ صفحات منتخب کریں';
+  document.getElementById('bookSelectHint').style.display = bookSelectMode ? 'block' : 'none';
+  updateBookMergeBarVisibility();
+  renderBookGrid();
+};
+
 function renderBookGrid(){
   bookGrid.innerHTML = '';
   bookPages.forEach((p, i)=>{
     const card = document.createElement('div');
     card.className = 'book-page-card';
+    card.style.position = 'relative';
+    const checkedAttr = bookSelectedSet.has(i) ? 'checked' : '';
     card.innerHTML = `
-      <button class="del" data-i="${i}">✕</button>
+      ${bookSelectMode ? `<input type="checkbox" class="book-sel-chk" data-i="${i}" ${checkedAttr} style="position:absolute;top:4px;left:4px;width:20px;height:20px;z-index:3;">` : `<button class="del" data-i="${i}">✕</button>`}
       <div class="thumb"><div class="pg-frame"></div>${p.html}</div>
-      <div class="num">صفحہ ${i+1}</div>`;
-    card.querySelector('.thumb').onclick = ()=> bookEditPage(i);
-    card.querySelector('.num').onclick = ()=> bookEditPage(i);
-    card.querySelector('.del').onclick = (e)=>{
-      e.stopPropagation();
-      if(confirm('یہ صفحہ حذف کریں؟')){ bookPages.splice(i,1); saveBook(); renderBookGrid(); }
-    };
+      <div class="num">صفحہ ${i+1}</div>
+      ${bookSelectMode ? `<div style="display:flex;justify-content:center;gap:6px;padding-bottom:6px;">
+        <button class="pill-btn book-move-up" data-i="${i}" style="padding:3px 8px;font-size:11px;" ${i===0?'disabled':''}>▲</button>
+        <button class="pill-btn book-move-down" data-i="${i}" style="padding:3px 8px;font-size:11px;" ${i===bookPages.length-1?'disabled':''}>▼</button>
+      </div>` : ''}`;
+    if(bookSelectMode){
+      card.querySelector('.book-sel-chk').onchange = (e)=>{
+        if(e.target.checked) bookSelectedSet.add(i); else bookSelectedSet.delete(i);
+        updateBookMergeBarVisibility();
+      };
+      card.querySelector('.book-move-up').onclick = (e)=>{
+        e.stopPropagation();
+        if(i>0){ [bookPages[i-1],bookPages[i]] = [bookPages[i],bookPages[i-1]]; saveBook(); renderBookGrid(); }
+      };
+      card.querySelector('.book-move-down').onclick = (e)=>{
+        e.stopPropagation();
+        if(i<bookPages.length-1){ [bookPages[i+1],bookPages[i]] = [bookPages[i],bookPages[i+1]]; saveBook(); renderBookGrid(); }
+      };
+      card.querySelector('.thumb').onclick = ()=>{
+        const chk = card.querySelector('.book-sel-chk');
+        chk.checked = !chk.checked;
+        chk.dispatchEvent(new Event('change'));
+      };
+    } else {
+      card.querySelector('.thumb').onclick = ()=> bookEditPage(i);
+      card.querySelector('.num').onclick = ()=> bookEditPage(i);
+      card.querySelector('.del').onclick = (e)=>{
+        e.stopPropagation();
+        if(confirm('یہ صفحہ حذف کریں؟')){ bookPages.splice(i,1); saveBook(); renderBookGrid(); }
+      };
+    }
     bookGrid.appendChild(card);
   });
 }
+
+/* منتخب صفحات کو ایک صفحے میں ملانا — اسی ترتیب سے جو کتاب میں نظر آ رہی ہے */
+document.getElementById('bookMergeBtn').onclick = ()=>{
+  const idxList = Array.from(bookSelectedSet).sort((a,b)=> a-b);
+  if(idxList.length < 2) return;
+  if(!confirm(idxList.length + ' منتخب صفحات کو ایک صفحے میں ملا دیں؟ اصل الگ صفحات ختم ہو جائیں گے (یہ واپس نہیں آئیں گے)۔')) return;
+  const mergedHtml = idxList.map(i=> bookPages[i].html).join('<div><br></div>');
+  const mergedTheme = bookPages[idxList[0]].theme || 'theme-paper';
+  const insertAt = idxList[0];
+  /* پیچھے سے حذف کریں تاکہ انڈیکس نہ بگڑیں */
+  for(let k=idxList.length-1; k>=0; k--) bookPages.splice(idxList[k], 1);
+  bookPages.splice(insertAt, 0, { html: mergedHtml, theme: mergedTheme });
+  saveBook();
+  bookSelectedSet.clear();
+  updateBookMergeBarVisibility();
+  renderBookGrid();
+  showToast(idxList.length + ' صفحات ایک صفحے میں ملا دیے گئے');
+};
+
+/* منتخب صفحات کو اکٹھا (سکرول کر کے) دیکھنا — بغیر ملائے */
+const bookTogetherModal = document.getElementById('bookTogetherModal');
+document.getElementById('bookViewTogetherBtn').onclick = ()=>{
+  const idxList = Array.from(bookSelectedSet).sort((a,b)=> a-b);
+  if(idxList.length < 2) return;
+  const wrap = document.getElementById('bookTogetherGrid');
+  wrap.innerHTML = '';
+  idxList.forEach(i=>{
+    const box = document.createElement('div');
+    box.style.cssText = 'border:1px solid var(--border-1);border-radius:10px;overflow:hidden;';
+    box.innerHTML = `<div style="background:var(--panel-bg-2);color:var(--text-dark);font-size:12px;font-weight:600;padding:6px 10px;">صفحہ ${i+1}</div>
+      <div class="${bookPages[i].theme||'theme-paper'}" style="padding:18px;font-family:'Jameel Noori Nastaleeq',serif;font-size:20px;direction:rtl;text-align:right;">${bookPages[i].html}</div>`;
+    wrap.appendChild(box);
+  });
+  bookTogetherModal.classList.add('open');
+};
+document.getElementById('bookTogetherClose').onclick = ()=> bookTogetherModal.classList.remove('open');
 function bookEditPage(i){
   bookEditingIndex = i;
   canvasText.innerHTML = bookPages[i].html;
@@ -2758,7 +2914,16 @@ function bookEditPage(i){
   showToast('صفحہ ' + (i+1) + ' ترمیم کے لیے کھل گیا — تبدیلی کے بعد "موجودہ صفحہ کتاب میں محفوظ کریں" دبائیں');
 }
 
-document.getElementById('btnOpenBook').onclick = ()=>{ loadBook(); renderBookGrid(); bookModal.classList.add('open'); };
+document.getElementById('btnOpenBook').onclick = ()=>{
+  loadBook();
+  bookSelectMode = false;
+  bookSelectedSet.clear();
+  document.getElementById('bookSelectModeBtn').textContent = '☑️ صفحات منتخب کریں';
+  document.getElementById('bookSelectHint').style.display = 'none';
+  updateBookMergeBarVisibility();
+  renderBookGrid();
+  bookModal.classList.add('open');
+};
 document.getElementById('bookClose').onclick = ()=>{ bookModal.classList.remove('open'); };
 document.getElementById('bookNewPage').onclick = ()=>{
   canvasText.innerHTML = '';
