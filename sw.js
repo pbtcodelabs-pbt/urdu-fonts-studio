@@ -1,13 +1,13 @@
 /* اردو فونٹ اسٹوڈیو — سروس ورکر
-   ورژن: UF44Fr0633PM
+   ورژن: UF211Mo0411AM
    مقصد: ایپ آن لائن اور آف لائن دونوں حالتوں میں بغیر کسی رکاوٹ کے چلے۔ */
 
-const APP_VERSION   = "UF44Fr0633PM";
+const APP_VERSION   = "UF211Mo0411AM";
 const CACHE_NAME    = "urdu-font-studio-" + APP_VERSION;
 const CORE_ASSETS   = [
   "./",
   "./index.html",
-  "./UF44Fr0633PM.html",
+  "./UF211Mo0411AM.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-180.png"
@@ -60,7 +60,7 @@ self.addEventListener("fetch", (event) => {
           const cached =
             (await caches.match(req)) ||
             (await caches.match("./index.html")) ||
-            (await caches.match("./UF44Fr0633PM.html"));
+            (await caches.match("./UF211Mo0411AM.html"));
           return cached || Response.error();
         })
     );
