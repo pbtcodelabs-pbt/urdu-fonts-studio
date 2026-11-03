@@ -45,6 +45,8 @@ self.addEventListener("activate", (event) => {
 /* صفحہ کھولنے کی درخواست (navigation): پہلے نیٹ ورک آزمائیں تاکہ تازہ ترین ورژن ملے،
    نیٹ ورک نہ ہو تو فوراً محفوظ شدہ (آف لائن) نسخہ دکھا دیں — ایپ کبھی خالی/ناکام نہیں ہوگی۔ */
 self.addEventListener("fetch", (event) => {
+  /* ہیلپ ڈیسک (#33): pbtcodelabs-pbt.github.io/help/ کی فائلیں (widget.js) کبھی کیش نہیں — ہر ایپ میں نیا بٹن فوراً */
+  try { const _hd = new URL(event.request.url); if (_hd.hostname === 'pbtcodelabs-pbt.github.io' && _hd.pathname.startsWith('/help/')) return; } catch (_e) {}
   const req = event.request;
   if (req.method !== "GET") return;
 
